@@ -10,7 +10,7 @@
 
     <artifactId>visualvm4idea-help</artifactId>
     <packaging>jar</packaging>
-    
+
     <name>visualvm4idea-help</name>
 
 </project>

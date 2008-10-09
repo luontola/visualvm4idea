@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.orfjackal.visualvm4idea</groupId>
+        <artifactId>visualvm4idea</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>visualvm4idea-dist</artifactId>
+    <packaging>pom</packaging>
+
+    <name>visualvm4idea-dist</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-help</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-plugin</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <finalName>visualvm4idea-${version}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <attach>false</attach>
+                    <descriptors>
+                        <descriptor>src/main/assembly/dist.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
