@@ -1,4 +1,4 @@
 @echo off
-call mvn clean package assembly:assembly && goto :eof
+call mvn clean package && goto :eof
 echo.
 pause
