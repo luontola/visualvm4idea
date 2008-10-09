@@ -31,26 +31,44 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
-import java.lang.instrument.Instrumentation;
+import org.objectweb.asm.ClassAdapter;
+import org.objectweb.asm.ClassVisitor;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
- * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
- * for details on using agents.
- *
  * @author Esko Luontola
  * @since 9.10.2008
  */
-public class Agent {
+public class DebugClassAdapter extends ClassAdapter {
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+    private static final Writer out;
+
+    static {
+        try {
+            out = new FileWriter("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+    public DebugClassAdapter(ClassVisitor cv) {
+        super(cv);
     }
 
-    private static void installTransformations(Instrumentation inst) {
-        inst.addTransformer(new VisualVmHooks());
+    private void debug(String s) {
+        try {
+            out.append(s).append("\n");
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        super.visit(version, access, name, signature, superName, interfaces);
+        debug(name);
     }
 }

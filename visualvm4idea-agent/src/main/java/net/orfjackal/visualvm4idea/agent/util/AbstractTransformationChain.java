@@ -1,5 +1,5 @@
 /*
- * This file is part of VisualVM for IDEA
+ * This file is part of Dimdwarf Application Server <http://dimdwarf.sourceforge.net/>
  *
  * Copyright (c) 2008, Esko Luontola. All Rights Reserved.
  *
@@ -29,28 +29,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
+package net.orfjackal.visualvm4idea.agent.util;
 
-import java.lang.instrument.Instrumentation;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
+import java.security.ProtectionDomain;
 
 /**
- * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
- * for details on using agents.
- *
  * @author Esko Luontola
- * @since 9.10.2008
+ * @since 9.9.2008
  */
-public class Agent {
+public abstract class AbstractTransformationChain implements ClassFileTransformer {
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
+                            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+        ClassReader cr = new ClassReader(classfileBuffer);
+        ClassWriter cw;
+        if (enableAdditiveTransformationOptimization()) {
+            cw = new ClassWriter(cr, 0);
+        } else {
+            cw = new ClassWriter(0);
+        }
+        ClassVisitor cv = getAdapters(cw);
+        cr.accept(cv, 0);
+        return cw.toByteArray();
     }
 
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+    /**
+     * See "Optimization" in section 2.2.4 of
+     * <a href="http://download.forge.objectweb.org/asm/asm-guide.pdf">ASM 3.0 User Guide</a>
+     */
+    protected boolean enableAdditiveTransformationOptimization() {
+        return true;
     }
 
-    private static void installTransformations(Instrumentation inst) {
-        inst.addTransformer(new VisualVmHooks());
-    }
+    protected abstract ClassVisitor getAdapters(ClassVisitor cv);
 }

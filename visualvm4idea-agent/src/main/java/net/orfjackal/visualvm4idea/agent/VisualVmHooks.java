@@ -31,26 +31,17 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
-import java.lang.instrument.Instrumentation;
+import net.orfjackal.visualvm4idea.agent.util.AbstractTransformationChain;
+import org.objectweb.asm.ClassVisitor;
 
 /**
- * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
- * for details on using agents.
- *
  * @author Esko Luontola
  * @since 9.10.2008
  */
-public class Agent {
+public class VisualVmHooks extends AbstractTransformationChain {
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
-    }
-
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
-    }
-
-    private static void installTransformations(Instrumentation inst) {
-        inst.addTransformer(new VisualVmHooks());
+    protected ClassVisitor getAdapters(ClassVisitor cv) {
+        cv = new DebugClassAdapter(cv);
+        return cv;
     }
 }
