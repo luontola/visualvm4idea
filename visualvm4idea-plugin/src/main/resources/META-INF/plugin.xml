@@ -1,0 +1,34 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin url="http://plugins.intellij.net/plugin/?id=xxx">
+
+    <name>${plugin.name}</name>
+    <id>${plugin.id}</id>
+    <version>${project.version}</version>
+
+    <description>
+        xxx
+    </description>
+    <category>Profiling</category>
+
+    <vendor url="http://www.orfjackal.net" logo="/net/orfjackal/extformatter/icons/logo-16.png">Esko Luontola</vendor>
+
+    <idea-version since-build="7941"/>
+
+    <change-notes><![CDATA[
+        <p>0.1.0 (2008-xx-xx)
+        <br>- Initial release</p>
+
+        <p>Known issues
+        <br>- xxx
+        </p>
+    ]]></change-notes>
+
+    <helpset file="visualvm4idea-help.jar" path="/Help.hs"/>
+
+    <project-components>
+        <component>
+            <implementation-class>net.orfjackal.extformatter.plugin.ProjectSettingsComponent</implementation-class>
+        </component>
+    </project-components>
+
+</idea-plugin>
