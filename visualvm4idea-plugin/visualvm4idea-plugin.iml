@@ -157,6 +157,19 @@
     </orderEntry>
     <orderEntry type="module" module-name="visualvm4idea-core" exported="" />
     <orderEntry type="module-library">
+      <library name="com.sun.tools.visualvm:visualvm-application:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="com.sun.tools.visualvm:visualvm-core:1.0.1">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core.jar!/" />

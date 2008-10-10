@@ -19,6 +19,13 @@
 
         <dependency>
             <groupId>com.sun.tools.visualvm</groupId>
+            <artifactId>visualvm-application</artifactId>
+            <version>${visualvm.version}</version>
+            <scope>system</scope>
+            <systemPath>${visualvm.home}/visualvm/modules/com-sun-tools-visualvm-application.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.tools.visualvm</groupId>
             <artifactId>visualvm-core</artifactId>
             <version>${visualvm.version}</version>
             <scope>system</scope>

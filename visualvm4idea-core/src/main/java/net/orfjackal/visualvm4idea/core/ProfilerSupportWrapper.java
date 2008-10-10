@@ -32,55 +32,27 @@
 package net.orfjackal.visualvm4idea.core;
 
 import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import com.sun.tools.visualvm.profiler.ProfilerSupport;
 
-import java.util.Set;
+import java.lang.reflect.Method;
 
 /**
  * @author Esko Luontola
  * @since 10.10.2008
  */
-public class DebugRunner implements Runnable {
+public class ProfilerSupportWrapper {
 
-    private static Thread t;
-
-    public synchronized static void start() {
-        if (t == null) {
-            t = new Thread(new DebugRunner());
-            t.setDaemon(true);
-            t.start();
-            System.out.println("DebugRunner started");
-        }
+    public static void selectProfilerView(Application application) {
+        call("selectProfilerView", new Class<?>[]{Application.class}, application);
     }
 
-    public void run() {
-        while (true) {
-            try {
-                printDebugInfo();
-            } catch (Throwable t) {
-                t.printStackTrace(System.out);
-                return;
-            }
-            sleep(10000);
-        }
-    }
-
-    private void printDebugInfo() {
-        System.out.println("---");
-
-        Set<Application> applications = DataSourceRepository.sharedInstance().getDataSources(Application.class);
-        for (Application application : applications) {
-            System.out.println("application = " + application);
-            ProfilerSupportWrapper.selectProfilerView(application);
-            sleep(1000);
-        }
-    }
-
-    private static void sleep(int millis) {
+    private static void call(String methodName, Class<?>[] parameterTypes, Object... args) {
         try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // ignore
+            Method method = ProfilerSupport.class.getDeclaredMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            method.invoke(ProfilerSupport.getInstance(), args);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
