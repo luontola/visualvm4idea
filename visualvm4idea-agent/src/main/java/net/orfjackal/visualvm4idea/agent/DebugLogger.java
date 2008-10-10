@@ -31,21 +31,33 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
-import org.objectweb.asm.ClassAdapter;
-import org.objectweb.asm.ClassVisitor;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * @author Esko Luontola
- * @since 9.10.2008
+ * @since 10.10.2008
  */
-public class DebugClassAdapter extends ClassAdapter {
+public class DebugLogger {
 
-    public DebugClassAdapter(ClassVisitor cv) {
-        super(cv);
+    private static final Writer out;
+
+    static {
+        try {
+            out = new FileWriter("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        super.visit(version, access, name, signature, superName, interfaces);
-        DebugLogger.debug(name);
+
+    public static void debug(String s) {
+        try {
+            out.append(s).append("\n");
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
