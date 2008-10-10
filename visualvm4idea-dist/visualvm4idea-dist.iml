@@ -6,6 +6,7 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/target/archive-tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/target/visualvm4idea" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -149,6 +150,19 @@
         </JAVADOC>
         <SOURCES>
           <root url="jar://$M2_REPO$/junit/junit-dep/4.4/junit-dep-4.4-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="asm:asm-all:3.1">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

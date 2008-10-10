@@ -51,7 +51,6 @@ public class DebugLogger {
         }
     }
 
-
     public static void debug(String s) {
         try {
             out.append(s).append("\n");
