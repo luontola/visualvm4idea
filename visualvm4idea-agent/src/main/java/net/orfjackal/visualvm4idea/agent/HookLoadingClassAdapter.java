@@ -35,50 +35,50 @@ import org.objectweb.asm.*;
 
 /**
  * @author Esko Luontola
- * @since 9.10.2008
+ * @since 10.10.2008
  */
-public class DebugClassAdapter extends ClassAdapter implements Opcodes {
+public class HookLoadingClassAdapter extends ClassAdapter implements Opcodes {
 
     private String className;
-    private String methodName;
 
-    public DebugClassAdapter(ClassVisitor cv) {
+    public HookLoadingClassAdapter(ClassVisitor cv) {
         super(cv);
     }
 
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        super.visit(version, access, name, signature, superName, interfaces);
         this.className = name;
-//        System.out.println(name);
+        super.visit(version, access, name, signature, superName, interfaces);
     }
 
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        this.methodName = name;
-
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        if (className.equals("com/sun/tools/visualvm/profiler/ApplicationProfilerView$MasterViewSupport")
-                && methodName.equals("<init>")) {
-            System.out.println("MasterViewSupport instrumented");
-            mv = new MethodAdapter(mv) {
-                public void visitInsn(int opcode) {
-                    if (opcode == RETURN) {
-                        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-                        super.visitLdcInsn("MasterViewSupport initialized");
-                        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
-
-                        // DebugRunner.start();
-//                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/core/DebugRunner", "start", "()V");
-
-                        // ClassLoaderHook.hook(getClass().getClassLoader());
-//                        super.visitVarInsn(ALOAD, 0);
-//                        super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;");
-//                        super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getClassLoader", "()Ljava/lang/ClassLoader;");
-//                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/ClassLoaderHook", "hook", "(Ljava/lang/ClassLoader;)V");
-                    }
-                    super.visitInsn(opcode);
-                }
-            };
+        if (name.equals("<init>")
+                && className.equals("com/sun/tools/visualvm/core/datasource/DataSourceRepository")) {
+            mv = new HookLoadingMethodAdapter(mv);
         }
         return mv;
+    }
+
+
+    private static class HookLoadingMethodAdapter extends MethodAdapter {
+
+        public HookLoadingMethodAdapter(MethodVisitor mv) {
+            super(mv);
+        }
+
+        public void visitInsn(int opcode) {
+            if (opcode == RETURN) {
+                // ClassLoaderHook.hook(this.getClass().getClassLoader());
+                super.visitVarInsn(ALOAD, 0);
+                super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;");
+                super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getClassLoader", "()Ljava/lang/ClassLoader;");
+                super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/ClassLoaderHook", "hook", "(Ljava/lang/ClassLoader;)V");
+            }
+            super.visitInsn(opcode);
+        }
+
+        public void visitMaxs(int maxStack, int maxLocals) {
+            super.visitMaxs(Math.max(maxStack, 1), maxLocals);
+        }
     }
 }

@@ -38,12 +38,13 @@ package net.orfjackal.visualvm4idea.agent;
 public class Test {
 
     public Test() {
-        ClassLoaderHook.hook(getClass().getClassLoader());
+        ClassLoaderHook.hook(this.getClass().getClassLoader());
     }
 
-    public static void test0() {
+    public void test0() {
     }
 
-    public static void test1() {
+    public void test1() {
+        ClassLoaderHook.hook(this.getClass().getClassLoader());
     }
 }

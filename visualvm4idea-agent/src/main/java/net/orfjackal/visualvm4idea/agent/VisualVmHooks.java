@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.agent;
 
 import net.orfjackal.visualvm4idea.agent.util.AbstractTransformationChain;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * @author Esko Luontola
@@ -41,7 +42,9 @@ import org.objectweb.asm.ClassVisitor;
 public class VisualVmHooks extends AbstractTransformationChain {
 
     protected ClassVisitor getAdapters(ClassVisitor cv) {
+        cv = new CheckClassAdapter(cv);
         cv = new DebugClassAdapter(cv);
+        cv = new HookLoadingClassAdapter(cv);
         return cv;
     }
 }
