@@ -218,6 +218,7 @@
         </JAVADOC>
         <SOURCES>
           <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/openapi-sources.jar!/" />
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/src/src_openapi.zip!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -231,6 +232,7 @@
         </JAVADOC>
         <SOURCES>
           <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/extensions-sources.jar!/" />
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/src/src_extensions.zip!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -245,6 +247,24 @@
         <SOURCES>
           <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5-sources.jar!/" />
         </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea_rt.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntryProperties />
