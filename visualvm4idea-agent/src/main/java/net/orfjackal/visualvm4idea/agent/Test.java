@@ -38,13 +38,13 @@ package net.orfjackal.visualvm4idea.agent;
 public class Test {
 
     public Test() {
-        DebugLogger.debug("foo");
+        System.out.println("foo");
     }
 
     public static void test0() {
     }
 
     public static void test1() {
-        DebugLogger.debug("foo");
+        System.out.println("foo");
     }
 }

@@ -29,34 +29,61 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
+package net.orfjackal.visualvm4idea.core;
 
-import java.io.FileWriter;
+import com.sun.tools.visualvm.core.datasource.DataSource;
+import com.sun.tools.visualvm.host.Host;
+
 import java.io.IOException;
-import java.io.Writer;
+import java.util.Set;
 
 /**
  * @author Esko Luontola
  * @since 10.10.2008
  */
-public class DebugLogger {
+public class DebugRunner implements Runnable {
 
-    private static final Writer out;
+    private static Thread t;
 
-    static {
-        try {
-            out = new FileWriter("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public synchronized static void start() {
+        if (t == null) {
+            t = new Thread(new DebugRunner());
+            t.setDaemon(true);
+            t.start();
+            System.out.println("DebugRunner started");
         }
     }
 
-    public static void debug(String s) {
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // ignore
+            }
+            try {
+                printDebugInfo();
+            } catch (Throwable t) {
+                t.printStackTrace(System.out);
+                return;
+            }
+        }
+    }
+
+    private void printDebugInfo() {
+        System.out.println("---");
+        ClassLoader cl = DebugRunner.class.getClassLoader();
+        System.out.println("cl = " + cl);
         try {
-            out.append(s).append("\n");
-            out.flush();
+            System.getProperties().store(System.out, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        Set<DataSource> dataSources = Host.LOCALHOST.getRepository().getDataSources();
+//        Set<DataSource> dataSources = DataSourceRepository.sharedInstance().getDataSources();
+        for (DataSource dataSource : dataSources) {
+            System.out.println("dataSource: " + dataSource);
         }
     }
 }

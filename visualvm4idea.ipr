@@ -274,6 +274,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea.iml" filepath="$PROJECT_DIR$/visualvm4idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-agent/visualvm4idea-agent.iml" filepath="$PROJECT_DIR$/visualvm4idea-agent/visualvm4idea-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm4idea-core/visualvm4idea-core.iml" filepath="$PROJECT_DIR$/visualvm4idea-core/visualvm4idea-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-dist/visualvm4idea-dist.iml" filepath="$PROJECT_DIR$/visualvm4idea-dist/visualvm4idea-dist.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-help/visualvm4idea-help.iml" filepath="$PROJECT_DIR$/visualvm4idea-help/visualvm4idea-help.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-plugin/visualvm4idea-plugin.iml" filepath="$PROJECT_DIR$/visualvm4idea-plugin/visualvm4idea-plugin.iml" />

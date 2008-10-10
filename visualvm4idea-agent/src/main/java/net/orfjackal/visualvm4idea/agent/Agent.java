@@ -31,6 +31,8 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -52,5 +54,11 @@ public class Agent {
 
     private static void installTransformations(Instrumentation inst) {
         inst.addTransformer(new VisualVmHooks());
+        try {
+            System.setOut(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_out.txt"));
+            System.setErr(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_err.txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

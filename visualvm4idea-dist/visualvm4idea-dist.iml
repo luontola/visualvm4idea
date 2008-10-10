@@ -169,6 +169,46 @@
     </orderEntry>
     <orderEntry type="module" module-name="visualvm4idea-help" exported="" />
     <orderEntry type="module" module-name="visualvm4idea-plugin" exported="" />
+    <orderEntry type="module" module-name="visualvm4idea-core" exported="" />
+    <orderEntry type="module-library">
+      <library name="com.sun.tools.visualvm:visualvm-core:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="com.sun.tools.visualvm:visualvm-host:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="com.sun.tools.visualvm:visualvm-profiler:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library name="com.intellij:openapi:7941">
         <CLASSES>

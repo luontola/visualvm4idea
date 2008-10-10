@@ -9,6 +9,8 @@
                  build 7941 = 7.0.4 -->
             <idea.version>7941</idea.version>
             <idea.home>C:/Program Files/JetBrains/idea-7.0.4-jdk15</idea.home>
+            <visualvm.version>1.0.1</visualvm.version>
+            <visualvm.home>D:/DEVEL/VisualVM for IDEA/visualvm_101</visualvm.home>
         </properties>
         <activation>
             <activeByDefault>true</activeByDefault>

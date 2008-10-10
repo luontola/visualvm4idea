@@ -49,7 +49,7 @@ public class DebugClassAdapter extends ClassAdapter implements Opcodes {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
         this.className = name;
-//        DebugLogger.debug(name);
+//        System.out.println(name);
     }
 
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -58,12 +58,14 @@ public class DebugClassAdapter extends ClassAdapter implements Opcodes {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
         if (className.equals("com/sun/tools/visualvm/profiler/ApplicationProfilerView$MasterViewSupport")
                 && methodName.equals("<init>")) {
-            DebugLogger.debug("MasterViewSupport instrumented");
+            System.out.println("MasterViewSupport instrumented");
             mv = new MethodAdapter(mv) {
                 public void visitInsn(int opcode) {
                     if (opcode == RETURN) {
+                        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
                         super.visitLdcInsn("MasterViewSupport initialized");
-                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/DebugLogger", "debug", "(Ljava/lang/String;)V");
+                        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/core/DebugRunner", "start", "()V");
                         super.visitInsn(opcode);
                     } else {
                         super.visitInsn(opcode);

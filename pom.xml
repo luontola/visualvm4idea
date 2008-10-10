@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>visualvm4idea-agent</module>
+        <module>visualvm4idea-core</module>
         <module>visualvm4idea-dist</module>
         <module>visualvm4idea-help</module>
         <module>visualvm4idea-plugin</module>
@@ -93,6 +94,11 @@
             <dependency>
                 <groupId>net.orfjackal.visualvm4idea</groupId>
                 <artifactId>visualvm4idea-agent</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.orfjackal.visualvm4idea</groupId>
+                <artifactId>visualvm4idea-core</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
