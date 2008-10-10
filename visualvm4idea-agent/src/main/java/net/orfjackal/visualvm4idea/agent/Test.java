@@ -31,46 +31,20 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
-import org.objectweb.asm.*;
-
 /**
  * @author Esko Luontola
- * @since 9.10.2008
+ * @since 10.10.2008
  */
-public class DebugClassAdapter extends ClassAdapter implements Opcodes {
+public class Test {
 
-    private String className;
-    private String methodName;
-
-    public DebugClassAdapter(ClassVisitor cv) {
-        super(cv);
+    public Test() {
+        DebugLogger.debug("foo");
     }
 
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        super.visit(version, access, name, signature, superName, interfaces);
-        this.className = name;
-//        DebugLogger.debug(name);
+    public static void test0() {
     }
 
-    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        this.methodName = name;
-
-        MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        if (className.equals("com/sun/tools/visualvm/profiler/ApplicationProfilerView$MasterViewSupport")
-                && methodName.equals("<init>")) {
-            DebugLogger.debug("MasterViewSupport instrumented");
-            mv = new MethodAdapter(mv) {
-                public void visitInsn(int opcode) {
-                    if (opcode == RETURN) {
-                        super.visitLdcInsn("MasterViewSupport initialized");
-                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/DebugLogger", "debug", "(Ljava/lang/String;)V");
-                        super.visitInsn(opcode);
-                    } else {
-                        super.visitInsn(opcode);
-                    }
-                }
-            };
-        }
-        return mv;
+    public static void test1() {
+        DebugLogger.debug("foo");
     }
 }
