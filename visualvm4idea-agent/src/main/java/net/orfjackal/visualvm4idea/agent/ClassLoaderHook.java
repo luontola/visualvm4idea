@@ -60,7 +60,7 @@ public class ClassLoaderHook {
 
     private static void tryStartHookInClassLoader(ClassLoader parent) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass("net.orfjackal.visualvm4idea.core.DebugRunner");
+        Class<?> clazz = loader.loadClass("net.orfjackal.visualvm4idea.core.HookInstaller");
         clazz.getMethod("start").invoke(null);
     }
 
