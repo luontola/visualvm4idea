@@ -34,7 +34,6 @@ package net.orfjackal.visualvm4idea.core;
 import com.sun.tools.visualvm.core.datasource.DataSource;
 import com.sun.tools.visualvm.host.Host;
 
-import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -57,31 +56,31 @@ public class DebugRunner implements Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // ignore
-            }
-            try {
                 printDebugInfo();
             } catch (Throwable t) {
                 t.printStackTrace(System.out);
                 return;
+            }
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                // ignore
             }
         }
     }
 
     private void printDebugInfo() {
         System.out.println("---");
-        ClassLoader cl = DebugRunner.class.getClassLoader();
-        System.out.println("cl = " + cl);
-        try {
-            System.getProperties().store(System.out, null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        ClassLoader cl = DebugRunner.class.getClassLoader();
+//        System.out.println("cl = " + cl);
+//        try {
+//            System.getProperties().store(System.out, null);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        Set<DataSource> dataSources = Host.LOCALHOST.getRepository().getDataSources();
 //        Set<DataSource> dataSources = DataSourceRepository.sharedInstance().getDataSources();
+        Set<DataSource> dataSources = Host.LOCALHOST.getRepository().getDataSources();
         for (DataSource dataSource : dataSources) {
             System.out.println("dataSource: " + dataSource);
         }

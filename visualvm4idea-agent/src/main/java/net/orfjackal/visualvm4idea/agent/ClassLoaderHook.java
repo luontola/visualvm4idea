@@ -31,19 +31,40 @@
 
 package net.orfjackal.visualvm4idea.agent;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 /**
  * @author Esko Luontola
  * @since 10.10.2008
  */
-public class Test {
+public class ClassLoaderHook {
 
-    public Test() {
-        ClassLoaderHook.hook(getClass().getClassLoader());
+    public static final String HOOK_LIB_PROPERTY = "net.orfjackal.visualvm4idea.agent.hookLibrary";
+
+    private static boolean hooked = false;
+
+    public static synchronized void hook(ClassLoader parent) {
+        if (!hooked) {
+            hooked = true;
+            try {
+                tryStartHookInClassLoader(parent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public static void test0() {
+    private static void tryStartHookInClassLoader(ClassLoader parent) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
+        Class<?> clazz = loader.loadClass("net.orfjackal.visualvm4idea.core.DebugRunner");
+        clazz.getMethod("start").invoke(null);
     }
 
-    public static void test1() {
+    private static URL getHookLibrary() throws MalformedURLException {
+        return new File(System.getProperty(HOOK_LIB_PROPERTY)).toURI().toURL();
     }
 }

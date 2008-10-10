@@ -45,14 +45,15 @@ import java.lang.instrument.Instrumentation;
 public class Agent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+        installTransformations(agentArgs, inst);
     }
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
-        installTransformations(inst);
+        installTransformations(agentArgs, inst);
     }
 
-    private static void installTransformations(Instrumentation inst) {
+    private static void installTransformations(String agentArgs, Instrumentation inst) {
+        System.setProperty(ClassLoaderHook.HOOK_LIB_PROPERTY, agentArgs);
         inst.addTransformer(new VisualVmHooks());
         try {
             System.setOut(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_out.txt"));
