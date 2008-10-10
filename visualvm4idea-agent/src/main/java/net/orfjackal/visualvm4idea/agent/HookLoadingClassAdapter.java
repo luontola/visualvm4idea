@@ -39,21 +39,23 @@ import org.objectweb.asm.*;
  */
 public class HookLoadingClassAdapter extends ClassAdapter implements Opcodes {
 
-    private String className;
+    private static final String TARGET_CLASS = "com/sun/tools/visualvm/profiler/Installer";
+    private static final String TARGET_METHOD = "restored";
+
+    private boolean instrumentClass;
 
     public HookLoadingClassAdapter(ClassVisitor cv) {
         super(cv);
     }
 
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        this.className = name;
+        instrumentClass = name.equals(TARGET_CLASS);
         super.visit(version, access, name, signature, superName, interfaces);
     }
 
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        if (name.equals("<init>")
-                && className.equals("com/sun/tools/visualvm/core/datasource/DataSourceRepository")) {
+        if (instrumentClass && name.equals(TARGET_METHOD)) {
             mv = new HookLoadingMethodAdapter(mv);
         }
         return mv;

@@ -31,45 +31,20 @@
 
 package net.orfjackal.visualvm4idea.core;
 
-import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
-
-import java.util.Set;
-
 /**
  * @author Esko Luontola
  * @since 10.10.2008
  */
-public class DebugRunner implements Runnable {
+public class HookInstaller {
 
-    public void run() {
-        while (true) {
-            try {
-                printDebugInfo();
-            } catch (Throwable t) {
-                t.printStackTrace(System.out);
-                return;
-            }
-            sleep(10000);
-        }
-    }
+    private static boolean started = false;
 
-    private void printDebugInfo() {
-        System.out.println("---");
-
-        Set<Application> applications = DataSourceRepository.sharedInstance().getDataSources(Application.class);
-        for (Application application : applications) {
-            System.out.println("application = " + application);
-            ProfilerSupportWrapper.selectProfilerView(application);
-            sleep(1000);
-        }
-    }
-
-    private static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // ignore
+    public synchronized static void start() {
+        if (!started) {
+            Thread t = new Thread(new DebugRunner());
+            t.setDaemon(true);
+            t.start();
+            started = true;
         }
     }
 }
