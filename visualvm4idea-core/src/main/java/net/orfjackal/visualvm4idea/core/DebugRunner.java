@@ -42,6 +42,8 @@ import java.util.Set;
  */
 public class DebugRunner implements Runnable {
 
+    // TODO: remove debug code
+
     public void run() {
         while (true) {
             try {

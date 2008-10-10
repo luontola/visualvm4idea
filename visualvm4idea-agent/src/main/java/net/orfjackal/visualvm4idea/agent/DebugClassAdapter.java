@@ -39,6 +39,8 @@ import org.objectweb.asm.*;
  */
 public class DebugClassAdapter extends ClassAdapter implements Opcodes {
 
+    // TODO: remove debug code
+
     private String className;
 
     public DebugClassAdapter(ClassVisitor cv) {
@@ -63,15 +65,6 @@ public class DebugClassAdapter extends ClassAdapter implements Opcodes {
 //                        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //                        super.visitLdcInsn("MasterViewSupport initialized");
 //                        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
-
-                        // DebugRunner.start();
-//                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/core/DebugRunner", "start", "()V");
-
-                        // ClassLoaderHook.hook(getClass().getClassLoader());
-//                        super.visitVarInsn(ALOAD, 0);
-//                        super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;");
-//                        super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getClassLoader", "()Ljava/lang/ClassLoader;");
-//                        super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/ClassLoaderHook", "hook", "(Ljava/lang/ClassLoader;)V");
                     }
                     super.visitInsn(opcode);
                 }

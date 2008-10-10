@@ -29,22 +29,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.agent;
+
+import net.orfjackal.visualvm4idea.agent.util.AbstractTransformationChain;
+import org.objectweb.asm.ClassVisitor;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 9.10.2008
  */
-public class HookInstaller {
+public class VisualVmTransformer extends AbstractTransformationChain {
 
-    private static boolean started = false;
-
-    public synchronized static void start() {
-        if (!started) {
-            Thread t = new Thread(new DebugRunner());
-            t.setDaemon(true);
-            t.start();
-            started = true;
-        }
+    protected ClassVisitor getAdapters(ClassVisitor cv) {
+        cv = new DebugClassAdapter(cv);
+        cv = new HookLoadingClassAdapter(cv);
+        return cv;
     }
 }

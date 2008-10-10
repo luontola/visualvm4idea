@@ -70,11 +70,11 @@ public class HookLoadingClassAdapter extends ClassAdapter implements Opcodes {
 
         public void visitInsn(int opcode) {
             if (opcode == RETURN) {
-                // ClassLoaderHook.hook(this.getClass().getClassLoader());
+                // HookLoader.hook(this.getClass().getClassLoader());
                 super.visitVarInsn(ALOAD, 0);
                 super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;");
                 super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getClassLoader", "()Ljava/lang/ClassLoader;");
-                super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/ClassLoaderHook", "hook", "(Ljava/lang/ClassLoader;)V");
+                super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/HookLoader", "hook", "(Ljava/lang/ClassLoader;)V");
             }
             super.visitInsn(opcode);
         }

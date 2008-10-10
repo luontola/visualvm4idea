@@ -54,11 +54,12 @@ public class Agent {
 
     private static void installTransformations(String agentArgs, Instrumentation inst) {
         directOutputToFile();
-        System.setProperty(ClassLoaderHook.HOOK_LIB_PROPERTY, agentArgs);
-        inst.addTransformer(new VisualVmHooks());
+        System.setProperty(HookLoader.HOOK_LIB_PROPERTY, agentArgs);
+        inst.addTransformer(new VisualVmTransformer());
     }
 
     private static void directOutputToFile() {
+        // TODO: remove debug code
         try {
             System.setOut(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_out.txt"));
             System.setErr(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_err.txt"));
