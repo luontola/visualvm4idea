@@ -31,28 +31,23 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.ExecutionRegistry;
-import com.intellij.openapi.components.ApplicationComponent;
-import org.jetbrains.annotations.NotNull;
+import javax.swing.*;
+import java.net.URL;
 
 /**
  * @author Esko Luontola
  * @since 14.10.2008
  */
-public class VisualVmPlugin implements ApplicationComponent {
+public class Resources {
 
-    private final ProfiledJavaProgramRunner runner = new ProfiledJavaProgramRunner();
+    public static final Icon LOGO_16 = createIcon("icons/logo-16.png");
+    public static final Icon LOGO_32 = createIcon("icons/logo-32.png");
 
-    @NotNull
-    public String getComponentName() {
-        return "VisualVmPlugin";
-    }
-
-    public void initComponent() {
-        ExecutionRegistry.getInstance().registerRunner(runner);
-    }
-
-    public void disposeComponent() {
-        ExecutionRegistry.getInstance().unregisterRunner(runner);
+    private static Icon createIcon(String name) {
+        URL url = Resources.class.getResource(name);
+        if (url == null) {
+            throw new IllegalArgumentException("Not found: " + name);
+        }
+        return new ImageIcon(url);
     }
 }

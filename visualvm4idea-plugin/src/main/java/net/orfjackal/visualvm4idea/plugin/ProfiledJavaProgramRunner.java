@@ -70,7 +70,7 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
 
     public RunnerInfo getInfo() {
         System.out.println("ProfiledJavaProgramRunner.getInfo");
-        return null;
+        return new RunnerInfo("VisualVmId", "TODO: description", Resources.LOGO_16, "VisualVmToolWindowId", "VisualVmHelpId");
     }
 
     public SettingsEditor getSettingsEditor(RunConfiguration configuration) {
