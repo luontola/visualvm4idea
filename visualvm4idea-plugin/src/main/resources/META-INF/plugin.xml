@@ -10,7 +10,7 @@
     </description>
     <category>Profiling</category>
 
-    <vendor url="http://www.orfjackal.net" logo="/net/orfjackal/extformatter/icons/logo-16.png">Esko Luontola</vendor>
+    <vendor url="http://www.orfjackal.net" logo="/net/orfjackal/visualvm4idea/icons/logo-16.png">Esko Luontola</vendor>
 
     <idea-version since-build="7941"/>
 
@@ -25,10 +25,10 @@
 
     <helpset file="visualvm4idea-help.jar" path="/Help.hs"/>
 
-    <project-components>
+    <application-components>
         <component>
-            <implementation-class>net.orfjackal.extformatter.plugin.ProjectSettingsComponent</implementation-class>
+            <implementation-class>net.orfjackal.visualvm4idea.plugin.VisualVmPlugin</implementation-class>
         </component>
-    </project-components>
+    </application-components>
 
 </idea-plugin>
