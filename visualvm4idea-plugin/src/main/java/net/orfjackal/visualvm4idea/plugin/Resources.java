@@ -31,8 +31,9 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.openapi.util.IconLoader;
+
 import javax.swing.*;
-import java.net.URL;
 
 /**
  * @author Esko Luontola
@@ -40,14 +41,6 @@ import java.net.URL;
  */
 public class Resources {
 
-    public static final Icon LOGO_16 = createIcon("icons/logo-16.png");
-    public static final Icon LOGO_32 = createIcon("icons/logo-32.png");
-
-    private static Icon createIcon(String name) {
-        URL url = Resources.class.getResource(name);
-        if (url == null) {
-            throw new IllegalArgumentException("Not found: " + name);
-        }
-        return new ImageIcon(url);
-    }
+    public static final Icon LOGO_16 = IconLoader.getIcon("icons/logo-16.png", Resources.class);
+    public static final Icon LOGO_32 = IconLoader.getIcon("icons/logo-32.png", Resources.class);
 }
