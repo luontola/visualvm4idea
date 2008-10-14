@@ -37,6 +37,7 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.JavaProgramRunner;
 import com.intellij.execution.runners.RunnerInfo;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizable;
 
@@ -46,35 +47,42 @@ import com.intellij.openapi.util.JDOMExternalizable;
  */
 public class ProfiledJavaProgramRunner implements JavaProgramRunner {
 
+    private static final Logger log = Logger.getInstance(ProfiledJavaProgramRunner.class.getName());
+
     public JDOMExternalizable createConfigurationData(ConfigurationInfoProvider settingsProvider) {
-        System.out.println("ProfiledJavaProgramRunner.createConfigurationData");
+        log.info("ProfiledJavaProgramRunner.createConfigurationData");
         return null;
     }
 
+    // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
-        System.out.println("ProfiledJavaProgramRunner.patch");
+        log.info("ProfiledJavaProgramRunner.patch");
+        // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
+        // javaParameters.getVMParametersList().replaceOrAppend(...);
     }
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
-        System.out.println("ProfiledJavaProgramRunner.checkConfiguration");
+        log.info("ProfiledJavaProgramRunner.checkConfiguration");
     }
 
+    // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
-        System.out.println("ProfiledJavaProgramRunner.onProcessStarted");
+        log.info("ProfiledJavaProgramRunner.onProcessStarted");
     }
 
+    // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
-        System.out.println("ProfiledJavaProgramRunner.createActions");
+        log.info("ProfiledJavaProgramRunner.createActions");
         return new AnAction[0];
     }
 
     public RunnerInfo getInfo() {
-        System.out.println("ProfiledJavaProgramRunner.getInfo");
+        log.info("ProfiledJavaProgramRunner.getInfo");
         return new RunnerInfo("VisualVmId", "TODO: description", Resources.LOGO_16, "VisualVmToolWindowId", "VisualVmHelpId");
     }
 
     public SettingsEditor getSettingsEditor(RunConfiguration configuration) {
-        System.out.println("ProfiledJavaProgramRunner.getSettingsEditor");
+        log.info("ProfiledJavaProgramRunner.getSettingsEditor");
         return null;
     }
 }
