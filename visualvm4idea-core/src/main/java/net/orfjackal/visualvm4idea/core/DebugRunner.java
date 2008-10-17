@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.core;
 
 import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 
 import java.util.Set;
 

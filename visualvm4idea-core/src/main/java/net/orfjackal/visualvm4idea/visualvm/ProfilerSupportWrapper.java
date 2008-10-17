@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.visualvm;
 
 import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.profiler.ProfilerSupport;
