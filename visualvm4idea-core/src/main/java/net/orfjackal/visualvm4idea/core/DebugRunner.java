@@ -32,6 +32,8 @@
 package net.orfjackal.visualvm4idea.core;
 
 import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.application.jvm.Jvm;
+import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 
@@ -61,9 +63,35 @@ public class DebugRunner implements Runnable {
         System.out.println("---");
 
         Set<Application> applications = DataSourceRepository.sharedInstance().getDataSources(Application.class);
-        for (Application application : applications) {
-            System.out.println("application = " + application);
-            ProfilerSupportWrapper.selectProfilerView(application);
+        for (Application app : applications) {
+
+            System.out.println("app = " + app);
+            System.out.println("app.getHost() = " + app.getHost());
+            System.out.println("app.getId() = " + app.getId());
+            System.out.println("app.getMaster() = " + app.getMaster());
+            System.out.println("app.getOwner() = " + app.getOwner());
+            System.out.println("app.getPid() = " + app.getPid());
+            System.out.println("app.getRepository() = " + app.getRepository());
+            System.out.println("app.getState() = " + app.getState());
+            System.out.println("app.getStorage() = " + app.getStorage());
+            System.out.println("app.isLocalApplication() = " + app.isLocalApplication());
+            System.out.println("app.isRemoved() = " + app.isRemoved());
+            System.out.println("app.isVisible() = " + app.isVisible());
+            System.out.println("app.supportsUserRemove() = " + app.supportsUserRemove());
+
+            Jvm jvm = JvmFactory.getJVMFor(app);
+            System.out.println("jvm.getCommandLine() = " + jvm.getCommandLine());
+            System.out.println("jvm.getJavaHome() = " + jvm.getJavaHome());
+            System.out.println("jvm.getJvmArgs() = " + jvm.getJvmArgs());
+            System.out.println("jvm.getJvmFlags() = " + jvm.getJvmFlags());
+            System.out.println("jvm.getMainArgs() = " + jvm.getMainArgs());
+            System.out.println("jvm.getMainClass() = " + jvm.getMainClass());
+            System.out.println("jvm.getVmInfo() = " + jvm.getVmInfo());
+            System.out.println("jvm.getVmName() = " + jvm.getVmName());
+            System.out.println("jvm.getVmVendor() = " + jvm.getVmVendor());
+            System.out.println("jvm.getVmVersion() = " + jvm.getVmVersion());
+
+            ProfilerSupportWrapper.selectProfilerView(app);
             sleep(1000);
         }
     }
