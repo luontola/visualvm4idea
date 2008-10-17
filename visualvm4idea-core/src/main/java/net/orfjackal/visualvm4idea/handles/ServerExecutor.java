@@ -29,62 +29,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.util;
+package net.orfjackal.visualvm4idea.handles;
 
-import jdave.Group;
-import jdave.Specification;
-import jdave.junit4.JDaveRunner;
-import org.junit.runner.RunWith;
+import net.orfjackal.visualvm4idea.util.ServerConnection;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.rmi.RemoteException;
+import java.util.concurrent.Callable;
 
 /**
  * @author Esko Luontola
  * @since 17.10.2008
  */
-@RunWith(JDaveRunner.class)
-@Group({"fast"})
-public class ClientServerConnectionSpec extends Specification<Object> {
+public class ServerExecutor {
 
-    public class WhenTheClientIsStarted {
+    private final ServerConnection connection;
 
-        private ServerConnection server;
-        private ClientConnection client;
+    public ServerExecutor(ServerConnection connection) {
+        this.connection = connection;
+    }
 
-        public Object create() throws IOException {
-            server = new ServerConnection();
-            return null;
+    public <V> V runRemotely(Callable<V> callable) throws Exception {
+        connection.getOutput().writeObject(callable);
+        Object value = connection.getInput().readObject();
+        if (value instanceof Exception) {
+            Exception e = (Exception) value;
+            throw new RemoteException(e.getMessage(), e);
         }
-
-        public void destroy() throws IOException {
-            client.close();
-            server.close();
-        }
-
-        public void theClientConnectsToTheServer() throws Exception {
-            specify(!server.isConnected());
-            startClient();
-            specify(server.isConnected());
-        }
-
-        public void clientCanSendMessagesToTheServer() throws Exception {
-            startClient();
-            client.getOutput().writeUTF("message");
-            client.getOutput().flush();
-            specify(server.getInput().readUTF(), should.equal("message"));
-        }
-
-        public void serverCanSendMessagesToTheClient() throws Exception {
-            startClient();
-            server.getOutput().writeUTF("message");
-            server.getOutput().flush();
-            specify(client.getInput().readUTF(), should.equal("message"));
-        }
-
-        private void startClient() throws IOException, InterruptedException {
-            client = new ClientConnection(server.getPort());
-            server.awaitConnection(100, TimeUnit.MILLISECONDS);
-        }
+        return (V) value;
     }
 }

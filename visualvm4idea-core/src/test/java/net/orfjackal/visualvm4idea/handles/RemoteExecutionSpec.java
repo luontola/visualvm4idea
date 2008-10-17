@@ -31,15 +31,18 @@
 
 package net.orfjackal.visualvm4idea.handles;
 
+import jdave.Block;
 import jdave.Group;
 import jdave.Specification;
 import jdave.junit4.JDaveRunner;
-import net.orfjackal.visualvm4idea.core.VisualVmHookRunner;
+import net.orfjackal.visualvm4idea.util.ClientConnection;
 import net.orfjackal.visualvm4idea.util.ServerConnection;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.util.concurrent.Callable;
 
 /**
  * @author Esko Luontola
@@ -47,38 +50,58 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(JDaveRunner.class)
 @Group({"fast"})
-public class StartingVisualVmSpec extends Specification<Object> {
+public class RemoteExecutionSpec extends Specification<Object> {
 
-    public class WhenVisualVmIsStarted {
+    public class WhenServerSendsACommandToTheClient {
 
-        private ServerConnection server;
-        private VisualVmHandle handle;
-        private VisualVmHookRunner hook;
-        private Thread hookThread;
+        private ServerConnection serverCon;
+        private ClientConnection clientCon;
+        private ServerExecutor server;
+        private ClientExecutor client;
 
         public Object create() throws IOException {
-            server = new ServerConnection();
-            handle = new VisualVmHandle(server);
-            hook = new VisualVmHookRunner(server.getPort());
+            serverCon = new ServerConnection();
+            clientCon = new ClientConnection(serverCon.getPort());
+            server = new ServerExecutor(serverCon);
+            client = new ClientExecutor(clientCon);
             return null;
         }
 
         public void destroy() throws IOException {
-            hookThread.interrupt();
-            server.close();
+            clientCon.close();
+            serverCon.close();
         }
 
-        public void itWillConnectToTheHandle() throws InterruptedException {
-            specify(!server.isConnected());
-            startVisualVm();
-            server.awaitConnection(100, TimeUnit.MILLISECONDS);
-            specify(server.isConnected());
+        public void theClientWillExecuteTheCommandAndReturnTheValue() throws Exception {
+            specify(server.runRemotely(new ValueCallable("foo")), should.equal("foo"));
         }
 
-        private void startVisualVm() {
-            hookThread = new Thread(hook);
-            hookThread.setDaemon(true);
-            hookThread.start();
+        public void ifTheClientThrowsAnExceptionTheServerWillRethrowIt() {
+            specify(new Block() {
+                public void run() throws Throwable {
+                    server.runRemotely(new ExceptionCallable());
+                }
+            }, should.raise(RemoteException.class));
+        }
+    }
+
+    private static class ValueCallable implements Callable<String>, Serializable {
+
+        private final String value;
+
+        public ValueCallable(String value) {
+            this.value = value;
+        }
+
+        public String call() throws Exception {
+            return value;
+        }
+    }
+
+    private static class ExceptionCallable implements Callable<String>, Serializable {
+
+        public String call() throws Exception {
+            throw new IllegalArgumentException();
         }
     }
 }

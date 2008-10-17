@@ -64,14 +64,16 @@ public class StartingProfiledApplicationSpec extends Specification<Object> {
         }
 
         public void destroy() throws IOException {
+            handle.resumeApplication();
             server.close();
         }
 
-        public void itConnectsToTheProfilerAndWaitsForInstructions() {
+        public void itConnectsToTheProfilerAndWaitsForInstructions() throws InterruptedException {
             specify(server.isConnected(), should.equal(false));
             startProfiledApp();
             specify(server.isConnected(), should.equal(true));
             specify(app.premainEntered());
+            app.main.await(100, TimeUnit.MILLISECONDS);
             specify(!app.mainEntered());
         }
 
