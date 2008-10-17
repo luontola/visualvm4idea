@@ -71,5 +71,11 @@ public class ParameterParserSpec extends Specification<Object> {
             specify(params.get("foo"), should.equal("1"));
             specify(params.get("bar"), should.equal("2"));
         }
+
+        public void allowsTheKeyValueSeparatorCharInAValue() {
+            params = ParameterParser.parse("foo=1=2");
+            specify(params.size(), should.equal(1));
+            specify(params.get("foo"), should.equal("1=2"));
+        }
     }
 }

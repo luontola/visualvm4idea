@@ -41,6 +41,7 @@ public class HookLoadingClassAdapter extends ClassAdapter implements Opcodes {
 
     private static final String TARGET_CLASS = "com/sun/tools/visualvm/profiler/Installer";
     private static final String TARGET_METHOD = "restored";
+    private static final String HOOK_LOADER_CLASS = "net/orfjackal/visualvm4idea/visualvm/agent/HookLoader";
 
     private boolean instrumentClass;
 
@@ -74,7 +75,7 @@ public class HookLoadingClassAdapter extends ClassAdapter implements Opcodes {
                 super.visitVarInsn(ALOAD, 0);
                 super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;");
                 super.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getClassLoader", "()Ljava/lang/ClassLoader;");
-                super.visitMethodInsn(INVOKESTATIC, "net/orfjackal/visualvm4idea/agent/HookLoader", "hook", "(Ljava/lang/ClassLoader;)V");
+                super.visitMethodInsn(INVOKESTATIC, HOOK_LOADER_CLASS, "hook", "(Ljava/lang/ClassLoader;)V");
             }
             super.visitInsn(opcode);
         }

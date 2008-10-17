@@ -156,6 +156,7 @@
     <orderEntry type="module" module-name="visualvm4idea-help" exported="" />
     <orderEntry type="module" module-name="visualvm4idea-plugin" exported="" />
     <orderEntry type="module" module-name="visualvm4idea-core" exported="" />
+    <orderEntry type="module" module-name="visualvm4idea-util" exported="" />
     <orderEntry type="module-library">
       <library name="com.sun.tools.visualvm:visualvm-application:1.0.1">
         <CLASSES>

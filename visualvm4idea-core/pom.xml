@@ -15,6 +15,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-util</artifactId>
+        </dependency>
+
         <!-- VisualVM -->
 
         <dependency>

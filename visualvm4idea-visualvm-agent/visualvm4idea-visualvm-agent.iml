@@ -154,6 +154,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="visualvm4idea-util" exported="" />
     <orderEntry type="module-library" exported="">
       <library name="asm:asm:3.1">
         <CLASSES>

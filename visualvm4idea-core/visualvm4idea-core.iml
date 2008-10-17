@@ -154,6 +154,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="visualvm4idea-util" exported="" />
     <orderEntry type="module-library">
       <library name="com.sun.tools.visualvm:visualvm-application:1.0.1">
         <CLASSES>

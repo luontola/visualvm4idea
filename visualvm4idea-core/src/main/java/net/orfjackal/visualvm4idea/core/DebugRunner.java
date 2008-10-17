@@ -52,7 +52,7 @@ public class DebugRunner implements Runnable {
                 t.printStackTrace(System.out);
                 return;
             }
-            sleep(10000);
+            sleep(5000);
         }
     }
 

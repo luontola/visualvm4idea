@@ -8,11 +8,13 @@
     <packaging>pom</packaging>
     <modules>
         <module>visualvm4idea-core</module>
-        <module>visualvm4idea-dist</module>
-        <module>visualvm4idea-help</module>
-        <module>visualvm4idea-plugin</module>
+        <module>visualvm4idea-util</module>
         <module>visualvm4idea-program-agent</module>
         <module>visualvm4idea-visualvm-agent</module>
+
+        <module>visualvm4idea-plugin</module>
+        <module>visualvm4idea-help</module>
+        <module>visualvm4idea-dist</module>
     </modules>
     <properties>
         <plugin.name>VisualVM for IDEA</plugin.name>
@@ -99,12 +101,7 @@
             </dependency>
             <dependency>
                 <groupId>net.orfjackal.visualvm4idea</groupId>
-                <artifactId>visualvm4idea-help</artifactId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.orfjackal.visualvm4idea</groupId>
-                <artifactId>visualvm4idea-plugin</artifactId>
+                <artifactId>visualvm4idea-util</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
@@ -115,6 +112,17 @@
             <dependency>
                 <groupId>net.orfjackal.visualvm4idea</groupId>
                 <artifactId>visualvm4idea-visualvm-agent</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.orfjackal.visualvm4idea</groupId>
+                <artifactId>visualvm4idea-plugin</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.orfjackal.visualvm4idea</groupId>
+                <artifactId>visualvm4idea-help</artifactId>
                 <version>${version}</version>
             </dependency>
 

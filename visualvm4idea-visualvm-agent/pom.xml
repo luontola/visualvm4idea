@@ -16,6 +16,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-util</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
         </dependency>
