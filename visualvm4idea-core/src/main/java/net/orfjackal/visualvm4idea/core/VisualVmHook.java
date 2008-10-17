@@ -29,42 +29,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+package net.orfjackal.visualvm4idea.core;
 
 /**
  * @author Esko Luontola
  * @since 10.10.2008
  */
-public class HookLoader {
+public class VisualVmHook {
 
-    public static final String HOOK_LIB_PROPERTY = "net.orfjackal.visualvm4idea.visualvm.agent.hookLibrary";
-    private static final String HOOK_CLASS = "net.orfjackal.visualvm4idea.core.VisualVmHook";
+    private static boolean started = false;
 
-    private static boolean hooked = false;
-
-    public static synchronized void hook(ClassLoader classLoader) {
-        if (!hooked) {
-            hooked = true;
-            try {
-                tryStartHookUnderClassLoader(classLoader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public synchronized static void start() {
+        if (!started) {
+            Thread t = new Thread(new DebugRunner());
+            t.setDaemon(true);
+            t.start();
+            started = true;
         }
-    }
-
-    private static void tryStartHookUnderClassLoader(ClassLoader parent) throws Exception {
-        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass(HOOK_CLASS);
-        clazz.getMethod("start").invoke(null);
-    }
-
-    private static URL getHookLibrary() throws MalformedURLException {
-        return new File(System.getProperty(HOOK_LIB_PROPERTY)).toURI().toURL();
     }
 }

@@ -29,42 +29,35 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
+package net.orfjackal.visualvm4idea.core;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 17.10.2008
  */
-public class HookLoader {
+public class VisualVmHookRunner implements Runnable {
 
-    public static final String HOOK_LIB_PROPERTY = "net.orfjackal.visualvm4idea.visualvm.agent.hookLibrary";
-    private static final String HOOK_CLASS = "net.orfjackal.visualvm4idea.core.VisualVmHook";
+    private final int port;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
-    private static boolean hooked = false;
+    public VisualVmHookRunner(int port) {
+        this.port = port;
+    }
 
-    public static synchronized void hook(ClassLoader classLoader) {
-        if (!hooked) {
-            hooked = true;
-            try {
-                tryStartHookUnderClassLoader(classLoader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public void run() {
+        try {
+            Socket socket = new Socket("localhost", port);
+            in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    private static void tryStartHookUnderClassLoader(ClassLoader parent) throws Exception {
-        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass(HOOK_CLASS);
-        clazz.getMethod("start").invoke(null);
-    }
-
-    private static URL getHookLibrary() throws MalformedURLException {
-        return new File(System.getProperty(HOOK_LIB_PROPERTY)).toURI().toURL();
     }
 }

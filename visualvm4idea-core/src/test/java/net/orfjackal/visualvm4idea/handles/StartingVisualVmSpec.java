@@ -29,42 +29,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
+package net.orfjackal.visualvm4idea.handles;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import jdave.Group;
+import jdave.Specification;
+import jdave.junit4.JDaveRunner;
+import net.orfjackal.visualvm4idea.core.VisualVmHookRunner;
+import org.junit.runner.RunWith;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 17.10.2008
  */
-public class HookLoader {
+@RunWith(JDaveRunner.class)
+@Group({"fast"})
+public class StartingVisualVmSpec extends Specification<Object> {
 
-    public static final String HOOK_LIB_PROPERTY = "net.orfjackal.visualvm4idea.visualvm.agent.hookLibrary";
-    private static final String HOOK_CLASS = "net.orfjackal.visualvm4idea.core.VisualVmHook";
+    public class WhenVisualVmIsStarted {
 
-    private static boolean hooked = false;
+        private VisualVmHandle handle;
+        private VisualVmHookRunner hook;
+        private Thread hookThread;
 
-    public static synchronized void hook(ClassLoader classLoader) {
-        if (!hooked) {
-            hooked = true;
-            try {
-                tryStartHookUnderClassLoader(classLoader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        public Object create() {
+            handle = new VisualVmHandle();
+            hook = new VisualVmHookRunner(handle.getPort());
+            return null;
         }
-    }
 
-    private static void tryStartHookUnderClassLoader(ClassLoader parent) throws Exception {
-        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass(HOOK_CLASS);
-        clazz.getMethod("start").invoke(null);
-    }
+        public void destroy() {
+            hookThread.interrupt();
+        }
 
-    private static URL getHookLibrary() throws MalformedURLException {
-        return new File(System.getProperty(HOOK_LIB_PROPERTY)).toURI().toURL();
+        public void itWillConnectToTheHandle() {
+            specify(!handle.isConnected());
+            startVisualVm();
+            handle.awaitConnection(100, TimeUnit.MILLISECONDS);
+            specify(handle.isConnected());
+        }
+
+        private void startVisualVm() {
+            hookThread = new Thread(hook);
+            hookThread.setDaemon(true);
+            hookThread.start();
+        }
     }
 }

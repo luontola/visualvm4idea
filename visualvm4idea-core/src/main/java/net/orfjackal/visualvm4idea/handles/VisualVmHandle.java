@@ -29,22 +29,67 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.handles;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 17.10.2008
  */
-public class Hook {
+public class VisualVmHandle {
 
-    private static boolean started = false;
+    private final ServerSocket serverSocket;
+    private final CountDownLatch connected = new CountDownLatch(1);
 
-    public synchronized static void start() {
-        if (!started) {
-            Thread t = new Thread(new DebugRunner());
-            t.setDaemon(true);
-            t.start();
-            started = true;
+    private volatile Socket socket;
+    private volatile ObjectInputStream in;
+    private volatile ObjectOutputStream out;
+
+    public VisualVmHandle() {
+        try {
+            serverSocket = new ServerSocket(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Thread t = new Thread(new SocketListener());
+        t.setDaemon(true);
+        t.start();
+    }
+
+    public int getPort() {
+        return serverSocket.getLocalPort();
+    }
+
+    public boolean isConnected() {
+        return socket != null && socket.isConnected();
+    }
+
+    public void awaitConnection(int timeout, TimeUnit unit) {
+        try {
+            connected.await(timeout, unit);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private class SocketListener implements Runnable {
+
+        public void run() {
+            try {
+                socket = serverSocket.accept();
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
