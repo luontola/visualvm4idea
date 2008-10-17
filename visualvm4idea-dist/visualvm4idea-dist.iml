@@ -20,7 +20,6 @@
         </JAVADOC>
         <SOURCES>
           <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/annotations-sources.jar!/" />
-          <root url="intellijad://intellijad" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -154,7 +153,7 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="visualvm4idea-agent" exported="" />
+    <orderEntry type="module" module-name="visualvm4idea-visualvm-agent" exported="" />
     <orderEntry type="module-library" exported="">
       <library name="asm:asm:3.1">
         <CLASSES>

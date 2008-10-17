@@ -273,11 +273,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea.iml" filepath="$PROJECT_DIR$/visualvm4idea.iml" />
-      <module fileurl="file://$PROJECT_DIR$/visualvm4idea-agent/visualvm4idea-agent.iml" filepath="$PROJECT_DIR$/visualvm4idea-agent/visualvm4idea-agent.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-core/visualvm4idea-core.iml" filepath="$PROJECT_DIR$/visualvm4idea-core/visualvm4idea-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-dist/visualvm4idea-dist.iml" filepath="$PROJECT_DIR$/visualvm4idea-dist/visualvm4idea-dist.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-help/visualvm4idea-help.iml" filepath="$PROJECT_DIR$/visualvm4idea-help/visualvm4idea-help.iml" />
       <module fileurl="file://$PROJECT_DIR$/visualvm4idea-plugin/visualvm4idea-plugin.iml" filepath="$PROJECT_DIR$/visualvm4idea-plugin/visualvm4idea-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualvm4idea-visualvm-agent/visualvm4idea-visualvm-agent.iml" filepath="$PROJECT_DIR$/visualvm4idea-visualvm-agent/visualvm4idea-visualvm-agent.iml" />
     </modules>
   </component>
   <component name="ProjectRootConfigurable.UI">
@@ -299,7 +299,7 @@
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="visualvm4idea-agent" />
+      <module name="" />
       <envs />
       <RunnerSettings RunnerId="JProfiler">
         <option name="WINDOW" value="false" />
@@ -322,7 +322,7 @@
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="visualvm4idea-agent" />
+      <module name="" />
       <envs />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="1516" />
