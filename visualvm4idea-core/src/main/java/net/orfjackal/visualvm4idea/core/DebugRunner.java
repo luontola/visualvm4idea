@@ -35,7 +35,11 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import com.sun.tools.visualvm.profiler.CPUSettingsSupport;
+import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
+import com.sun.tools.visualvm.profiler.ProfilerSupport;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
+import net.orfjackal.visualvm4idea.visualvm.ReflectionUtil;
 
 import java.util.Set;
 
@@ -93,6 +97,24 @@ public class DebugRunner implements Runnable {
 
             ProfilerSupportWrapper.selectProfilerView(app);
             sleep(1000);
+
+            Object provider = ReflectionUtil.get(ProfilerSupport.class, ProfilerSupport.getInstance(), "profilerViewProvider");
+            Object view = ReflectionUtil.call("com.sun.tools.visualvm.profiler.ApplicationProfilerViewProvider", provider,
+                    "view", new Class<?>[]{Application.class}, app);
+            System.out.println("view = " + view);
+
+            Object masterViewSupport =
+                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView", view, "masterViewSupport");
+            System.out.println("masterViewSupport = " + masterViewSupport);
+
+            CPUSettingsSupport cpuSettingsSupport = (CPUSettingsSupport)
+                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView$MasterViewSupport",
+                            masterViewSupport, "cpuSettingsSupport");
+            MemorySettingsSupport memorySettingsSupport = (MemorySettingsSupport)
+                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView$MasterViewSupport",
+                            masterViewSupport, "memorySettingsSupport");
+            System.out.println("cpuSettingsSupport = " + cpuSettingsSupport);
+            System.out.println("memorySettingsSupport = " + memorySettingsSupport);
         }
     }
 

@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.visualvm;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -56,6 +57,25 @@ public class ReflectionUtil {
             Method method = cls.getDeclaredMethod(methodName, parameterTypes);
             method.setAccessible(true);
             return method.invoke(obj, args);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object get(String className, Object obj, String fieldName) {
+        try {
+            Class<?> cls = ReflectionUtil.class.getClassLoader().loadClass(className);
+            return get(cls, obj, fieldName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object get(Class<?> cls, Object obj, String fieldName) {
+        try {
+            Field field = cls.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
