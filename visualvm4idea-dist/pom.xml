@@ -17,15 +17,19 @@
 
         <dependency>
             <groupId>net.orfjackal.visualvm4idea</groupId>
-            <artifactId>visualvm4idea-visualvm-agent</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.orfjackal.visualvm4idea</groupId>
             <artifactId>visualvm4idea-help</artifactId>
         </dependency>
         <dependency>
             <groupId>net.orfjackal.visualvm4idea</groupId>
             <artifactId>visualvm4idea-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-program-agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-visualvm-agent</artifactId>
         </dependency>
 
     </dependencies>

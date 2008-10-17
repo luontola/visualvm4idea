@@ -5,8 +5,8 @@
     <exclude-output />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/target/archive-tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/target/visualvm4idea" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -150,115 +150,6 @@
         </JAVADOC>
         <SOURCES>
           <root url="jar://$M2_REPO$/junit/junit-dep/4.4/junit-dep-4.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module" module-name="visualvm4idea-help" exported="" />
-    <orderEntry type="module" module-name="visualvm4idea-plugin" exported="" />
-    <orderEntry type="module" module-name="visualvm4idea-core" exported="" />
-    <orderEntry type="module-library">
-      <library name="com.sun.tools.visualvm:visualvm-application:1.0.1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="com.sun.tools.visualvm:visualvm-core:1.0.1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="com.sun.tools.visualvm:visualvm-host:1.0.1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="com.sun.tools.visualvm:visualvm-profiler:1.0.1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="com.intellij:openapi:7941">
-        <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/openapi.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/openapi-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/openapi-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="com.intellij:extensions:7941">
-        <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/extensions.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/extensions-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/extensions-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="com.intellij:forms_rt:6.0.5">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module" module-name="visualvm4idea-program-agent" exported="" />
-    <orderEntry type="module" module-name="visualvm4idea-visualvm-agent" exported="" />
-    <orderEntry type="module-library" exported="">
-      <library name="asm:asm:3.1">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
