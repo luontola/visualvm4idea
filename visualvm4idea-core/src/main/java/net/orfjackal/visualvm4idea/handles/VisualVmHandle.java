@@ -71,22 +71,25 @@ public class VisualVmHandle {
         return socket != null && socket.isConnected();
     }
 
-    public void awaitConnection(int timeout, TimeUnit unit) {
+    public void awaitConnection(int timeout, TimeUnit unit) throws InterruptedException {
+        connected.await(timeout, unit);
+    }
+
+    public void close() {
         try {
-            connected.await(timeout, unit);
-        } catch (InterruptedException e) {
+            serverSocket.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private class SocketListener implements Runnable {
-
         public void run() {
             try {
                 socket = serverSocket.accept();
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());
-
+                connected.countDown();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -61,6 +61,7 @@ public class StartingVisualVmSpec extends Specification<Object> {
 
         public void destroy() {
             hookThread.interrupt();
+            handle.close();
         }
 
         public void itWillConnectToTheHandle() {

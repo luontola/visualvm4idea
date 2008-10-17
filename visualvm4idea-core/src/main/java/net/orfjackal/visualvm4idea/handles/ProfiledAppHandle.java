@@ -95,10 +95,9 @@ public class ProfiledAppHandle {
             try {
                 socket = serverSocket.accept();
                 out = new ObjectOutputStream(socket.getOutputStream());
+                connected.countDown();
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } finally {
-                connected.countDown();
             }
         }
     }
