@@ -31,20 +31,33 @@
 
 package net.orfjackal.visualvm4idea.visualvm;
 
-import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.profiler.ProfilerSupport;
+import java.lang.reflect.Method;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 18.10.2008
  */
-public class ProfilerSupportWrapper {
+public class ReflectionUtil {
 
-    private ProfilerSupportWrapper() {
+    private ReflectionUtil() {
     }
 
-    public static void selectProfilerView(Application application) {
-        ReflectionUtil.call(ProfilerSupport.class, ProfilerSupport.getInstance(),
-                "selectProfilerView", new Class<?>[]{Application.class}, application);
+    public static Object call(String className, Object obj, String methodName, Class<?>[] parameterTypes, Object... args) {
+        try {
+            Class<?> cls = ReflectionUtil.class.getClassLoader().loadClass(className);
+            return call(cls, obj, methodName, parameterTypes, args);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object call(Class<?> cls, Object obj, String methodName, Class<?>[] parameterTypes, Object... args) {
+        try {
+            Method method = cls.getDeclaredMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            return method.invoke(obj, args);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
