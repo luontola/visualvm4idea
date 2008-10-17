@@ -64,7 +64,7 @@ public class StartingVisualVmSpec extends Specification<Object> {
             handle.close();
         }
 
-        public void itWillConnectToTheHandle() {
+        public void itWillConnectToTheHandle() throws InterruptedException {
             specify(!handle.isConnected());
             startVisualVm();
             handle.awaitConnection(100, TimeUnit.MILLISECONDS);
