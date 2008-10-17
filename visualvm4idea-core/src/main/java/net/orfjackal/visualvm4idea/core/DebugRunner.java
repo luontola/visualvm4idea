@@ -98,6 +98,13 @@ public class DebugRunner implements Runnable {
             ProfilerSupportWrapper.selectProfilerView(app);
             sleep(1000);
 
+            // TODO: create a fluent api for reflection:
+            // Object mvs = Access.object(ProfilerSupport.getInstance())
+            //          .field("profilerViewProvider").method(app)
+            //          .field("masterViewSupport").value();
+            // Object cpu = Access.object(mvs).field("cpuSettingsSupport").value();
+            // Object mem = Access.object(mvs).field("memorySettingsSupport").value();
+
             Object provider = ReflectionUtil.get(ProfilerSupport.class, ProfilerSupport.getInstance(), "profilerViewProvider");
             Object view = ReflectionUtil.call("com.sun.tools.visualvm.profiler.ApplicationProfilerViewProvider", provider,
                     "view", new Class<?>[]{Application.class}, app);
