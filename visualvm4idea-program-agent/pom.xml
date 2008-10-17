@@ -33,8 +33,8 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Premain-Class>net.orfjackal.visualvm4idea.program.agent.ProgramAgent</Premain-Class>
-                            <Agent-Class>net.orfjackal.visualvm4idea.program.agent.ProgramAgent</Agent-Class>
+                            <Premain-Class>net.orfjackal.visualvm4idea.program.agent.ProfiledAppAgent</Premain-Class>
+                            <Agent-Class>net.orfjackal.visualvm4idea.program.agent.ProfiledAppAgent</Agent-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>

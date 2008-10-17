@@ -31,23 +31,36 @@
 
 package net.orfjackal.visualvm4idea.program.agent;
 
-import java.lang.instrument.Instrumentation;
+import net.orfjackal.visualvm4idea.util.ParameterParser;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 
 /**
  * @author Esko Luontola
  * @since 17.10.2008
  */
-public class ProgramAgent {
+public class ProfiledAppAgent {
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        waitForProfilerToStart(agentArgs, inst);
+    public static void premain(String agentArgs) {
+        int port = Integer.parseInt(ParameterParser.parse(agentArgs).get("port"));
+        waitForProfilerToStart(port);
     }
 
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        waitForProfilerToStart(agentArgs, inst);
+    private static void waitForProfilerToStart(int port) {
+        try {
+            Socket socket = new Socket("localhost", port);
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            waitForResumeCommand(in);
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void waitForProfilerToStart(String agentArgs, Instrumentation inst) {
-
+    private static void waitForResumeCommand(ObjectInputStream in) throws IOException {
+        String command = in.readUTF();
+        assert command.equals("RESUME");
     }
 }
