@@ -29,11 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.program.agent;
+package net.orfjackal.visualvm4idea.handles;
 
 import jdave.Group;
 import jdave.Specification;
 import jdave.junit4.JDaveRunner;
+import net.orfjackal.visualvm4idea.program.agent.ProfiledAppAgent;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
