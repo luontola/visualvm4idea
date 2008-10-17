@@ -29,9 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
-
-import net.orfjackal.visualvm4idea.util.ServerConnection;
+package net.orfjackal.visualvm4idea.util;
 
 import java.rmi.RemoteException;
 import java.util.concurrent.Callable;

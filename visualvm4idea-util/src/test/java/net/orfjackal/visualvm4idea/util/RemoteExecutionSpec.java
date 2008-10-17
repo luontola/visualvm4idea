@@ -29,14 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
+package net.orfjackal.visualvm4idea.util;
 
 import jdave.Block;
 import jdave.Group;
 import jdave.Specification;
 import jdave.junit4.JDaveRunner;
-import net.orfjackal.visualvm4idea.util.ClientConnection;
-import net.orfjackal.visualvm4idea.util.ServerConnection;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;

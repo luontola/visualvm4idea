@@ -29,9 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
-
-import net.orfjackal.visualvm4idea.util.ClientConnection;
+package net.orfjackal.visualvm4idea.util;
 
 import java.util.concurrent.Callable;
 
