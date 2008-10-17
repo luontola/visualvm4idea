@@ -29,41 +29,42 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
+package net.orfjackal.visualvm4idea.visualvm.agent;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.lang.instrument.Instrumentation;
 
 /**
+ * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
+ * for details on using agents.
+ *
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 9.10.2008
  */
-public class HookLoader {
+public class Agent {
 
-    public static final String HOOK_LIB_PROPERTY = "net.orfjackal.visualvm4idea.agent.hookLibrary";
+    public static void premain(String agentArgs, Instrumentation inst) {
+        installTransformations(agentArgs, inst);
+    }
 
-    private static boolean hooked = false;
+    public static void agentmain(String agentArgs, Instrumentation inst) {
+        installTransformations(agentArgs, inst);
+    }
 
-    public static synchronized void hook(ClassLoader classLoader) {
-        if (!hooked) {
-            hooked = true;
-            try {
-                tryStartHookUnderClassLoader(classLoader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    private static void installTransformations(String agentArgs, Instrumentation inst) {
+        directOutputToFile();
+        System.setProperty(HookLoader.HOOK_LIB_PROPERTY, agentArgs);
+        inst.addTransformer(new VisualVmTransformer());
+    }
+
+    private static void directOutputToFile() {
+        // TODO: remove debug code
+        try {
+            System.setOut(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_out.txt"));
+            System.setErr(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_err.txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    private static void tryStartHookUnderClassLoader(ClassLoader parent) throws Exception {
-        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass("net.orfjackal.visualvm4idea.core.Hook");
-        clazz.getMethod("start").invoke(null);
-    }
-
-    private static URL getHookLibrary() throws MalformedURLException {
-        return new File(System.getProperty(HOOK_LIB_PROPERTY)).toURI().toURL();
     }
 }

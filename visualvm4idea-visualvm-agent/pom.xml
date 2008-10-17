@@ -39,8 +39,8 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Premain-Class>net.orfjackal.visualvm4idea.agent.Agent</Premain-Class>
-                            <Agent-Class>net.orfjackal.visualvm4idea.agent.Agent</Agent-Class>
+                            <Premain-Class>net.orfjackal.visualvm4idea.visualvm.agent.Agent</Premain-Class>
+                            <Agent-Class>net.orfjackal.visualvm4idea.visualvm.agent.Agent</Agent-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>

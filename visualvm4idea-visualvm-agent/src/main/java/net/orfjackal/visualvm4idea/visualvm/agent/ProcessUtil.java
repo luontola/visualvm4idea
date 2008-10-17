@@ -1,5 +1,5 @@
 /*
- * This file is part of Dimdwarf Application Server <http://dimdwarf.sourceforge.net/>
+ * This file is part of VisualVM for IDEA
  *
  * Copyright (c) 2008, Esko Luontola. All Rights Reserved.
  *
@@ -29,43 +29,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent.util;
+package net.orfjackal.visualvm4idea.visualvm.agent;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
-import java.security.ProtectionDomain;
+import java.lang.reflect.Field;
 
 /**
  * @author Esko Luontola
- * @since 9.9.2008
+ * @since 15.10.2008
  */
-public abstract class AbstractTransformationChain implements ClassFileTransformer {
+public class ProcessUtil {
 
-    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-                            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        ClassReader cr = new ClassReader(classfileBuffer);
-        ClassWriter cw;
-        if (enableAdditiveTransformationOptimization()) {
-            cw = new ClassWriter(cr, 0);
-        } else {
-            cw = new ClassWriter(0);
+    public static long getProcessHandle(Process p) {
+        try {
+            Field handle = p.getClass().getDeclaredField("handle");
+            handle.setAccessible(true);
+            return handle.getLong(p);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        ClassVisitor cv = getAdapters(cw);
-        cr.accept(cv, 0);
-        return cw.toByteArray();
     }
 
-    /**
-     * See "Optimization" in section 2.2.4 of
-     * <a href="http://download.forge.objectweb.org/asm/asm-guide.pdf">ASM 3.0 User Guide</a>
-     */
-    protected boolean enableAdditiveTransformationOptimization() {
-        return true;
-    }
+    public static void main(String[] args) throws Exception {
 
-    protected abstract ClassVisitor getAdapters(ClassVisitor cv);
+        Process p = Runtime.getRuntime().exec(new String[]{
+                "C:\\Program Files\\Java\\jre1.6.0_07\\bin\\java.exe",
+                "-jar", "D:\\DEVEL\\Animelister Client\\Release\\AnimelisterClient.jar"
+        });
+        long handle = getProcessHandle(p);
+        System.out.println("handle = " + handle);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of VisualVM for IDEA
+ * This file is part of Dimdwarf Application Server <http://dimdwarf.sourceforge.net/>
  *
  * Copyright (c) 2008, Esko Luontola. All Rights Reserved.
  *
@@ -29,42 +29,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
+package net.orfjackal.visualvm4idea.visualvm.agent.util;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.lang.instrument.Instrumentation;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
+import java.security.ProtectionDomain;
 
 /**
- * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
- * for details on using agents.
- *
  * @author Esko Luontola
- * @since 9.10.2008
+ * @since 9.9.2008
  */
-public class Agent {
+public abstract class AbstractTransformationChain implements ClassFileTransformer {
 
-    public static void premain(String agentArgs, Instrumentation inst) {
-        installTransformations(agentArgs, inst);
-    }
-
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        installTransformations(agentArgs, inst);
-    }
-
-    private static void installTransformations(String agentArgs, Instrumentation inst) {
-        directOutputToFile();
-        System.setProperty(HookLoader.HOOK_LIB_PROPERTY, agentArgs);
-        inst.addTransformer(new VisualVmTransformer());
-    }
-
-    private static void directOutputToFile() {
-        // TODO: remove debug code
-        try {
-            System.setOut(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_out.txt"));
-            System.setErr(new PrintStream("D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\debug_err.txt"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
+                            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+        ClassReader cr = new ClassReader(classfileBuffer);
+        ClassWriter cw;
+        if (enableAdditiveTransformationOptimization()) {
+            cw = new ClassWriter(cr, 0);
+        } else {
+            cw = new ClassWriter(0);
         }
+        ClassVisitor cv = getAdapters(cw);
+        cr.accept(cv, 0);
+        return cw.toByteArray();
     }
+
+    /**
+     * See "Optimization" in section 2.2.4 of
+     * <a href="http://download.forge.objectweb.org/asm/asm-guide.pdf">ASM 3.0 User Guide</a>
+     */
+    protected boolean enableAdditiveTransformationOptimization() {
+        return true;
+    }
+
+    protected abstract ClassVisitor getAdapters(ClassVisitor cv);
 }

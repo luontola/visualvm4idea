@@ -29,36 +29,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
-
-import java.lang.reflect.Field;
+package net.orfjackal.visualvm4idea.visualvm.agent;
 
 /**
  * @author Esko Luontola
- * @since 15.10.2008
+ * @since 10.10.2008
  */
-public class ProcessUtil {
+public class Test {
 
-    public static long getProcessHandle(Process p) {
-        try {
-            Field handle = p.getClass().getDeclaredField("handle");
-            handle.setAccessible(true);
-            return handle.getLong(p);
-
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    public Test() {
+        HookLoader.hook(this.getClass().getClassLoader());
     }
 
-    public static void main(String[] args) throws Exception {
+    public void test0() {
+    }
 
-        Process p = Runtime.getRuntime().exec(new String[]{
-                "C:\\Program Files\\Java\\jre1.6.0_07\\bin\\java.exe",
-                "-jar", "D:\\DEVEL\\Animelister Client\\Release\\AnimelisterClient.jar"
-        });
-        long handle = getProcessHandle(p);
-        System.out.println("handle = " + handle);
+    public void test1() {
+        HookLoader.hook(this.getClass().getClassLoader());
     }
 }

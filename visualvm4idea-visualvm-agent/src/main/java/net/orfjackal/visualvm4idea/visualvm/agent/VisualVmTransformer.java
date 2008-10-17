@@ -29,22 +29,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.agent;
+package net.orfjackal.visualvm4idea.visualvm.agent;
+
+import net.orfjackal.visualvm4idea.visualvm.agent.util.AbstractTransformationChain;
+import org.objectweb.asm.ClassVisitor;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 9.10.2008
  */
-public class Test {
+public class VisualVmTransformer extends AbstractTransformationChain {
 
-    public Test() {
-        HookLoader.hook(this.getClass().getClassLoader());
-    }
-
-    public void test0() {
-    }
-
-    public void test1() {
-        HookLoader.hook(this.getClass().getClassLoader());
+    protected ClassVisitor getAdapters(ClassVisitor cv) {
+        cv = new DebugClassAdapter(cv);
+        cv = new HookLoadingClassAdapter(cv);
+        return cv;
     }
 }
