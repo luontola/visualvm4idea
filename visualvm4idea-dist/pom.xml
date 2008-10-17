@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>net.orfjackal.visualvm4idea</groupId>
-            <artifactId>visualvm4idea-agent</artifactId>
+            <artifactId>visualvm4idea-visualvm-agent</artifactId>
         </dependency>
         <dependency>
             <groupId>net.orfjackal.visualvm4idea</groupId>

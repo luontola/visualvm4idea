@@ -8,10 +8,10 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>visualvm4idea-agent</artifactId>
+    <artifactId>visualvm4idea-visualvm-agent</artifactId>
     <packaging>jar</packaging>
 
-    <name>visualvm4idea-agent</name>
+    <name>visualvm4idea-visualvm-agent</name>
 
     <dependencies>
 
