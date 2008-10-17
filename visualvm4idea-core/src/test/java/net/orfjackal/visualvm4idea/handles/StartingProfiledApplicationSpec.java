@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(JDaveRunner.class)
 @Group({"fast"})
-public class StartingProfilingSpec extends Specification<Object> {
+public class StartingProfiledApplicationSpec extends Specification<Object> {
 
     public class WhenTheApplicationToBeProfiledStarts {
 
