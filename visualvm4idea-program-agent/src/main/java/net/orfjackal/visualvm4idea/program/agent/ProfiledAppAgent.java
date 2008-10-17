@@ -31,11 +31,11 @@
 
 package net.orfjackal.visualvm4idea.program.agent;
 
+import net.orfjackal.visualvm4idea.util.ClientConnection;
 import net.orfjackal.visualvm4idea.util.ParameterParser;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 
 /**
  * @author Esko Luontola
@@ -50,10 +50,9 @@ public class ProfiledAppAgent {
 
     private static void waitForProfilerToStart(int port) {
         try {
-            Socket socket = new Socket("localhost", port);
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            waitForResumeCommand(in);
-            socket.close();
+            ClientConnection con = new ClientConnection(port);
+            waitForResumeCommand(con.getInput());
+            con.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

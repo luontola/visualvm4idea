@@ -29,56 +29,70 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
-
-import jdave.Group;
-import jdave.Specification;
-import jdave.junit4.JDaveRunner;
-import net.orfjackal.visualvm4idea.core.VisualVmHookRunner;
-import net.orfjackal.visualvm4idea.util.ServerConnection;
-import org.junit.runner.RunWith;
+package net.orfjackal.visualvm4idea.util;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Esko Luontola
  * @since 17.10.2008
  */
-@RunWith(JDaveRunner.class)
-@Group({"fast"})
-public class StartingVisualVmSpec extends Specification<Object> {
+public class ServerConnection {
 
-    public class WhenVisualVmIsStarted {
+    private final ServerSocket serverSocket;
+    private final CountDownLatch connected = new CountDownLatch(1);
 
-        private ServerConnection server;
-        private VisualVmHandle handle;
-        private VisualVmHookRunner hook;
-        private Thread hookThread;
+    private volatile Socket socket;
+    private volatile ObjectInputStream in;
+    private volatile ObjectOutputStream out;
 
-        public Object create() throws IOException {
-            server = new ServerConnection();
-            handle = new VisualVmHandle(server);
-            hook = new VisualVmHookRunner(server.getPort());
-            return null;
-        }
+    public ServerConnection() throws IOException {
+        serverSocket = new ServerSocket(0);
+        Thread t = new Thread(new SocketListener());
+        t.setDaemon(true);
+        t.start();
+    }
 
-        public void destroy() throws IOException {
-            hookThread.interrupt();
-            server.close();
-        }
+    public int getPort() {
+        return serverSocket.getLocalPort();
+    }
 
-        public void itWillConnectToTheHandle() throws InterruptedException {
-            specify(!server.isConnected());
-            startVisualVm();
-            server.awaitConnection(100, TimeUnit.MILLISECONDS);
-            specify(server.isConnected());
-        }
+    public boolean isConnected() {
+        return socket != null && socket.isConnected();
+    }
 
-        private void startVisualVm() {
-            hookThread = new Thread(hook);
-            hookThread.setDaemon(true);
-            hookThread.start();
+    public ObjectInputStream getInput() {
+        return in;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return out;
+    }
+
+    public void awaitConnection(int timeout, TimeUnit unit) throws InterruptedException {
+        connected.await(timeout, unit);
+    }
+
+    public void close() throws IOException {
+        serverSocket.close();
+    }
+
+    private class SocketListener implements Runnable {
+        public void run() {
+            try {
+                socket = serverSocket.accept();
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+                connected.countDown();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -31,12 +31,10 @@
 
 package net.orfjackal.visualvm4idea.handles;
 
+import net.orfjackal.visualvm4idea.util.ServerConnection;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Esko Luontola
@@ -44,61 +42,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class ProfiledAppHandle {
 
-    private final ServerSocket serverSocket;
-    private final CountDownLatch connected = new CountDownLatch(1);
+    private final ServerConnection server;
 
-    private volatile Socket socket;
-    private volatile ObjectOutputStream out;
-
-    public ProfiledAppHandle() {
-        try {
-            serverSocket = new ServerSocket(0);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Thread t = new Thread(new SocketListener());
-        t.setDaemon(true);
-        t.start();
-    }
-
-    public int getPort() {
-        return serverSocket.getLocalPort();
-    }
-
-    public boolean isConnected() {
-        return socket != null && socket.isConnected();
-    }
-
-    public void awaitConnection(long timeout, TimeUnit unit) throws InterruptedException {
-        connected.await(timeout, unit);
+    public ProfiledAppHandle(ServerConnection server) {
+        this.server = server;
     }
 
     public void resumeApplication() {
         try {
+            ObjectOutputStream out = server.getOutput();
             out.writeUTF("RESUME");
             out.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public void close() {
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private class SocketListener implements Runnable {
-        public void run() {
-            try {
-                socket = serverSocket.accept();
-                out = new ObjectOutputStream(socket.getOutputStream());
-                connected.countDown();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 }

@@ -29,19 +29,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
+package net.orfjackal.visualvm4idea.util;
 
-import net.orfjackal.visualvm4idea.util.ServerConnection;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 /**
  * @author Esko Luontola
  * @since 17.10.2008
  */
-public class VisualVmHandle {
+public class ClientConnection {
 
-    private final ServerConnection server;
+    private final Socket socket;
+    private final ObjectInputStream in;
+    private final ObjectOutputStream out;
 
-    public VisualVmHandle(ServerConnection server) {
-        this.server = server;
+    public ClientConnection(int port) throws IOException {
+        socket = new Socket("localhost", port);
+        in = new ObjectInputStream(socket.getInputStream());
+        out = new ObjectOutputStream(socket.getOutputStream());
+    }
+
+    public ObjectInputStream getInput() {
+        return in;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return out;
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }

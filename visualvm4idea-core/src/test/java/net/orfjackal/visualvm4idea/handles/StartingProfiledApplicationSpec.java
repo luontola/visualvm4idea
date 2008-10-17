@@ -35,8 +35,10 @@ import jdave.Group;
 import jdave.Specification;
 import jdave.junit4.JDaveRunner;
 import net.orfjackal.visualvm4idea.program.agent.ProfiledAppAgent;
+import net.orfjackal.visualvm4idea.util.ServerConnection;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -50,23 +52,25 @@ public class StartingProfiledApplicationSpec extends Specification<Object> {
 
     public class WhenTheApplicationToBeProfiledStarts {
 
-        private ProfiledApp app;
+        private ServerConnection server;
         private ProfiledAppHandle handle;
+        private ProfiledApp app;
 
-        public Object create() {
-            handle = new ProfiledAppHandle();
-            app = new ProfiledApp(handle.getPort());
+        public Object create() throws IOException {
+            server = new ServerConnection();
+            handle = new ProfiledAppHandle(server);
+            app = new ProfiledApp(server.getPort());
             return null;
         }
 
-        public void destroy() {
-            handle.close();
+        public void destroy() throws IOException {
+            server.close();
         }
 
         public void itConnectsToTheProfilerAndWaitsForInstructions() {
-            specify(handle.isConnected(), should.equal(false));
+            specify(server.isConnected(), should.equal(false));
             startProfiledApp();
-            specify(handle.isConnected(), should.equal(true));
+            specify(server.isConnected(), should.equal(true));
             specify(app.premainEntered());
             specify(!app.mainEntered());
         }
@@ -84,7 +88,7 @@ public class StartingProfiledApplicationSpec extends Specification<Object> {
             t.setDaemon(true);
             t.start();
             try {
-                handle.awaitConnection(200, TimeUnit.MILLISECONDS);
+                server.awaitConnection(200, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
