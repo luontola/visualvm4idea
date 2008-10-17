@@ -42,7 +42,7 @@ import java.lang.instrument.Instrumentation;
  * @author Esko Luontola
  * @since 9.10.2008
  */
-public class Agent {
+public class VisualVmAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
         installTransformations(agentArgs, inst);
