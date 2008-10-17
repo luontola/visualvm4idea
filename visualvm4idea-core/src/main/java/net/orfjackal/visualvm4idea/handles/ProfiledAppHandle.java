@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.program.agent;
+package net.orfjackal.visualvm4idea.handles;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

@@ -20,6 +20,17 @@
             <artifactId>visualvm4idea-util</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-program-agent</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.orfjackal.visualvm4idea</groupId>
+            <artifactId>visualvm4idea-visualvm-agent</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- VisualVM -->
 
         <dependency>
