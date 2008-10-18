@@ -64,7 +64,6 @@ public class StartingProfiledApplicationSpec extends Specification<Object> {
         }
 
         public void destroy() throws IOException {
-            handle.resumeApplication();
             server.close();
         }
 
