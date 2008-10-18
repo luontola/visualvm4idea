@@ -40,10 +40,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizable;
-import net.orfjackal.visualvm4idea.handles.ProfiledAppHandle;
-import net.orfjackal.visualvm4idea.util.ServerConnection;
-
-import java.io.IOException;
 
 /**
  * @author Esko Luontola
@@ -63,6 +59,7 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
         log.info("ProfiledJavaProgramRunner.patch");
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
+/*
         try {
             // TODO: this starts up the agent, but VisualVM does not see the app before main() is executed
             ServerConnection server = new ServerConnection();
@@ -84,6 +81,13 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+*/
+
+        // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
+        String agent = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib\\deployed\\jdk16\\windows\\profilerinterface.dll";
+        String lib = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib";
+        int port = 5140;
+        javaParameters.getVMParametersList().prepend("-agentpath:" + agent + "=" + lib + "," + port);
     }
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
