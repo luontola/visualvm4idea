@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.visualvm;
 
 import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.profiler.ProfilerSupport;
+import net.orfjackal.visualvm4idea.util.Reflect;
 
 /**
  * @author Esko Luontola
@@ -44,7 +45,7 @@ public class ProfilerSupportWrapper {
     }
 
     public static void selectProfilerView(Application application) {
-        ReflectionUtil.call(ProfilerSupport.class, ProfilerSupport.getInstance(),
-                "selectProfilerView", new Class<?>[]{Application.class}, application);
+        Reflect.on(ProfilerSupport.getInstance())
+                .method("selectProfilerView", Application.class).call(application);
     }
 }
