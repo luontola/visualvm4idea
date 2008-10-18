@@ -38,8 +38,8 @@ import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
 import com.sun.tools.visualvm.profiler.CPUSettingsSupport;
 import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
 import com.sun.tools.visualvm.profiler.ProfilerSupport;
+import net.orfjackal.visualvm4idea.util.Reflect;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
-import net.orfjackal.visualvm4idea.visualvm.ReflectionUtil;
 
 import java.util.Set;
 
@@ -98,28 +98,16 @@ public class DebugRunner implements Runnable {
             ProfilerSupportWrapper.selectProfilerView(app);
             sleep(1000);
 
-            // TODO: create a fluent api for reflection:
-            // Object mvs = Access.object(ProfilerSupport.getInstance())
-            //          .field("profilerViewProvider").method(app)
-            //          .field("masterViewSupport").value();
-            // Object cpu = Access.object(mvs).field("cpuSettingsSupport").value();
-            // Object mem = Access.object(mvs).field("memorySettingsSupport").value();
-
-            Object provider = ReflectionUtil.get(ProfilerSupport.class, ProfilerSupport.getInstance(), "profilerViewProvider");
-            Object view = ReflectionUtil.call("com.sun.tools.visualvm.profiler.ApplicationProfilerViewProvider", provider,
-                    "view", new Class<?>[]{Application.class}, app);
-            System.out.println("view = " + view);
-
-            Object masterViewSupport =
-                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView", view, "masterViewSupport");
+            Object masterViewSupport = Reflect.on(ProfilerSupport.getInstance())
+                    .field("profilerViewProvider")
+                    .method("view", Application.class).with(app)
+                    .field("masterViewSupport").value();
             System.out.println("masterViewSupport = " + masterViewSupport);
 
             CPUSettingsSupport cpuSettingsSupport = (CPUSettingsSupport)
-                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView$MasterViewSupport",
-                            masterViewSupport, "cpuSettingsSupport");
+                    Reflect.on(masterViewSupport).field("cpuSettingsSupport").value();
             MemorySettingsSupport memorySettingsSupport = (MemorySettingsSupport)
-                    ReflectionUtil.get("com.sun.tools.visualvm.profiler.ApplicationProfilerView$MasterViewSupport",
-                            masterViewSupport, "memorySettingsSupport");
+                    Reflect.on(masterViewSupport).field("memorySettingsSupport").value();
             System.out.println("cpuSettingsSupport = " + cpuSettingsSupport);
             System.out.println("memorySettingsSupport = " + memorySettingsSupport);
         }
