@@ -32,7 +32,6 @@
 package net.orfjackal.visualvm4idea.util;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -65,11 +64,11 @@ public class Reflect {
         return obj;
     }
 
-    public Reflect field(String fieldName) {
+    public FieldAccess field(String fieldName) {
         try {
             for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
                 try {
-                    return tryReadDeclaredField(cls, fieldName);
+                    return new FieldAccess(cls.getDeclaredField(fieldName));
                 } catch (NoSuchFieldException e) {
                     // try superclass
                 }
@@ -84,7 +83,7 @@ public class Reflect {
         try {
             for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
                 try {
-                    return tryCallDeclaredMethod(cls, methodName, parameterTypes);
+                    return new MethodCall(cls.getDeclaredMethod(methodName, parameterTypes));
                 } catch (NoSuchMethodException e) {
                     // try superclass
                 }
@@ -95,26 +94,39 @@ public class Reflect {
         throw new IllegalArgumentException("No method '" + methodName + "' in class " + cls);
     }
 
-    private Reflect tryReadDeclaredField(Class<?> cls, String fieldName)
-            throws NoSuchFieldException, IllegalAccessException {
-        Field field = cls.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return new Reflect(field.get(obj));
-    }
 
-    private MethodCall tryCallDeclaredMethod(Class<?> cls, String methodName, Class<?>[] parameterTypes)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Method method = cls.getDeclaredMethod(methodName, parameterTypes);
-        method.setAccessible(true);
-        return new MethodCall(method);
-    }
+    public class FieldAccess {
 
+        private final Field field;
+
+        private FieldAccess(Field field) {
+            field.setAccessible(true);
+            this.field = field;
+        }
+
+        public Reflect get() {
+            try {
+                return new Reflect(field.get(obj));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void set(Object value) {
+            try {
+                field.set(obj, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     public class MethodCall {
 
         private final Method method;
 
         private MethodCall(Method method) {
+            method.setAccessible(true);
             this.method = method;
         }
 

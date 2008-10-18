@@ -53,11 +53,11 @@ public class ReflectSpec extends Specification<Object> {
         }
 
         public void readFieldsOfAnObject() {
-            specify(Reflect.on(obj).field("af").value(), should.equal("AF"));
+            specify(Reflect.on(obj).field("af").get().value(), should.equal("AF"));
         }
 
         public void readFieldsOfAnObjectsSuperclass() {
-            specify(Reflect.on(obj).field("bf").value(), should.equal("BF"));
+            specify(Reflect.on(obj).field("bf").get().value(), should.equal("BF"));
         }
 
         public void callsMethodsOfAnObject() {
@@ -77,7 +77,7 @@ public class ReflectSpec extends Specification<Object> {
         }
 
         public void readsStaticFieldsOfAClass() {
-            specify(Reflect.on(DummyA.class).field("sf").value(), should.equal("SF"));
+            specify(Reflect.on(DummyA.class).field("sf").get().value(), should.equal("SF"));
         }
 
         public void canNestMethodCalls() {
@@ -86,12 +86,17 @@ public class ReflectSpec extends Specification<Object> {
         }
 
         public void canNestFieldReads() {
-            specify(Reflect.on(obj).field("af")
+            specify(Reflect.on(obj).field("af").get()
                     .method("length").with().value(), should.equal(2));
         }
 
         public void canCallVoidMethods() {
             specify(Reflect.on(obj).method("av").with().value(), should.equal(null));
+        }
+
+        public void canWriteFields() {
+            Reflect.on(obj).field("af").set("XYZ");
+            specify(Reflect.on(obj).field("af").get().value(), should.equal("XYZ"));
         }
     }
 

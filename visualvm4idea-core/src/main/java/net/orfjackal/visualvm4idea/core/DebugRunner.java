@@ -99,15 +99,15 @@ public class DebugRunner implements Runnable {
             sleep(1000);
 
             Object masterViewSupport = Reflect.on(ProfilerSupport.getInstance())
-                    .field("profilerViewProvider")
+                    .field("profilerViewProvider").get()
                     .method("view", Application.class).with(app)
-                    .field("masterViewSupport").value();
+                    .field("masterViewSupport").get().value();
             System.out.println("masterViewSupport = " + masterViewSupport);
 
             CPUSettingsSupport cpuSettingsSupport = (CPUSettingsSupport)
-                    Reflect.on(masterViewSupport).field("cpuSettingsSupport").value();
+                    Reflect.on(masterViewSupport).field("cpuSettingsSupport").get().value();
             MemorySettingsSupport memorySettingsSupport = (MemorySettingsSupport)
-                    Reflect.on(masterViewSupport).field("memorySettingsSupport").value();
+                    Reflect.on(masterViewSupport).field("memorySettingsSupport").get().value();
             System.out.println("cpuSettingsSupport = " + cpuSettingsSupport);
             System.out.println("memorySettingsSupport = " + memorySettingsSupport);
         }
