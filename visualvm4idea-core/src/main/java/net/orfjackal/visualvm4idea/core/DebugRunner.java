@@ -100,7 +100,7 @@ public class DebugRunner implements Runnable {
 
             Object masterViewSupport = Reflect.on(ProfilerSupport.getInstance())
                     .field("profilerViewProvider").get()
-                    .method("view", Application.class).with(app)
+                    .method("view", Application.class).call(app)
                     .field("masterViewSupport").get().value();
             System.out.println("masterViewSupport = " + masterViewSupport);
 

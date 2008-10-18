@@ -61,19 +61,19 @@ public class ReflectSpec extends Specification<Object> {
         }
 
         public void callsMethodsOfAnObject() {
-            specify(Reflect.on(obj).method("am").with().value(), should.equal("AM"));
+            specify(Reflect.on(obj).method("am").call().value(), should.equal("AM"));
         }
 
         public void callsMethodsOfAnObjectsSuperclass() {
-            specify(Reflect.on(obj).method("bm").with().value(), should.equal("BM"));
+            specify(Reflect.on(obj).method("bm").call().value(), should.equal("BM"));
         }
 
         public void callsMethodsWithParameters() {
-            specify(Reflect.on(obj).method("dup", String.class).with("x").value(), should.equal("xx"));
+            specify(Reflect.on(obj).method("dup", String.class).call("x").value(), should.equal("xx"));
         }
 
         public void callsStaticMethodsOfAClass() {
-            specify(Reflect.on(DummyA.class).method("sm").with().value(), should.equal("SM"));
+            specify(Reflect.on(DummyA.class).method("sm").call().value(), should.equal("SM"));
         }
 
         public void readsStaticFieldsOfAClass() {
@@ -81,17 +81,17 @@ public class ReflectSpec extends Specification<Object> {
         }
 
         public void canNestMethodCalls() {
-            specify(Reflect.on(obj).method("am").with()
-                    .method("length").with().value(), should.equal(2));
+            specify(Reflect.on(obj).method("am").call()
+                    .method("length").call().value(), should.equal(2));
         }
 
         public void canNestFieldReads() {
             specify(Reflect.on(obj).field("af").get()
-                    .method("length").with().value(), should.equal(2));
+                    .method("length").call().value(), should.equal(2));
         }
 
         public void canCallVoidMethods() {
-            specify(Reflect.on(obj).method("av").with().value(), should.equal(null));
+            specify(Reflect.on(obj).method("av").call().value(), should.equal(null));
         }
 
         public void canWriteFields() {

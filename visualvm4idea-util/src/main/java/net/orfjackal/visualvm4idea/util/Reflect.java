@@ -130,7 +130,7 @@ public class Reflect {
             this.method = method;
         }
 
-        public Reflect with(Object... parameters) {
+        public Reflect call(Object... parameters) {
             try {
                 return new Reflect(method.invoke(obj, parameters));
             } catch (Exception e) {
