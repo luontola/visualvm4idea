@@ -210,6 +210,58 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="org.netbeans.lib.profiler:netbeans-lib-profiler:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="org.netbeans.lib.profiler:netbeans-lib-profiler-common:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="org.netbeans.lib.profiler:netbeans-lib-profiler-ui:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="org.netbeans.modules.profiler:netbeans-modules-profiler:1.0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-modules-profiler.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-modules-profiler-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../visualvm_101/profiler2/modules/org-netbeans-modules-profiler-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="com.intellij:openapi:7941">
         <CLASSES>
           <root url="jar://C:/Program Files/JetBrains/idea-7.0.4-jdk15/lib/openapi.jar!/" />

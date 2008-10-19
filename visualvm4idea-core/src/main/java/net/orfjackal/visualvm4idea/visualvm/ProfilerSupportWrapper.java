@@ -48,4 +48,9 @@ public class ProfilerSupportWrapper {
         Reflect.on(ProfilerSupport.getInstance())
                 .method("selectProfilerView", Application.class).call(application);
     }
+
+    public static void setProfiledApplication(Application profiledApplication) {
+        Reflect.on(ProfilerSupport.getInstance())
+                .method("setProfiledApplication", Application.class).call(profiledApplication);
+    }
 }

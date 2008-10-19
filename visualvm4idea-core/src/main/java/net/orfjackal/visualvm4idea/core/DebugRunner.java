@@ -40,6 +40,14 @@ import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
 import com.sun.tools.visualvm.profiler.ProfilerSupport;
 import net.orfjackal.visualvm4idea.util.Reflect;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
+import org.netbeans.lib.profiler.client.ClientUtils;
+import org.netbeans.lib.profiler.common.AttachSettings;
+import org.netbeans.lib.profiler.common.ProfilingSettings;
+import org.netbeans.lib.profiler.common.ProfilingSettingsPresets;
+import org.netbeans.lib.profiler.common.filters.SimpleFilter;
+import org.netbeans.lib.profiler.global.CommonConstants;
+import org.netbeans.modules.profiler.NetBeansProfiler;
+import org.netbeans.modules.profiler.utils.IDEUtils;
 
 import java.util.Set;
 
@@ -53,13 +61,68 @@ public class DebugRunner implements Runnable {
 
     public void run() {
         while (true) {
+            System.out.println("--");
             try {
-                printDebugInfo();
+                beginProfiling();
+//                printDebugInfo();
             } catch (Throwable t) {
                 t.printStackTrace(System.out);
                 return;
             }
-            sleep(5000);
+            sleep(10000);
+        }
+    }
+
+    private static void beginProfiling() {
+        Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
+        for (Application app : apps) {
+            System.out.println("app = " + app);
+            System.out.println("app.getPid() = " + app.getPid());
+
+            Jvm jvm = JvmFactory.getJVMFor(app);
+            if (jvm.getClass().getSimpleName().equals("DefaultJvm")) {
+                System.out.println("jvm = " + jvm);
+
+                // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
+                // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
+                final AttachSettings attachSettings = new AttachSettings();
+                attachSettings.setDirect(true);
+                attachSettings.setDynamic16(true);
+                attachSettings.setPid(app.getPid());
+//                attachSettings.setHost("localhost");
+//                attachSettings.setPort(5140);
+                System.out.println("attachSettings = " + attachSettings);
+
+                // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+                // com.sun.tools.visualvm.profiler.CPUSettingsSupport.saveSettings()
+//                Storage storage = app.getStorage();
+//                storage.setCustomProperty(CPUSettingsSupport.SNAPSHOT_VERSION, CURRENT_SNAPSHOT_VERSION);
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_ROOT_CLASSES, rootsArea.getTextArea().getText());
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_PROFILE_RUNNABLES, Boolean.toString(runnablesCheckBox.isSelected()));
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_TYPE, Integer.toString(inclFilterRadioButton.isSelected() ?
+//                        SimpleFilter.SIMPLE_FILTER_INCLUSIVE : SimpleFilter.SIMPLE_FILTER_EXCLUSIVE));
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_VALUE, filtersArea.getTextArea().getText());
+
+                // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+                // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
+                final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
+                profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
+                profilingSettings.setSelectedInstrumentationFilter(SimpleFilter.NO_FILTER);
+                profilingSettings.setInstrumentationRootMethods(new ClientUtils.SourceCodeSelection[0]);
+                profilingSettings.setInstrumentSpawnedThreads(true);
+                System.out.println("profilingSettings = " + profilingSettings);
+
+                // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+                ProfilerSupportWrapper.setProfiledApplication(app);
+                IDEUtils.runInProfilerRequestProcessor(new Runnable() {
+                    public void run() {
+                        NetBeansProfiler.getDefaultNB().attachToApp(profilingSettings, attachSettings);
+                    }
+                });
+                System.out.println("profiling started");
+
+                throw new RuntimeException("ok");
+            }
         }
     }
 
