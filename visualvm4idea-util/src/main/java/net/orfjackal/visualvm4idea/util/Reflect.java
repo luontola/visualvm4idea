@@ -60,38 +60,30 @@ public class Reflect {
         this.cls = cls;
     }
 
-    public Object value() {
-        return obj;
-    }
-
     public FieldAccess field(String fieldName) {
-        try {
-            for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
-                try {
-                    return new FieldAccess(cls.getDeclaredField(fieldName));
-                } catch (NoSuchFieldException e) {
-                    // try superclass
-                }
+        for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
+            try {
+                return new FieldAccess(cls.getDeclaredField(fieldName));
+            } catch (NoSuchFieldException e) {
+                // try superclass
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
-        throw new IllegalArgumentException("No field '" + fieldName + "' in class " + cls);
+        throw new IllegalArgumentException("No field '" + fieldName + "' in class " + this.cls);
     }
 
     public MethodCall method(String methodName, Class<?>... parameterTypes) {
-        try {
-            for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
-                try {
-                    return new MethodCall(cls.getDeclaredMethod(methodName, parameterTypes));
-                } catch (NoSuchMethodException e) {
-                    // try superclass
-                }
+        for (Class<?> cls = this.cls; cls != null; cls = cls.getSuperclass()) {
+            try {
+                return new MethodCall(cls.getDeclaredMethod(methodName, parameterTypes));
+            } catch (NoSuchMethodException e) {
+                // try superclass
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
         throw new IllegalArgumentException("No method '" + methodName + "' in class " + cls);
+    }
+
+    public Object value() {
+        return obj;
     }
 
 
