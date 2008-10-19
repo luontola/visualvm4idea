@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent.util;
+package net.orfjackal.visualvm4idea.util;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;

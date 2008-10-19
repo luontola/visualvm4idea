@@ -155,6 +155,32 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="visualvm4idea-util" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library name="asm:asm:3.1">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="asm:asm-all:3.1">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="copyright">

@@ -31,7 +31,7 @@
 
 package net.orfjackal.visualvm4idea.visualvm.agent;
 
-import net.orfjackal.visualvm4idea.visualvm.agent.util.AbstractTransformationChain;
+import net.orfjackal.visualvm4idea.util.AbstractTransformationChain;
 import org.objectweb.asm.ClassVisitor;
 
 /**
