@@ -68,7 +68,7 @@ public class Reflect {
                 // try superclass
             }
         }
-        throw new IllegalArgumentException("No field '" + fieldName + "' in class " + this.cls);
+        throw new IllegalArgumentException("No field '" + fieldName + "' in class " + cls);
     }
 
     public MethodCall method(String methodName, Class<?>... parameterTypes) {
