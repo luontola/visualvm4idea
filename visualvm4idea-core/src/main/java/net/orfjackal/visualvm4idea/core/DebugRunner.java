@@ -63,7 +63,8 @@ public class DebugRunner implements Runnable {
         while (true) {
             System.out.println("--");
             try {
-                beginProfiling();
+                beginProfilingDirectly();
+//                beginProfiling();
 //                printDebugInfo();
             } catch (Throwable t) {
                 t.printStackTrace(System.out);
@@ -71,6 +72,55 @@ public class DebugRunner implements Runnable {
             }
             sleep(10000);
         }
+    }
+
+    private static void beginProfilingDirectly() {
+
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
+        final AttachSettings attachSettings = new AttachSettings();
+        attachSettings.setDirect(true);
+//                attachSettings.setDynamic16(true);
+//                attachSettings.setPid(app.getPid());
+        attachSettings.setHost("localhost");
+        attachSettings.setPort(5140);
+        System.out.println("attachSettings = " + attachSettings);
+
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // com.sun.tools.visualvm.profiler.CPUSettingsSupport.saveSettings()
+//                Storage storage = app.getStorage();
+//                storage.setCustomProperty(CPUSettingsSupport.SNAPSHOT_VERSION, CURRENT_SNAPSHOT_VERSION);
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_ROOT_CLASSES, rootsArea.getTextArea().getText());
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_PROFILE_RUNNABLES, Boolean.toString(runnablesCheckBox.isSelected()));
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_TYPE, Integer.toString(inclFilterRadioButton.isSelected() ?
+//                        SimpleFilter.SIMPLE_FILTER_INCLUSIVE : SimpleFilter.SIMPLE_FILTER_EXCLUSIVE));
+//                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_VALUE, filtersArea.getTextArea().getText());
+
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
+        final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
+        profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
+        String instrFilter = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+        profilingSettings.setSelectedInstrumentationFilter(
+                new SimpleFilter(instrFilter, SimpleFilter.SIMPLE_FILTER_EXCLUSIVE, instrFilter)
+        );
+        profilingSettings.setInstrumentationRootMethods(new ClientUtils.SourceCodeSelection[]{
+                new ClientUtils.SourceCodeSelection("net.orfjackal.**", "*", null)
+        });
+        profilingSettings.setInstrumentSpawnedThreads(true);
+        System.out.println("profilingSettings = " + profilingSettings);
+
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // TODO: delay the call to setProfiledApplication, otherwise appears to work
+//                ProfilerSupportWrapper.setProfiledApplication(app);
+        IDEUtils.runInProfilerRequestProcessor(new Runnable() {
+            public void run() {
+                NetBeansProfiler.getDefaultNB().attachToApp(profilingSettings, attachSettings);
+            }
+        });
+        System.out.println("profiling started");
+
+        throw new RuntimeException("ok");
     }
 
     private static void beginProfiling() {
