@@ -87,7 +87,7 @@ public class DebugRunner implements Runnable {
                 // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
                 final AttachSettings attachSettings = new AttachSettings();
                 attachSettings.setDirect(true);
-                attachSettings.setDynamic16(true);
+//                attachSettings.setDynamic16(true);
                 attachSettings.setPid(app.getPid());
 //                attachSettings.setHost("localhost");
 //                attachSettings.setPort(5140);
@@ -107,8 +107,13 @@ public class DebugRunner implements Runnable {
                 // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
                 final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
                 profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
-                profilingSettings.setSelectedInstrumentationFilter(SimpleFilter.NO_FILTER);
-                profilingSettings.setInstrumentationRootMethods(new ClientUtils.SourceCodeSelection[0]);
+                String instrFilter = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+                profilingSettings.setSelectedInstrumentationFilter(
+                        new SimpleFilter(instrFilter, SimpleFilter.SIMPLE_FILTER_EXCLUSIVE, instrFilter)
+                );
+                profilingSettings.setInstrumentationRootMethods(new ClientUtils.SourceCodeSelection[]{
+                        new ClientUtils.SourceCodeSelection("net.orfjackal.**", "*", null)
+                });
                 profilingSettings.setInstrumentSpawnedThreads(true);
                 System.out.println("profilingSettings = " + profilingSettings);
 
@@ -120,6 +125,16 @@ public class DebugRunner implements Runnable {
                     }
                 });
                 System.out.println("profiling started");
+
+                sleep(10000);
+                System.out.println("jvm1 = " + JvmFactory.getJVMFor(app));
+                System.out.println("providers = " + Reflect.on(JvmFactory.getDefault()).field("providers").get().value());
+                System.out.println("modelCache = " + Reflect.on(JvmFactory.getDefault()).field("modelCache").get().value());
+                System.out.println("JvmFactory.clearCache()");
+                Reflect.on(JvmFactory.getDefault()).method("clearCache").call();
+                System.out.println("providers = " + Reflect.on(JvmFactory.getDefault()).field("providers").get().value());
+                System.out.println("modelCache = " + Reflect.on(JvmFactory.getDefault()).field("modelCache").get().value());
+                System.out.println("jvm2 = " + JvmFactory.getJVMFor(app));
 
                 throw new RuntimeException("ok");
             }

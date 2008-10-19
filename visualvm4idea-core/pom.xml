@@ -61,6 +61,15 @@
             <scope>system</scope>
             <systemPath>${visualvm.home}/visualvm/modules/com-sun-tools-visualvm-profiler.jar</systemPath>
         </dependency>
+        <!--
+        <dependency>
+            <groupId>com.sun.tools.visualvm</groupId>
+            <artifactId>visualvm-tools</artifactId>
+            <version>${visualvm.version}</version>
+            <scope>system</scope>
+            <systemPath>${visualvm.home}/visualvm/modules/com-sun-tools-visualvm-tools.jar</systemPath>
+        </dependency>
+        -->
         <dependency>
             <groupId>org.netbeans.lib.profiler</groupId>
             <artifactId>netbeans-lib-profiler</artifactId>
