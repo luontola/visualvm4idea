@@ -32,10 +32,10 @@
 package net.orfjackal.visualvm4idea.program.agent;
 
 import net.orfjackal.visualvm4idea.util.ClientConnection;
-import net.orfjackal.visualvm4idea.util.ParameterParser;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.instrument.Instrumentation;
 
 /**
  * @author Esko Luontola
@@ -43,9 +43,10 @@ import java.io.ObjectInputStream;
  */
 public class ProfiledAppAgent {
 
-    public static void premain(String agentArgs) {
-        int port = Integer.parseInt(ParameterParser.parse(agentArgs).get("port"));
-        waitForProfilerToStart(port);
+    public static void premain(String agentArgs, Instrumentation inst) {
+        inst.addTransformer(new ProfiledAppTransformer());
+//        int port = Integer.parseInt(ParameterParser.parse(agentArgs).get("port"));
+//        waitForProfilerToStart(port);
     }
 
     private static void waitForProfilerToStart(int port) {

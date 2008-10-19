@@ -294,7 +294,7 @@
     <configuration default="false" name="TraceClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="org.objectweb.asm.util.TraceClassVisitor" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.agent.Test" />
+      <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.visualvm.agent.Test" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -317,7 +317,7 @@
     <configuration default="false" name="ASMifierClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="org.objectweb.asm.util.ASMifierClassVisitor" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.agent.Test" />
+      <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.visualvm.agent.Test" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -361,6 +361,8 @@
         <value defaultName="wholeProject" />
       </option>
       <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" value="true" />
       </method>

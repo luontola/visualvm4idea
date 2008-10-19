@@ -29,22 +29,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
+package net.orfjackal.visualvm4idea.program.agent;
+
+import org.objectweb.asm.*;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 19.10.2008
  */
-public class Test {
+public class ProfiledAppClassAdapter extends ClassAdapter implements Opcodes {
 
-    public Test() {
-        HookLoader.hook(this.getClass().getClassLoader());
+    private String className;
+
+    public ProfiledAppClassAdapter(ClassVisitor cv) {
+        super(cv);
     }
 
-    public void test0() {
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        super.visit(version, access, name, signature, superName, interfaces);
+        this.className = name;
     }
 
-    public void test1() throws InterruptedException {
-        Thread.sleep(10000);
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+
+        MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
+        if (className.equals("com/intellij/rt/execution/application/AppMain")
+                && name.equals("main")) {
+            mv = new MethodAdapter(mv) {
+                public void visitCode() {
+                    super.visitCode();
+                    super.visitLdcInsn(10000L);
+                    super.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "sleep", "(J)V");
+                }
+            };
+        }
+        return mv;
     }
 }

@@ -29,22 +29,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
+package net.orfjackal.visualvm4idea.program.agent;
+
+import net.orfjackal.visualvm4idea.util.AbstractTransformationChain;
+import org.objectweb.asm.ClassVisitor;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 19.10.2008
  */
-public class Test {
+public class ProfiledAppTransformer extends AbstractTransformationChain {
 
-    public Test() {
-        HookLoader.hook(this.getClass().getClassLoader());
-    }
-
-    public void test0() {
-    }
-
-    public void test1() throws InterruptedException {
-        Thread.sleep(10000);
+    protected ClassVisitor getAdapters(ClassVisitor cv) {
+        cv = new ProfiledAppClassAdapter(cv);
+        return cv;
     }
 }
