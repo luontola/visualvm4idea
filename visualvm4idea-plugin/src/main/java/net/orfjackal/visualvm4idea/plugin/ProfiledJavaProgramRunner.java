@@ -40,6 +40,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizable;
+import net.orfjackal.visualvm4idea.visualvm.VisualVmController;
 
 /**
  * @author Esko Luontola
@@ -48,6 +49,8 @@ import com.intellij.openapi.util.JDOMExternalizable;
 public class ProfiledJavaProgramRunner implements JavaProgramRunner {
 
     private static final Logger log = Logger.getInstance(ProfiledJavaProgramRunner.class.getName());
+
+    private final VisualVmController visualVm = new VisualVmController();
 
     public JDOMExternalizable createConfigurationData(ConfigurationInfoProvider settingsProvider) {
         log.info("ProfiledJavaProgramRunner.createConfigurationData");
@@ -74,6 +77,8 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         log.info("ProfiledJavaProgramRunner.onProcessStarted");
+
+        visualVm.beginProfilingApplication(5140);
     }
 
     // on run: 3

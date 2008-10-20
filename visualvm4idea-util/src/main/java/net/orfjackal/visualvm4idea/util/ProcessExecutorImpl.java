@@ -29,47 +29,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.visualvm.agent;
+package net.orfjackal.visualvm4idea.util;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
+ * Executes a shell command. Prints the output of the command.
+ *
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 1.12.2007
  */
-public class HookLoader {
+public class ProcessExecutorImpl implements ProcessExecutor {
 
-    public static final String LIB_PROPERTY = "visualvm4idea.lib";
-    public static final String PORT_PROPERTY = "visualvm4idea.port";
-    private static final String HOOK_CLASS = "net.orfjackal.visualvm4idea.core.VisualVmHook";
+    public Process exec(String... command) {
+        return exec(command, System.out, System.err);
+    }
 
-    private static boolean hooked = false;
+    public Process exec(String[] command, OutputStream stdout, OutputStream stderr) {
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            redirect(process.getInputStream(), stdout);
+            redirect(process.getErrorStream(), stderr);
+            return process;
 
-    public static synchronized void hook(ClassLoader classLoader) {
-        if (!hooked) {
-            hooked = true;
-            try {
-                tryStartHookUnderClassLoader(classLoader);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private static void tryStartHookUnderClassLoader(ClassLoader parent) throws Exception {
-        ClassLoader loader = new URLClassLoader(new URL[]{getHookLibrary()}, parent);
-        Class<?> clazz = loader.loadClass(HOOK_CLASS);
-        clazz.getMethod("start", int.class).invoke(null, getPort());
-    }
-
-    private static URL getHookLibrary() throws MalformedURLException {
-        return new File(System.getProperty(LIB_PROPERTY)).toURI().toURL();
-    }
-
-    private static int getPort() {
-        return Integer.parseInt(System.getProperty(PORT_PROPERTY));
+    private static void redirect(final InputStream from, final OutputStream to) {
+        Thread t = new Thread() {
+            public void run() {
+                byte[] buf = new byte[1024];
+                int len;
+                try {
+                    while ((len = from.read(buf)) > 0) {
+                        to.write(buf, 0, len);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.setDaemon(true);
+        t.start();
     }
 }

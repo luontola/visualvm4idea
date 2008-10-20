@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.util;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.concurrent.Callable;
 
@@ -46,13 +47,18 @@ public class ServerExecutor {
         this.connection = connection;
     }
 
-    public <V> V runRemotely(Callable<V> callable) throws Exception {
-        connection.getOutput().writeObject(callable);
-        Object value = connection.getInput().readObject();
-        if (value instanceof Exception) {
-            Exception e = (Exception) value;
-            throw new RemoteException(e.getMessage(), e);
+    public <V> V runRemotely(Callable<V> callable) throws IOException {
+        try {
+            connection.getOutput().writeObject(callable);
+            Object value = connection.getInput().readObject();
+            if (value instanceof Exception) {
+                Exception e = (Exception) value;
+                throw new RemoteException(e.getMessage(), e);
+            }
+            return (V) value;
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        return (V) value;
     }
 }

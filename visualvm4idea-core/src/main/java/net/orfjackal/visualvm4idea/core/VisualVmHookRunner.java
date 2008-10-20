@@ -31,10 +31,10 @@
 
 package net.orfjackal.visualvm4idea.core;
 
+import net.orfjackal.visualvm4idea.util.ClientConnection;
+import net.orfjackal.visualvm4idea.util.ClientExecutor;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 /**
  * @author Esko Luontola
@@ -43,8 +43,6 @@ import java.net.Socket;
 public class VisualVmHookRunner implements Runnable {
 
     private final int port;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
 
     public VisualVmHookRunner(int port) {
         this.port = port;
@@ -52,12 +50,9 @@ public class VisualVmHookRunner implements Runnable {
 
     public void run() {
         try {
-            Socket socket = new Socket("localhost", port);
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-
+            new ClientExecutor(new ClientConnection(port));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Unable to connect to server on port " + port, e);
         }
     }
 }

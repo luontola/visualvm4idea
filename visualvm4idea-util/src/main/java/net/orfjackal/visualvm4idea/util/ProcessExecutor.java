@@ -29,19 +29,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.handles;
+package net.orfjackal.visualvm4idea.util;
 
-import net.orfjackal.visualvm4idea.util.ServerConnection;
+import java.io.OutputStream;
 
 /**
+ * Executes a shell command.
+ *
  * @author Esko Luontola
- * @since 17.10.2008
+ * @since 30.11.2007
  */
-public class VisualVmHandle {
+public interface ProcessExecutor {
 
-    private final ServerConnection server;
+    /**
+     * Executes the command and redirects stdout and stderr to System.out and System.err.
+     */
+    Process exec(String... command);
 
-    public VisualVmHandle(ServerConnection server) {
-        this.server = server;
-    }
+    /**
+     * Executes the command and redirects stdout and stderr to the specified streams.
+     */
+    Process exec(String[] command, OutputStream stdout, OutputStream stderr);
 }

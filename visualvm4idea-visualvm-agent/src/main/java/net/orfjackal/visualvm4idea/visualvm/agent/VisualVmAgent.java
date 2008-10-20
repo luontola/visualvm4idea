@@ -31,12 +31,9 @@
 
 package net.orfjackal.visualvm4idea.visualvm.agent;
 
-import net.orfjackal.visualvm4idea.util.ParameterParser;
-
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
-import java.util.Map;
 
 /**
  * See http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html
@@ -57,8 +54,8 @@ public class VisualVmAgent {
 
     private static void installTransformations(String agentArgs, Instrumentation inst) {
         directOutputToFile();
-        Map<String, String> args = ParameterParser.parse(agentArgs);
-        System.setProperty(HookLoader.HOOK_LIB_PROPERTY, args.get("lib"));
+//        Map<String, String> args = ParameterParser.parse(agentArgs);
+//        System.setProperty(HookLoader.LIB_PROPERTY, agentArgs);
         inst.addTransformer(new VisualVmTransformer());
     }
 

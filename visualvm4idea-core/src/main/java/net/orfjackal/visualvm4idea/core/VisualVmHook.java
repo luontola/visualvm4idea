@@ -39,9 +39,10 @@ public class VisualVmHook {
 
     private static boolean started = false;
 
-    public synchronized static void start() {
+    public synchronized static void start(int port) {
         if (!started) {
-            Thread t = new Thread(new DebugRunner());
+//            Thread t = new Thread(new DebugRunner());
+            Thread t = new Thread(new VisualVmHookRunner(port));
             t.setDaemon(true);
             t.start();
             started = true;
