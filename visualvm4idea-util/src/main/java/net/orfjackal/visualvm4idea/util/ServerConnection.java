@@ -67,7 +67,8 @@ public class ServerConnection {
     }
 
     public boolean isConnected() {
-        return socket != null && socket.isConnected();
+        return socket != null
+                && socket.isConnected();
     }
 
     public ObjectInputStream getInput() {
@@ -117,6 +118,7 @@ public class ServerConnection {
         public void run() {
             try {
                 socket = serverSocket.accept();
+                socket.setKeepAlive(true);
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());
                 serverSocket.close();
@@ -125,6 +127,5 @@ public class ServerConnection {
                 throw new RuntimeException(e);
             }
         }
-
     }
 }

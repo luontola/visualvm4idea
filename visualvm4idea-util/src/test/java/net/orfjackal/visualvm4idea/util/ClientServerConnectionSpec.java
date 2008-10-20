@@ -48,19 +48,32 @@ import java.util.concurrent.TimeUnit;
 @Group({"fast"})
 public class ClientServerConnectionSpec extends Specification<Object> {
 
+    private ServerConnection server;
+    private ClientConnection client;
+
+    public void create() throws Exception {
+        server = new ServerConnection();
+    }
+
+    public void destroy() throws Exception {
+        if (server != null) {
+            server.close();
+        }
+        if (client != null) {
+            client.close();
+        }
+    }
+
+    private void startClient() throws Exception {
+        client = new ClientConnection(server.getPort());
+        server.awaitClientConnected(100, TimeUnit.MILLISECONDS);
+    }
+
+
     public class WhenTheClientIsStarted {
 
-        private ServerConnection server;
-        private ClientConnection client;
-
         public Object create() throws IOException {
-            server = new ServerConnection();
             return null;
-        }
-
-        public void destroy() throws IOException {
-            client.close();
-            server.close();
         }
 
         public void theClientConnectsToTheServer() throws Exception {
@@ -92,11 +105,6 @@ public class ClientServerConnectionSpec extends Specification<Object> {
             server.getOutput().writeUTF("message");
             server.getOutput().flush();
             specify(client.getInput().readUTF(), should.equal("message"));
-        }
-
-        private void startClient() throws IOException, InterruptedException {
-            client = new ClientConnection(server.getPort());
-            server.awaitClientConnected(100, TimeUnit.MILLISECONDS);
         }
     }
 }
