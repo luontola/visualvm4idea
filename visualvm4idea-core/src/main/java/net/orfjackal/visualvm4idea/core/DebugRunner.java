@@ -76,16 +76,6 @@ public class DebugRunner implements Runnable {
 
     private static void beginProfilingDirectly() {
 
-        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
-        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
-        final AttachSettings attachSettings = new AttachSettings();
-        attachSettings.setDirect(true);
-//                attachSettings.setDynamic16(true);
-//                attachSettings.setPid(app.getPid());
-        attachSettings.setHost("localhost");
-        attachSettings.setPort(5140);
-        System.out.println("attachSettings = " + attachSettings);
-
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.saveSettings()
 //                Storage storage = app.getStorage();
@@ -96,6 +86,54 @@ public class DebugRunner implements Runnable {
 //                        SimpleFilter.SIMPLE_FILTER_INCLUSIVE : SimpleFilter.SIMPLE_FILTER_EXCLUSIVE));
 //                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_VALUE, filtersArea.getTextArea().getText());
 
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // TODO: delay the call to setProfiledApplication, otherwise appears to work
+//                ProfilerSupportWrapper.setProfiledApplication(app);
+        IDEUtils.runInProfilerRequestProcessor(new Runnable() {
+            public void run() {
+                NetBeansProfiler.getDefaultNB().attachToApp(getProfilingSettings(), getAttachSettings());
+            }
+        });
+        System.out.println("profiling started");
+        sleep(5000);
+
+        Application app = getProfiledApp();
+        System.out.println("app = " + app);
+        ProfilerSupportWrapper.setProfiledApplication(app);
+        ProfilerSupportWrapper.selectProfilerView(app);
+
+        throw new RuntimeException("ok");
+    }
+
+    private static Application getProfiledApp() {
+        Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
+        for (Application app : apps) {
+            System.out.println("--");
+            System.out.println("app = " + app);
+            Jvm jvm = JvmFactory.getJVMFor(app);
+            System.out.println("jvm = " + jvm);
+            System.out.println("jvm.getJvmArgs() = " + jvm.getJvmArgs());
+            if (jvm.getJvmArgs().contains("profilerinterface.dll")) {
+                return app;
+            }
+        }
+        return null;
+    }
+
+    private static AttachSettings getAttachSettings() {
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
+        final AttachSettings attachSettings = new AttachSettings();
+        attachSettings.setDirect(true);
+//                attachSettings.setDynamic16(true);
+//                attachSettings.setPid(app.getPid());
+        attachSettings.setHost("localhost");
+        attachSettings.setPort(5140);
+        System.out.println("attachSettings = " + attachSettings);
+        return attachSettings;
+    }
+
+    private static ProfilingSettings getProfilingSettings() {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
         final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
@@ -109,18 +147,7 @@ public class DebugRunner implements Runnable {
         });
         profilingSettings.setInstrumentSpawnedThreads(true);
         System.out.println("profilingSettings = " + profilingSettings);
-
-        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
-        // TODO: delay the call to setProfiledApplication, otherwise appears to work
-//                ProfilerSupportWrapper.setProfiledApplication(app);
-        IDEUtils.runInProfilerRequestProcessor(new Runnable() {
-            public void run() {
-                NetBeansProfiler.getDefaultNB().attachToApp(profilingSettings, attachSettings);
-            }
-        });
-        System.out.println("profiling started");
-
-        throw new RuntimeException("ok");
+        return profilingSettings;
     }
 
     private static void beginProfiling() {

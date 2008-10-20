@@ -47,9 +47,18 @@ public class TestMain {
 
     private static int fibo(int i) {
         if (i < 2) {
+            sleep(100);
             return i;
         } else {
             return fibo(i - 1) + fibo(i - 2);
+        }
+    }
+
+    private static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
