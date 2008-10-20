@@ -39,6 +39,7 @@ import com.sun.tools.visualvm.profiler.CPUSettingsSupport;
 import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
 import com.sun.tools.visualvm.profiler.ProfilerSupport;
 import net.orfjackal.visualvm4idea.util.Reflect;
+import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.lib.profiler.client.ClientUtils;
 import org.netbeans.lib.profiler.common.AttachSettings;
@@ -87,25 +88,34 @@ public class DebugRunner implements Runnable {
 //                storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_VALUE, filtersArea.getTextArea().getText());
 
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
-        // TODO: delay the call to setProfiledApplication, otherwise appears to work
-//                ProfilerSupportWrapper.setProfiledApplication(app);
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
-                NetBeansProfiler.getDefaultNB().attachToApp(getProfilingSettings(), getAttachSettings());
+                CpuSettings cpuSettings = new CpuSettings();
+                cpuSettings.spawnedThreads = true;
+                cpuSettings.roots.add("net.orfjackal.**");
+                cpuSettings.exclude = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+
+                int port = 5140;
+
+                NetBeansProfiler.getDefaultNB().attachToApp(cpuSettings.toProfilingSettings(), getAttachSettings(port));
+
+                Application app;
+                do {
+                    app = findProfiledApp();
+                    System.out.println("app = " + app);
+                    sleep(500);
+                } while (app == null);
+                ProfilerSupportWrapper.setProfiledApplication(app);
+                ProfilerSupportWrapper.selectProfilerView(app);
             }
         });
         System.out.println("profiling started");
-        sleep(5000);
 
-        Application app = getProfiledApp();
-        System.out.println("app = " + app);
-        ProfilerSupportWrapper.setProfiledApplication(app);
-        ProfilerSupportWrapper.selectProfilerView(app);
 
         throw new RuntimeException("ok");
     }
 
-    private static Application getProfiledApp() {
+    private static Application findProfiledApp() {
         Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
         for (Application app : apps) {
             System.out.println("--");
@@ -120,7 +130,7 @@ public class DebugRunner implements Runnable {
         return null;
     }
 
-    private static AttachSettings getAttachSettings() {
+    private static AttachSettings getAttachSettings(int port) {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
         final AttachSettings attachSettings = new AttachSettings();
@@ -128,26 +138,9 @@ public class DebugRunner implements Runnable {
 //                attachSettings.setDynamic16(true);
 //                attachSettings.setPid(app.getPid());
         attachSettings.setHost("localhost");
-        attachSettings.setPort(5140);
+        attachSettings.setPort(port);
         System.out.println("attachSettings = " + attachSettings);
         return attachSettings;
-    }
-
-    private static ProfilingSettings getProfilingSettings() {
-        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
-        // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
-        final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
-        profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
-        String instrFilter = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
-        profilingSettings.setSelectedInstrumentationFilter(
-                new SimpleFilter(instrFilter, SimpleFilter.SIMPLE_FILTER_EXCLUSIVE, instrFilter)
-        );
-        profilingSettings.setInstrumentationRootMethods(new ClientUtils.SourceCodeSelection[]{
-                new ClientUtils.SourceCodeSelection("net.orfjackal.**", "*", null)
-        });
-        profilingSettings.setInstrumentSpawnedThreads(true);
-        System.out.println("profilingSettings = " + profilingSettings);
-        return profilingSettings;
     }
 
     private static void beginProfiling() {
