@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.util;
 
+import jdave.Block;
 import jdave.Group;
 import jdave.Specification;
 import jdave.junit4.JDaveRunner;
@@ -68,6 +69,17 @@ public class ClientServerConnectionSpec extends Specification<Object> {
             specify(server.isConnected());
         }
 
+        public void aSecondClientCanNotConnectToTheServer() throws Exception {
+            startClient();
+            specify(server.isConnected());
+            specify(new Block() {
+                public void run() throws Throwable {
+                    new ClientConnection(server.getPort());
+                }
+            }, should.raise(IOException.class));
+            specify(server.isConnected());
+        }
+
         public void clientCanSendMessagesToTheServer() throws Exception {
             startClient();
             client.getOutput().writeUTF("message");
@@ -84,7 +96,7 @@ public class ClientServerConnectionSpec extends Specification<Object> {
 
         private void startClient() throws IOException, InterruptedException {
             client = new ClientConnection(server.getPort());
-            server.awaitConnection(100, TimeUnit.MILLISECONDS);
+            server.awaitClientConnected(100, TimeUnit.MILLISECONDS);
         }
     }
 }

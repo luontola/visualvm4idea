@@ -36,8 +36,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Esko Luontola
@@ -46,7 +48,8 @@ import java.util.concurrent.TimeUnit;
 public class ServerConnection {
 
     private final ServerSocket serverSocket;
-    private final CountDownLatch connected = new CountDownLatch(1);
+    private final Lock lock = new ReentrantLock();
+    private final Condition clientConnected = lock.newCondition();
 
     private volatile Socket socket;
     private volatile ObjectInputStream in;
@@ -54,7 +57,7 @@ public class ServerConnection {
 
     public ServerConnection() throws IOException {
         serverSocket = new ServerSocket(0);
-        Thread t = new Thread(new SocketListener());
+        Thread t = new Thread(new WaitForOneClientToConnect());
         t.setDaemon(true);
         t.start();
     }
@@ -68,31 +71,60 @@ public class ServerConnection {
     }
 
     public ObjectInputStream getInput() {
+        assert isConnected();
         return in;
     }
 
     public ObjectOutputStream getOutput() {
+        assert isConnected();
         return out;
     }
 
-    public void awaitConnection(int timeout, TimeUnit unit) throws InterruptedException {
-        connected.await(timeout, unit);
-    }
-
     public void close() throws IOException {
-        serverSocket.close();
+        if (socket != null) {
+            socket.close();
+        }
     }
 
-    private class SocketListener implements Runnable {
+    public void awaitClientConnected() throws InterruptedException {
+        lock.lock();
+        try {
+            clientConnected.await();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void awaitClientConnected(int timeout, TimeUnit unit) throws InterruptedException {
+        lock.lock();
+        try {
+            clientConnected.await(timeout, unit);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void signalClientConnected() {
+        lock.lock();
+        try {
+            clientConnected.signalAll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private class WaitForOneClientToConnect implements Runnable {
         public void run() {
             try {
                 socket = serverSocket.accept();
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());
-                connected.countDown();
+                serverSocket.close();
+                signalClientConnected();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+
     }
 }
