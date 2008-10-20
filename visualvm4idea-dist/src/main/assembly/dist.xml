@@ -16,7 +16,6 @@
             <excludes>
                 <exclude>net.orfjackal.visualvm4idea:visualvm4idea-core:jar</exclude>
                 <exclude>net.orfjackal.visualvm4idea:visualvm4idea-help:jar</exclude>
-                <exclude>net.orfjackal.visualvm4idea:visualvm4idea-program-agent:jar</exclude>
                 <exclude>net.orfjackal.visualvm4idea:visualvm4idea-visualvm-agent:jar</exclude>
                 <!-- HACK: forms_rt must be excluded here because of ideauidesigner-maven-plugin which requires it to have compile scope, even though IDEA already provides it for plugins -->
                 <exclude>com.intellij:forms_rt</exclude>
@@ -24,13 +23,6 @@
         </dependencySet>
 
         <!-- Fixed names for agents -->
-        <dependencySet>
-            <outputDirectory>lib</outputDirectory>
-            <includes>
-                <include>net.orfjackal.visualvm4idea:visualvm4idea-program-agent:jar</include>
-            </includes>
-            <outputFileNameMapping>visualvm4idea-program-agent.jar</outputFileNameMapping>
-        </dependencySet>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
             <includes>

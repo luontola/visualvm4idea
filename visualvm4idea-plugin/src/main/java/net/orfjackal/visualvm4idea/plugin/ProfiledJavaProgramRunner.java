@@ -59,29 +59,6 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
         log.info("ProfiledJavaProgramRunner.patch");
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
-/*
-        try {
-            // TODO: this starts up the agent, but VisualVM does not see the app before main() is executed
-            ServerConnection server = new ServerConnection();
-            final ProfiledAppHandle handle = new ProfiledAppHandle(server);
-            String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-program-agent.jar";
-            javaParameters.getVMParametersList().prepend("-javaagent:" + agentPath + "=port=" + server.getPort());
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        Thread.sleep(10000);
-                        handle.resumeApplication();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-            t.setDaemon(true);
-            t.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-*/
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
         String agent = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib\\deployed\\jdk16\\windows\\profilerinterface.dll";

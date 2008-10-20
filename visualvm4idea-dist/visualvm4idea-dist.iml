@@ -313,7 +313,6 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="visualvm4idea-program-agent" exported="" />
     <orderEntry type="module" module-name="visualvm4idea-visualvm-agent" exported="" />
     <orderEntryProperties />
   </component>
