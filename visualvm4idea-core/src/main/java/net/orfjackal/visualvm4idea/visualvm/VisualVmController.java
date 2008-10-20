@@ -51,10 +51,12 @@ public class VisualVmController {
     private volatile ServerExecutor executor;
 
     public void beginProfilingApplication(int port) {
+        // TODO: class loader problems, the class loader which is used on visualvm to load objects from stream, can not find this class
+        // maybe it would be better to just send strings?
         runOnVisualVm(new BeginProfilingApplicationOnPort(port));
     }
 
-    private Object runOnVisualVm(BeginProfilingApplicationOnPort command) {
+    private Object runOnVisualVm(Callable<?> command) {
         startVisualVmIfNotRunning();
         awaitVisualVmConnected();
         try {
@@ -62,7 +64,6 @@ public class VisualVmController {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
             closeConnection();
             throw new RuntimeException(e);
         }
@@ -116,7 +117,7 @@ public class VisualVmController {
     }
 
 
-    private static class BeginProfilingApplicationOnPort implements Callable<Object>, Serializable {
+    public static class BeginProfilingApplicationOnPort implements Callable<Object>, Serializable {
         private static final long serialVersionUID = 1L;
 
         private final int port;
@@ -130,5 +131,9 @@ public class VisualVmController {
             System.out.println("port = " + port);
             return null;
         }
+    }
+
+    public static void main(String[] args) {
+        new VisualVmController().beginProfilingApplication(5140);
     }
 }
