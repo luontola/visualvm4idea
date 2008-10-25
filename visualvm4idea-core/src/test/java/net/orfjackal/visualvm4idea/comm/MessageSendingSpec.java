@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 public class MessageSendingSpec extends Specification<Object> {
 
 
-
     public class WhenServerIsCreated {
 
         private MessageServer server;
@@ -61,7 +60,7 @@ public class MessageSendingSpec extends Specification<Object> {
         }
 
         public void noMessagesAreQueued() {
-            specify(server.getQueuedMessages(), should.equal(0));
+            specify(server.getRequestQueueSize(), should.equal(0));
         }
 
         public void sendingAMessageWillQueueTheMessageAndLaunchAClient() throws Exception {
@@ -69,7 +68,7 @@ public class MessageSendingSpec extends Specification<Object> {
                 one(clientLauncher).launch(server.getPort());
             }});
             server.send("message");
-            specify(server.getQueuedMessages(), should.equal(1));
+            specify(server.getRequestQueueSize(), should.equal(1));
             Thread.sleep(30); // wait for ClientLauncher.launch()
         }
     }
@@ -93,7 +92,7 @@ public class MessageSendingSpec extends Specification<Object> {
                 one(clientReciever).messageRecieved("message"); will(returnValue(new String[]{"OK"}));
             }});
             server.send("message");
-            specify(server.getQueuedMessages(), should.equal(1));
+            specify(server.getRequestQueueSize(), should.equal(1));
             Thread.sleep(30); // wait for message to arrive
         }
 
@@ -103,6 +102,15 @@ public class MessageSendingSpec extends Specification<Object> {
             }});
             Future<String[]> response = server.send("message");
             specify(response.get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK"));
+        }
+        
+        public void multipleMessagesCanBeSent() throws Exception {
+            checking(new Expectations() {{
+                one(clientReciever).messageRecieved("message1"); will(returnValue(new String[]{"OK1"}));
+                one(clientReciever).messageRecieved("message2"); will(returnValue(new String[]{"OK2"}));
+            }});
+            specify(server.send("message1").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK1"));
+            specify(server.send("message2").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK2"));
         }
     }
 }

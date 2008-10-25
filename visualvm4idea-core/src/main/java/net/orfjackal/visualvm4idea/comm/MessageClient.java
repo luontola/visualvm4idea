@@ -67,7 +67,9 @@ public class MessageClient {
             Socket socket = new Socket("localhost", port);
             ObjectInput in = new ObjectInputStream(socket.getInputStream());
             ObjectOutput out = new ObjectOutputStream(socket.getOutputStream());
-            processRequest(in, out);
+            while (true) {
+                processRequest(in, out);
+            }
         }
 
         private void processRequest(ObjectInput in, ObjectOutput out) throws ClassNotFoundException, IOException {

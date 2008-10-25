@@ -48,7 +48,7 @@ public class MessageServer implements MessageSender {
 
     private final MessageClientLauncher clientLauncher;
     private final ServerSocket serverSocket;
-    private final BlockingQueue<MessageTask> messages = new LinkedBlockingQueue<MessageTask>();
+    private final BlockingQueue<RequestHandle> requests = new LinkedBlockingQueue<RequestHandle>();
 
     public MessageServer(MessageClientLauncher clientLauncher) {
         this.clientLauncher = clientLauncher;
@@ -63,8 +63,8 @@ public class MessageServer implements MessageSender {
     }
 
     public Future<String[]> send(String... message) {
-        MessageTask msg = new MessageTask(message);
-        messages.add(msg);
+        RequestHandle msg = new RequestHandle(message);
+        requests.add(msg);
         return msg;
     }
 
@@ -73,8 +73,8 @@ public class MessageServer implements MessageSender {
     }
 
     @TestOnly
-    public int getQueuedMessages() {
-        return messages.size();
+    int getRequestQueueSize() {
+        return requests.size();
     }
 
 
@@ -86,40 +86,54 @@ public class MessageServer implements MessageSender {
 
         public void run() {
             try {
-                tryToSendAQueuedMessage();
+                while (true) {
+                    tryToSendOneQueuedMessage();
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void tryToSendAQueuedMessage() throws InterruptedException, IOException, ClassNotFoundException {
-            MessageTask task = messages.take();
-            openSocketConnection();
-            processMessageTask(task);
-        }
-
-        private void openSocketConnection() throws IOException {
-            if (socket == null) {
-                clientLauncher.launch(getPort());
-                socket = serverSocket.accept();
-                out = new ObjectOutputStream(socket.getOutputStream());
-                in = new ObjectInputStream(socket.getInputStream());
+        private void tryToSendOneQueuedMessage() throws InterruptedException, IOException, ClassNotFoundException {
+            RequestHandle request = requests.take();
+            if (notConnected()) {
+                connect();
             }
+            processRequest(request);
         }
 
-        private void processMessageTask(MessageTask task) throws IOException, ClassNotFoundException {
-            out.writeObject(task.getMessage());
+        private boolean notConnected() {
+            return socket == null;
+        }
+
+        private void connect() throws IOException {
+            launchNewClient();
+            openConnectionToClient();
+        }
+
+        private void launchNewClient() {
+            clientLauncher.launch(getPort());
+        }
+
+        private void openConnectionToClient() throws IOException {
+            socket = serverSocket.accept();
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+        }
+
+        private void processRequest(RequestHandle request) throws IOException, ClassNotFoundException {
+            out.writeObject(request.getMessage());
             out.flush();
             String[] response = (String[]) in.readObject();
-            task.setResponse(response);
+            request.setResponse(response);
         }
     }
 
-    private static class MessageTask extends FutureTask<String[]> {
+    private static class RequestHandle extends FutureTask<String[]> {
 
         private final String[] message;
 
-        public MessageTask(String[] message) {
+        public RequestHandle(String[] message) {
             super(new NullCallable());
             this.message = message;
         }
