@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.visualvm;
 
+import static net.orfjackal.visualvm4idea.util.StringUtil.splitCommaSeparated;
 import org.netbeans.lib.profiler.client.ClientUtils;
 import org.netbeans.lib.profiler.common.ProfilingSettings;
 import org.netbeans.lib.profiler.common.ProfilingSettingsPresets;
@@ -46,22 +47,39 @@ import java.util.List;
  */
 public class CpuSettings {
 
+    public static final String DEFAULT_EXCLUDES = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+
     public boolean spawnedThreads = true;
-    public final List<String> roots = new ArrayList<String>();
-    public String exclude = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+    public String roots = "";
+    public String includeClasses = "";
+    public String excludeClasses = "";
 
     public ProfilingSettings toProfilingSettings() {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
         final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
         profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
-        profilingSettings.setSelectedInstrumentationFilter(
-                new SimpleFilter(exclude, SimpleFilter.SIMPLE_FILTER_EXCLUSIVE, exclude)
-        );
-        profilingSettings.setInstrumentationRootMethods(asSourceCodeSelection(roots));
         profilingSettings.setInstrumentSpawnedThreads(spawnedThreads);
+        profilingSettings.setInstrumentationRootMethods(asSourceCodeSelection(splitCommaSeparated(roots)));
+        profilingSettings.setSelectedInstrumentationFilter(getInstrumentationFilter());
         System.out.println("profilingSettings = " + profilingSettings);
         return profilingSettings;
+    }
+
+    private SimpleFilter getInstrumentationFilter() {
+        if (includeClasses.length() == 0 && excludeClasses.length() == 0) {
+            return SimpleFilter.NO_FILTER;
+        }
+        String filter;
+        int filterType;
+        if (includeClasses.length() > 0) {
+            filter = includeClasses;
+            filterType = SimpleFilter.SIMPLE_FILTER_INCLUSIVE;
+        } else {
+            filter = excludeClasses;
+            filterType = SimpleFilter.SIMPLE_FILTER_EXCLUSIVE;
+        }
+        return new SimpleFilter(filter, filterType, filter);
     }
 
     private static ClientUtils.SourceCodeSelection[] asSourceCodeSelection(List<String> roots) {

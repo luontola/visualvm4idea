@@ -49,11 +49,11 @@ import java.util.Set;
  */
 public class ProfileAppCommand implements Command {
 
-    private final int profilerPort;
-
-    public ProfileAppCommand(int profilerPort) {
-        this.profilerPort = profilerPort;
-    }
+    public int profilerPort;
+    public boolean profileNewThreads = true;
+    public String roots = "";
+    public String includeClasses = "";
+    public String excludeClasses = "";
 
     public String getCommandId() {
         return "PROFILE_APP";
@@ -61,12 +61,24 @@ public class ProfileAppCommand implements Command {
 
     public String[] toMessage() {
         return new String[]{
-                getCommandId(), String.valueOf(profilerPort)
+                getCommandId(),
+                String.valueOf(profilerPort),
+                String.valueOf(profileNewThreads),
+                roots,
+                includeClasses,
+                excludeClasses,
         };
     }
 
     public Command fromMessage(String[] message) {
-        return new ProfileAppCommand(Integer.parseInt(message[1]));
+        int i = 0;
+        ProfileAppCommand cmd = new ProfileAppCommand();
+        cmd.profilerPort = Integer.parseInt(message[++i]);
+        cmd.profileNewThreads = Boolean.parseBoolean(message[++i]);
+        cmd.roots = message[++i];
+        cmd.includeClasses = message[++i];
+        cmd.excludeClasses = message[++i];
+        return cmd;
     }
 
     public String[] call() {
@@ -83,10 +95,13 @@ public class ProfileAppCommand implements Command {
     }
 
     private CpuSettings getCpuSettings() {
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
         CpuSettings cpuSettings = new CpuSettings();
-        cpuSettings.spawnedThreads = true;
-        cpuSettings.roots.add("net.orfjackal.**");
-        cpuSettings.exclude = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+        cpuSettings.spawnedThreads = profileNewThreads;
+        cpuSettings.roots = roots;
+        cpuSettings.includeClasses = includeClasses;
+        cpuSettings.excludeClasses = excludeClasses;
         return cpuSettings;
     }
 

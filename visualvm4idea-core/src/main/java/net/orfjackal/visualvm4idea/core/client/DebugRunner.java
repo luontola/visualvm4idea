@@ -92,8 +92,8 @@ public class DebugRunner implements Runnable {
             public void run() {
                 CpuSettings cpuSettings = new CpuSettings();
                 cpuSettings.spawnedThreads = true;
-                cpuSettings.roots.add("net.orfjackal.**");
-                cpuSettings.exclude = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+                cpuSettings.roots = "net.orfjackal.**";
+                cpuSettings.excludeClasses = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
 
                 int port = 5140;
 

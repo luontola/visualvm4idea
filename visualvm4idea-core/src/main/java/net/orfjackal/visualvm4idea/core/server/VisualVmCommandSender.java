@@ -35,6 +35,7 @@ import net.orfjackal.visualvm4idea.comm.MessageSender;
 import net.orfjackal.visualvm4idea.comm.MessageServer;
 import net.orfjackal.visualvm4idea.core.commands.Command;
 import net.orfjackal.visualvm4idea.core.commands.ProfileAppCommand;
+import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -56,7 +57,13 @@ public class VisualVmCommandSender {
     }
 
     public void beginProfilingApplication(int port) {
-        runCommand(new ProfileAppCommand(port));
+        ProfileAppCommand cmd = new ProfileAppCommand();
+        cmd.profilerPort = 5140;
+        cmd.profileNewThreads = true;
+        cmd.roots = "net.orfjackal.**";
+        cmd.includeClasses = "";
+        cmd.excludeClasses = CpuSettings.DEFAULT_EXCLUDES;
+        runCommand(cmd);
     }
 
     private String[] runCommand(Command command) {

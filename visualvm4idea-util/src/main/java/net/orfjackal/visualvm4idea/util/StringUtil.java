@@ -29,32 +29,35 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core.commands;
+package net.orfjackal.visualvm4idea.util;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Esko Luontola
  * @since 25.10.2008
  */
-public class CommandResolver {
+public class StringUtil {
 
-    private final Map<String, Command> commands;
-
-    public CommandResolver() {
-        Map<String, Command> commands = new HashMap<String, Command>();
-        register(commands, new ProfileAppCommand());
-        this.commands = Collections.unmodifiableMap(commands);
+    public static List<String> splitCommaSeparated(String combined) {
+        List<String> list = new ArrayList<String>();
+        for (String s : combined.split("[\\s,]+")) {
+            if (s.length() > 0) {
+                list.add(s);
+            }
+        }
+        return list;
     }
 
-    private static void register(Map<String, Command> target, ProfileAppCommand command) {
-        target.put(command.getCommandId(), command);
-    }
-
-    public Command getCommandFromMessage(String[] message) {
-        Command command = commands.get(message[0]);
-        return command.fromMessage(message);
+    public static String asCommaSeparated(List<String> list) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : list) {
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(s);
+        }
+        return sb.toString();
     }
 }
