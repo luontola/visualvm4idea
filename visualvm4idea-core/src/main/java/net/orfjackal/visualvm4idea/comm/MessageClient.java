@@ -47,7 +47,6 @@ public class MessageClient {
     private volatile ObjectInputStream in;
     private volatile ObjectOutputStream out;
 
-
     public MessageClient(MessageReciever reciever, int port) {
         this.reciever = reciever;
         this.port = port;
