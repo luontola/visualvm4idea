@@ -31,6 +31,18 @@
 
 package net.orfjackal.visualvm4idea.core.commands;
 
+import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.application.jvm.Jvm;
+import com.sun.tools.visualvm.application.jvm.JvmFactory;
+import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
+import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
+import org.netbeans.lib.profiler.common.AttachSettings;
+import org.netbeans.modules.profiler.NetBeansProfiler;
+import org.netbeans.modules.profiler.utils.IDEUtils;
+
+import java.util.Set;
+
 /**
  * @author Esko Luontola
  * @since 25.10.2008
@@ -58,8 +70,66 @@ public class ProfileAppCommand implements Command {
     }
 
     public String[] call() {
-        
-
+        IDEUtils.runInProfilerRequestProcessor(new Runnable() {
+            public void run() {
+                NetBeansProfiler.getDefaultNB().attachToApp(
+                        getCpuSettings().toProfilingSettings(), getAttachSettings());
+                Application app = getProfiledApplication();
+                ProfilerSupportWrapper.setProfiledApplication(app);
+                ProfilerSupportWrapper.selectProfilerView(app);
+            }
+        });
         return OK_RESPONSE;
+    }
+
+    private CpuSettings getCpuSettings() {
+        CpuSettings cpuSettings = new CpuSettings();
+        cpuSettings.spawnedThreads = true;
+        cpuSettings.roots.add("net.orfjackal.**");
+        cpuSettings.exclude = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+        return cpuSettings;
+    }
+
+    private AttachSettings getAttachSettings() {
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
+        final AttachSettings attachSettings = new AttachSettings();
+        attachSettings.setDirect(true);
+        attachSettings.setHost("localhost");
+        attachSettings.setPort(profilerPort);
+        System.out.println("attachSettings = " + attachSettings);
+        return attachSettings;
+    }
+
+    private Application getProfiledApplication() {
+        Application app;
+        do {
+            sleep(500);
+            app = findProfiledApp();
+        } while (app == null);
+        return app;
+    }
+
+    private static Application findProfiledApp() {
+        Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
+        for (Application app : apps) {
+            System.out.println("--");
+            System.out.println("app = " + app);
+            Jvm jvm = JvmFactory.getJVMFor(app);
+            System.out.println("jvm = " + jvm);
+            System.out.println("jvm.getJvmArgs() = " + jvm.getJvmArgs());
+            if (jvm.getJvmArgs().contains("profilerinterface.dll")) {
+                return app;
+            }
+        }
+        return null;
+    }
+
+    private static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // ignore
+        }
     }
 }
