@@ -91,9 +91,9 @@ public class DebugRunner implements Runnable {
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
                 CpuSettings cpuSettings = new CpuSettings();
-                cpuSettings.spawnedThreads = true;
+                cpuSettings.profileNewThreads = true;
                 cpuSettings.roots = "net.orfjackal.**";
-                cpuSettings.excludeClasses = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+                cpuSettings.filter = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
 
                 int port = 5140;
 

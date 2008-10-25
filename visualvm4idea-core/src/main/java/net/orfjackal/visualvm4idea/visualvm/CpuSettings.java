@@ -47,39 +47,45 @@ import java.util.List;
  */
 public class CpuSettings {
 
+    public enum FilterType {
+        INCLUDE(SimpleFilter.SIMPLE_FILTER_INCLUSIVE),
+        EXCLUDE(SimpleFilter.SIMPLE_FILTER_EXCLUSIVE);
+
+        private final int type;
+
+        private FilterType(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+    }
+
     public static final String DEFAULT_EXCLUDES = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
 
-    public boolean spawnedThreads = true;
+    public boolean profileNewThreads = true;
     public String roots = "";
-    public String includeClasses = "";
-    public String excludeClasses = "";
+    public FilterType filterType = FilterType.EXCLUDE;
+    public String filter = DEFAULT_EXCLUDES;
 
     public ProfilingSettings toProfilingSettings() {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
         final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
         profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
-        profilingSettings.setInstrumentSpawnedThreads(spawnedThreads);
+        profilingSettings.setInstrumentSpawnedThreads(profileNewThreads);
         profilingSettings.setInstrumentationRootMethods(asSourceCodeSelection(splitCommaSeparated(roots)));
         profilingSettings.setSelectedInstrumentationFilter(getInstrumentationFilter());
-        System.out.println("profilingSettings = " + profilingSettings);
         return profilingSettings;
     }
 
     private SimpleFilter getInstrumentationFilter() {
-        if (includeClasses.length() == 0 && excludeClasses.length() == 0) {
+        String filterValue = filter.trim();
+        if (filterValue.length() == 0 || filterValue.equals("*")) {
             return SimpleFilter.NO_FILTER;
         }
-        String filter;
-        int filterType;
-        if (includeClasses.length() > 0) {
-            filter = includeClasses;
-            filterType = SimpleFilter.SIMPLE_FILTER_INCLUSIVE;
-        } else {
-            filter = excludeClasses;
-            filterType = SimpleFilter.SIMPLE_FILTER_EXCLUSIVE;
-        }
-        return new SimpleFilter(filter, filterType, filter);
+        return new SimpleFilter(filterValue, filterType.getType(), filterValue);
     }
 
     private static ClientUtils.SourceCodeSelection[] asSourceCodeSelection(List<String> roots) {

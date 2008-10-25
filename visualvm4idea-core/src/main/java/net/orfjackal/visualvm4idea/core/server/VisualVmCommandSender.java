@@ -56,13 +56,14 @@ public class VisualVmCommandSender {
         visualvm = new MessageServer(new VisualVmLauncher());
     }
 
-    public void beginProfilingApplication(int port) {
+    public void beginProfilingApplication(int port, boolean profileNewThreads, String roots,
+                                          CpuSettings.FilterType filterType, String filter) {
         ProfileAppCommand cmd = new ProfileAppCommand();
-        cmd.profilerPort = 5140;
-        cmd.profileNewThreads = true;
-        cmd.roots = "net.orfjackal.**";
-        cmd.includeClasses = "";
-        cmd.excludeClasses = CpuSettings.DEFAULT_EXCLUDES;
+        cmd.profilerPort = port;
+        cmd.profileNewThreads = profileNewThreads;
+        cmd.roots = roots;
+        cmd.filterType = filterType;
+        cmd.filter = filter;
         runCommand(cmd);
     }
 
@@ -85,6 +86,7 @@ public class VisualVmCommandSender {
 
     public static void main(String[] args) {
         VisualVmCommandSender sender = new VisualVmCommandSender();
-        sender.beginProfilingApplication(5140);
+        sender.beginProfilingApplication(5140, true, "net.orfjackal.**",
+                CpuSettings.FilterType.EXCLUDE, CpuSettings.DEFAULT_EXCLUDES);
     }
 }

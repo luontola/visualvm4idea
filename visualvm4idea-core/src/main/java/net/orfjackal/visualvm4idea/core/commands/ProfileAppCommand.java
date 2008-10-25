@@ -52,8 +52,8 @@ public class ProfileAppCommand implements Command {
     public int profilerPort;
     public boolean profileNewThreads = true;
     public String roots = "";
-    public String includeClasses = "";
-    public String excludeClasses = "";
+    public CpuSettings.FilterType filterType = CpuSettings.FilterType.EXCLUDE;
+    public String filter = "";
 
     public String getCommandId() {
         return "PROFILE_APP";
@@ -65,8 +65,8 @@ public class ProfileAppCommand implements Command {
                 String.valueOf(profilerPort),
                 String.valueOf(profileNewThreads),
                 roots,
-                includeClasses,
-                excludeClasses,
+                filterType.name(),
+                filter,
         };
     }
 
@@ -76,8 +76,8 @@ public class ProfileAppCommand implements Command {
         cmd.profilerPort = Integer.parseInt(message[++i]);
         cmd.profileNewThreads = Boolean.parseBoolean(message[++i]);
         cmd.roots = message[++i];
-        cmd.includeClasses = message[++i];
-        cmd.excludeClasses = message[++i];
+        cmd.filterType = CpuSettings.FilterType.valueOf(message[++i]);
+        cmd.filter = message[++i];
         return cmd;
     }
 
@@ -98,10 +98,10 @@ public class ProfileAppCommand implements Command {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
         CpuSettings cpuSettings = new CpuSettings();
-        cpuSettings.spawnedThreads = profileNewThreads;
+        cpuSettings.profileNewThreads = profileNewThreads;
         cpuSettings.roots = roots;
-        cpuSettings.includeClasses = includeClasses;
-        cpuSettings.excludeClasses = excludeClasses;
+        cpuSettings.filterType = filterType;
+        cpuSettings.filter = filter;
         return cpuSettings;
     }
 
@@ -112,7 +112,6 @@ public class ProfileAppCommand implements Command {
         attachSettings.setDirect(true);
         attachSettings.setHost("localhost");
         attachSettings.setPort(profilerPort);
-        System.out.println("attachSettings = " + attachSettings);
         return attachSettings;
     }
 
@@ -128,11 +127,8 @@ public class ProfileAppCommand implements Command {
     private static Application findProfiledApp() {
         Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
         for (Application app : apps) {
-            System.out.println("--");
-            System.out.println("app = " + app);
             Jvm jvm = JvmFactory.getJVMFor(app);
-            System.out.println("jvm = " + jvm);
-            System.out.println("jvm.getJvmArgs() = " + jvm.getJvmArgs());
+            // TODO: use a unique id to identify the right JVM
             if (jvm.getJvmArgs().contains("profilerinterface.dll")) {
                 return app;
             }

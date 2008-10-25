@@ -41,6 +41,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizable;
 import net.orfjackal.visualvm4idea.core.server.VisualVmCommandSender;
+import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 
 /**
  * @author Esko Luontola
@@ -60,6 +61,10 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
         log.info("ProfiledJavaProgramRunner.patch");
+        log.info("javaParameters = " + javaParameters);
+        log.info("settings = " + settings);
+        log.info("beforeExecution = " + beforeExecution);
+
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
@@ -77,8 +82,11 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         log.info("ProfiledJavaProgramRunner.onProcessStarted");
+        log.info("settings = " + settings);
+        log.info("executionResult = " + executionResult);
 
-        visualVm.beginProfilingApplication(5140);
+        visualVm.beginProfilingApplication(5140, true, "net.orfjackal.**",
+                CpuSettings.FilterType.EXCLUDE, CpuSettings.DEFAULT_EXCLUDES);
     }
 
     // on run: 3
