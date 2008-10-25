@@ -38,6 +38,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 
 /**
@@ -77,6 +78,12 @@ public class MessageServer implements MessageSender {
         return requests.size();
     }
 
+    private void retryRequest(RequestHandle request) throws InterruptedException {
+        ArrayList<RequestHandle> tmp = new ArrayList<RequestHandle>();
+        tmp.add(request);
+        requests.drainTo(tmp);
+        requests.addAll(tmp);
+    }
 
     private class MessageQueueProsessor implements Runnable {
 
@@ -87,45 +94,70 @@ public class MessageServer implements MessageSender {
         public void run() {
             try {
                 while (true) {
-                    tryToSendOneQueuedMessage();
+                    tryToProcessNextRequest();
                 }
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void tryToSendOneQueuedMessage() throws InterruptedException, IOException, ClassNotFoundException {
+        private void tryToProcessNextRequest() throws InterruptedException {
             RequestHandle request = requests.take();
-            if (notConnected()) {
-                connect();
+            try {
+                if (notConnected()) {
+                    openConnection();
+                }
+                processRequest(request);
+            } catch (IOException e) {
+                retryRequest(request);
+                closeConnection();
             }
-            processRequest(request);
         }
 
         private boolean notConnected() {
             return socket == null;
         }
 
-        private void connect() throws IOException {
+        private void openConnection() throws IOException {
             launchNewClient();
-            openConnectionToClient();
+            acceptConnectionToClient();
         }
 
         private void launchNewClient() {
             clientLauncher.launch(getPort());
         }
 
-        private void openConnectionToClient() throws IOException {
+        private void acceptConnectionToClient() throws IOException {
             socket = serverSocket.accept();
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
         }
 
-        private void processRequest(RequestHandle request) throws IOException, ClassNotFoundException {
+        private void processRequest(RequestHandle request) throws IOException {
             out.writeObject(request.getMessage());
             out.flush();
-            String[] response = (String[]) in.readObject();
+            String[] response = readNextResponse();
             request.setResponse(response);
+        }
+
+        private String[] readNextResponse() throws IOException {
+            try {
+                return (String[]) in.readObject();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private void closeConnection() {
+            try {
+                if (socket != null) {
+                    socket.close();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } finally {
+                socket = null;
+            }
         }
     }
 

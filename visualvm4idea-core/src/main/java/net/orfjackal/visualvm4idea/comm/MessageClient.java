@@ -42,41 +42,66 @@ public class MessageClient {
 
     private final MessageReciever reciever;
     private final int port;
+    private final Thread worker;
+    private volatile Socket socket = null;
 
     public MessageClient(MessageReciever reciever, int port) {
         this.reciever = reciever;
         this.port = port;
-        Thread t = new Thread(new MessageInputConsumer());
-        t.setDaemon(true);
-        t.start();
+        worker = new Thread(new RequestProsessor());
+        worker.setDaemon(true);
+        worker.start();
     }
 
-    private class MessageInputConsumer implements Runnable {
+    public void close() {
+        worker.interrupt();
+        closeSocket(socket);
+    }
+
+    private class RequestProsessor implements Runnable {
 
         public void run() {
             try {
-                tryToRecieveMessages();
+                socket = new Socket("localhost", port);
+                tryToProcessRequests(socket);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                // connection closed
+            } finally {
+                closeSocket(socket);
+            }
+        }
+
+        private void tryToProcessRequests(Socket socket) throws IOException {
+            ObjectInput in = new ObjectInputStream(socket.getInputStream());
+            ObjectOutput out = new ObjectOutputStream(socket.getOutputStream());
+            while (!Thread.currentThread().isInterrupted()) {
+                processOneRequest(in, out);
+            }
+        }
+
+        private void processOneRequest(ObjectInput in, ObjectOutput out) throws IOException {
+            String[] request = readNextRequest(in);
+            String[] response = reciever.messageRecieved(request);
+            out.writeObject(response);
+            out.flush();
+        }
+
+        private String[] readNextRequest(ObjectInput in) throws IOException {
+            try {
+                return (String[]) in.readObject();
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
 
-        private void tryToRecieveMessages() throws IOException, ClassNotFoundException {
-            Socket socket = new Socket("localhost", port);
-            ObjectInput in = new ObjectInputStream(socket.getInputStream());
-            ObjectOutput out = new ObjectOutputStream(socket.getOutputStream());
-            while (true) {
-                processRequest(in, out);
+    private static void closeSocket(Socket socket) {
+        try {
+            if (socket != null) {
+                socket.close();
             }
-        }
-
-        private void processRequest(ObjectInput in, ObjectOutput out) throws ClassNotFoundException, IOException {
-            String[] message = (String[]) in.readObject();
-            String[] response = reciever.messageRecieved(message);
-            out.writeObject(response);
-            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

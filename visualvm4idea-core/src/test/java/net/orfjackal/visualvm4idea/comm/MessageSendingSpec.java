@@ -37,6 +37,8 @@ import jdave.junit4.JDaveRunner;
 import org.jmock.Expectations;
 import org.junit.runner.RunWith;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -110,6 +112,39 @@ public class MessageSendingSpec extends Specification<Object> {
                 one(clientReciever).messageRecieved("message2"); will(returnValue(new String[]{"OK2"}));
             }});
             specify(server.send("message1").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK1"));
+            specify(server.send("message2").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK2"));
+        }
+    }
+
+    public class IfClientIsClosed {
+
+        private MessageServer server;
+        private MessageReciever clientReciever1;
+        private MessageReciever clientReciever2;
+        private Queue<MessageReciever> recievers = new ConcurrentLinkedQueue<MessageReciever>();
+        private volatile MessageClient client;
+
+        public void create() throws Exception {
+            clientReciever1 = mock(MessageReciever.class, "clientReciever1");
+            clientReciever2 = mock(MessageReciever.class, "clientReciever2");
+            recievers.add(clientReciever1);
+            recievers.add(clientReciever2);
+            server = new MessageServer(new MessageClientLauncher() {
+                public void launch(int port) {
+                    client = new MessageClient(recievers.poll(), port);
+                }
+            });
+            checking(new Expectations() {{
+                one(clientReciever1).messageRecieved("message1"); will(returnValue(new String[]{"OK1"}));
+            }});
+            specify(server.send("message1").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK1"));
+            client.close();
+        }
+
+        public void aNewClientWillBeLaunchedToRecieveTheMessages() throws Exception {
+            checking(new Expectations() {{
+                one(clientReciever2).messageRecieved("message2"); will(returnValue(new String[]{"OK2"}));
+            }});
             specify(server.send("message2").get(100, TimeUnit.MILLISECONDS), should.containInOrder("OK2"));
         }
     }
