@@ -96,7 +96,7 @@ public class ProfiledJavaProgramRunner implements JavaProgramRunner {
     }
 
     public RunnerInfo getInfo() {
-        log.info("ProfiledJavaProgramRunner.getInfo");
+//        log.info("ProfiledJavaProgramRunner.getInfo");
         return new RunnerInfo("VisualVmId", "TODO: description", Resources.LOGO_16, "VisualVmToolWindowId", "VisualVmHelpId");
     }
 
