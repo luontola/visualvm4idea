@@ -60,19 +60,19 @@ public class VisualVmCommandSender {
     }
 
     private String[] runCommand(Command command) {
+        String[] message = command.toMessage();
         try {
-            String[] message = command.toMessage();
-            log.info("Send message: " + Arrays.toString(message));
+            log.info("Sent request " + Arrays.toString(message));
             String[] response = visualvm.send(message).get(10, TimeUnit.SECONDS);
-            log.info("Got response: " + Arrays.toString(response) + " to message " + Arrays.toString(message));
+            log.info("Got response " + Arrays.toString(response) + " to request " + Arrays.toString(message));
             return response;
 
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while waiting for response", e);
+            throw new RuntimeException("Interrupted while waiting for response, request was: " + Arrays.toString(message), e);
         } catch (ExecutionException e) {
-            throw new RuntimeException("Remote exception on VisualVM", e);
+            throw new RuntimeException("Remote exception on VisualVM, request was: " + Arrays.toString(message), e);
         } catch (TimeoutException e) {
-            throw new RuntimeException("No response from VisualVM", e);
+            throw new RuntimeException("No response from VisualVM, request was: " + Arrays.toString(message), e);
         }
     }
 
