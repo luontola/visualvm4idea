@@ -29,13 +29,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.comm;
+package net.orfjackal.visualvm4idea.core;
+
+import net.orfjackal.visualvm4idea.comm.MessageReciever;
 
 /**
  * @author Esko Luontola
  * @since 25.10.2008
  */
-public interface MessageClientLauncher {
+public class VisualVmCommandHandler implements MessageReciever {
 
-    void launch(int serverPort);
+    public String[] messageRecieved(String... message) {
+        return new String[0];
+    }
 }

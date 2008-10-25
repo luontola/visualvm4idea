@@ -83,8 +83,8 @@ public class MessageSendingSpec extends Specification<Object> {
         public void create() throws Exception {
             clientReciever = mock(MessageReciever.class);
             server = new MessageServer(new MessageClientLauncher() {
-                public void launch(int port) {
-                    new MessageClient(clientReciever, port);
+                public void launch(int serverPort) {
+                    new MessageClient(clientReciever, serverPort);
                 }
             });
         }
@@ -93,9 +93,9 @@ public class MessageSendingSpec extends Specification<Object> {
             checking(new Expectations() {{
                 one(clientReciever).messageRecieved("message"); will(returnValue(new String[]{"OK"}));
             }});
-            server.send("message");
+            Future<String[]> response = server.send("message");
             specify(server.getRequestQueueSize(), should.equal(1));
-            Thread.sleep(30); // wait for message to arrive
+            response.get(500, TimeUnit.MILLISECONDS);
         }
 
         public void theServerWillRecieveAResponseFromTheClient() throws Exception {
@@ -130,8 +130,8 @@ public class MessageSendingSpec extends Specification<Object> {
             recievers.add(clientReciever1);
             recievers.add(clientReciever2);
             server = new MessageServer(new MessageClientLauncher() {
-                public void launch(int port) {
-                    client = new MessageClient(recievers.poll(), port);
+                public void launch(int serverPort) {
+                    client = new MessageClient(recievers.poll(), serverPort);
                 }
             });
             checking(new Expectations() {{

@@ -31,10 +31,7 @@
 
 package net.orfjackal.visualvm4idea.core;
 
-import net.orfjackal.visualvm4idea.util.ClientConnection;
-import net.orfjackal.visualvm4idea.util.ClientExecutor;
-
-import java.io.IOException;
+import net.orfjackal.visualvm4idea.comm.MessageClient;
 
 /**
  * @author Esko Luontola
@@ -49,10 +46,6 @@ public class VisualVmHookRunner implements Runnable {
     }
 
     public void run() {
-        try {
-            new ClientExecutor(new ClientConnection(port));
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to server on port " + port, e);
-        }
+        new MessageClient(new VisualVmCommandHandler(), port);
     }
 }
