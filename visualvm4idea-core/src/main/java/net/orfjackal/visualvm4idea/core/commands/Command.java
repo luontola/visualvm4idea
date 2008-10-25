@@ -29,26 +29,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.core.commands;
 
-import net.orfjackal.visualvm4idea.core.client.VisualVmHookRunner;
+import java.util.concurrent.Callable;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 25.10.2008
  */
-public class VisualVmHook {
+public interface Command extends Callable<String[]> {
 
-    private static boolean started = false;
+    final String[] OK_RESPONSE = new String[]{"OK"};
 
-    public synchronized static void start(int port) {
-        System.out.println("VisualVmHook.start");
-        if (!started) {
-//            Thread t = new Thread(new DebugRunner());
-            Thread t = new Thread(new VisualVmHookRunner(port));
-            t.setDaemon(true);
-            t.start();
-            started = true;
-        }
-    }
+    String getCommandId();
+
+    String[] toMessage();
+
+    Command fromMessage(String[] message);
+
+    String[] call();
 }

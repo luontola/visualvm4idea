@@ -40,7 +40,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizable;
-import net.orfjackal.visualvm4idea.core.VisualVmCommandSender;
+import net.orfjackal.visualvm4idea.core.server.VisualVmCommandSender;
 
 /**
  * @author Esko Luontola

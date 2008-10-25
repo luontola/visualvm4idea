@@ -29,26 +29,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.core.commands;
 
-import net.orfjackal.visualvm4idea.core.client.VisualVmHookRunner;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 25.10.2008
  */
-public class VisualVmHook {
+public class CommandResolver {
 
-    private static boolean started = false;
+    private final Map<String, Command> commands;
 
-    public synchronized static void start(int port) {
-        System.out.println("VisualVmHook.start");
-        if (!started) {
-//            Thread t = new Thread(new DebugRunner());
-            Thread t = new Thread(new VisualVmHookRunner(port));
-            t.setDaemon(true);
-            t.start();
-            started = true;
-        }
+    public CommandResolver() {
+        Map<String, Command> commands = new HashMap<String, Command>();
+        register(commands, new ProfileAppCommand(0));
+        this.commands = Collections.unmodifiableMap(commands);
+    }
+
+    private static void register(Map<String, Command> target, ProfileAppCommand command) {
+        target.put(command.getCommandId(), command);
+    }
+
+    public Command getCommandFromMessage(String[] message) {
+        Command command = commands.get(message[0]);
+        return command.fromMessage(message);
     }
 }

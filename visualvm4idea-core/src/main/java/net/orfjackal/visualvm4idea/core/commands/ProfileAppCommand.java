@@ -29,26 +29,37 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
-
-import net.orfjackal.visualvm4idea.core.client.VisualVmHookRunner;
+package net.orfjackal.visualvm4idea.core.commands;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 25.10.2008
  */
-public class VisualVmHook {
+public class ProfileAppCommand implements Command {
 
-    private static boolean started = false;
+    private final int profilerPort;
 
-    public synchronized static void start(int port) {
-        System.out.println("VisualVmHook.start");
-        if (!started) {
-//            Thread t = new Thread(new DebugRunner());
-            Thread t = new Thread(new VisualVmHookRunner(port));
-            t.setDaemon(true);
-            t.start();
-            started = true;
-        }
+    public ProfileAppCommand(int profilerPort) {
+        this.profilerPort = profilerPort;
+    }
+
+    public String getCommandId() {
+        return "PROFILE_APP";
+    }
+
+    public String[] toMessage() {
+        return new String[]{
+                getCommandId(), String.valueOf(profilerPort)
+        };
+    }
+
+    public Command fromMessage(String[] message) {
+        return new ProfileAppCommand(Integer.parseInt(message[1]));
+    }
+
+    public String[] call() {
+        
+
+        return OK_RESPONSE;
     }
 }

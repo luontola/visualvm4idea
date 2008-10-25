@@ -29,17 +29,28 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.core.server;
 
-import net.orfjackal.visualvm4idea.comm.MessageReciever;
+import net.orfjackal.visualvm4idea.comm.MessageClientLauncher;
+import net.orfjackal.visualvm4idea.util.ProcessExecutorImpl;
 
 /**
  * @author Esko Luontola
  * @since 25.10.2008
  */
-public class VisualVmCommandHandler implements MessageReciever {
+public class VisualVmLauncher implements MessageClientLauncher {
 
-    public String[] messageRecieved(String... message) {
-        return new String[0];
+    public void launch(int serverPort) {
+        startVisualVm(serverPort);
+    }
+
+    private static void startVisualVm(int serverPort) {
+        String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-visualvm-agent.jar";
+        String libPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-core.jar";
+        new ProcessExecutorImpl()
+                .exec("D:\\DEVEL\\VisualVM for IDEA\\visualvm_101\\bin\\visualvm.exe",
+                        "-J-javaagent:" + agentPath,
+                        "-J-Dvisualvm4idea.lib=" + libPath,
+                        "-J-Dvisualvm4idea.port=" + serverPort);
     }
 }

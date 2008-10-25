@@ -29,26 +29,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.core.client;
 
-import net.orfjackal.visualvm4idea.core.client.VisualVmHookRunner;
+import net.orfjackal.visualvm4idea.comm.MessageReciever;
+import net.orfjackal.visualvm4idea.core.commands.Command;
+import net.orfjackal.visualvm4idea.core.commands.CommandResolver;
 
 /**
  * @author Esko Luontola
- * @since 10.10.2008
+ * @since 25.10.2008
  */
-public class VisualVmHook {
+public class VisualVmCommandHandler implements MessageReciever {
 
-    private static boolean started = false;
+    private final CommandResolver commandResolver = new CommandResolver();
 
-    public synchronized static void start(int port) {
-        System.out.println("VisualVmHook.start");
-        if (!started) {
-//            Thread t = new Thread(new DebugRunner());
-            Thread t = new Thread(new VisualVmHookRunner(port));
-            t.setDaemon(true);
-            t.start();
-            started = true;
-        }
+    public String[] messageRecieved(String... message) {
+        Command command = commandResolver.getCommandFromMessage(message);
+        return command.call();
     }
 }

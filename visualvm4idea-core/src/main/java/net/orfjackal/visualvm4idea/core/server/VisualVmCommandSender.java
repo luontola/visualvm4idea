@@ -29,45 +29,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core;
+package net.orfjackal.visualvm4idea.core.server;
 
-import net.orfjackal.visualvm4idea.comm.MessageClientLauncher;
 import net.orfjackal.visualvm4idea.comm.MessageSender;
 import net.orfjackal.visualvm4idea.comm.MessageServer;
-import net.orfjackal.visualvm4idea.util.ProcessExecutorImpl;
+import net.orfjackal.visualvm4idea.core.commands.Command;
+import net.orfjackal.visualvm4idea.core.commands.ProfileAppCommand;
+
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 /**
  * @author Esko Luontola
  * @since 17.10.2008
  */
 public class VisualVmCommandSender {
+    private static final Logger log = Logger.getLogger(VisualVmCommandSender.class.getName());
 
     private MessageSender visualvm;
 
     public VisualVmCommandSender() {
-        visualvm = new MessageServer(new MessageClientLauncher() {
-            public void launch(int serverPort) {
-                startVisualVm(serverPort);
-            }
-        });
+        visualvm = new MessageServer(new VisualVmLauncher());
     }
 
     public void beginProfilingApplication(int port) {
-        // TODO: class loader problems, the class loader which is used on visualvm to load objects from stream, can not find this class
-        // maybe it would be better to just send strings?
+        runCommand(new ProfileAppCommand(port));
     }
 
-    private static void startVisualVm(int serverPort) {
-        String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-visualvm-agent.jar";
-        String libPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-core.jar";
-        new ProcessExecutorImpl()
-                .exec("D:\\DEVEL\\VisualVM for IDEA\\visualvm_101\\bin\\visualvm.exe",
-                        "-J-javaagent:" + agentPath,
-                        "-J-Dvisualvm4idea.lib=" + libPath,
-                        "-J-Dvisualvm4idea.port=" + serverPort);
+    private String[] runCommand(Command command) {
+        try {
+            String[] message = command.toMessage();
+            log.info("Send message: " + Arrays.toString(message));
+            String[] response = visualvm.send(message).get(10, TimeUnit.SECONDS);
+            log.info("Got response: " + Arrays.toString(response) + " to message " + Arrays.toString(message));
+            return response;
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Interrupted while waiting for response", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Remote exception on VisualVM", e);
+        } catch (TimeoutException e) {
+            throw new RuntimeException("No response from VisualVM", e);
+        }
     }
 
     public static void main(String[] args) {
-        new VisualVmCommandSender().beginProfilingApplication(5140);
+        VisualVmCommandSender sender = new VisualVmCommandSender();
+        sender.beginProfilingApplication(5140);
     }
 }
