@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="net.orfjackal.visualvm4idea.plugin.ProfilerRunnerSettingsView">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="net.orfjackal.visualvm4idea.plugin.ProfilerSettingsEditor">
   <grid id="27dc6" binding="rootPane" layout-manager="FormLayout">
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -108,7 +108,7 @@
             <properties/>
             <border type="empty" title="Filtering"/>
             <children>
-              <component id="268f5" class="javax.swing.JRadioButton" binding="filterIncludeButton">
+              <component id="268f5" class="javax.swing.JRadioButton" binding="filterIncludeRadioButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <forms/>
@@ -200,7 +200,7 @@
               <text value="Profile object allocations and GC"/>
             </properties>
           </component>
-          <component id="70556" class="javax.swing.JSpinner" binding="trackEveryNAllocsSpinner">
+          <component id="70556" class="javax.swing.JSpinner" binding="profileAllocIntervalSpinner">
             <constraints>
               <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
               <forms defaultalign-horz="false"/>
@@ -239,15 +239,15 @@
     </children>
   </grid>
   <buttonGroups>
-    <group name="startFromGroup" bound="true">
+    <group name="startFromGroup">
       <member id="45904"/>
       <member id="7f53d"/>
     </group>
-    <group name="filterGroup" bound="true">
+    <group name="filterGroup">
       <member id="d98ff"/>
       <member id="268f5"/>
     </group>
-    <group name="profileAllocGroup" bound="true">
+    <group name="profileAllocGroup">
       <member id="d726"/>
       <member id="7777d"/>
     </group>

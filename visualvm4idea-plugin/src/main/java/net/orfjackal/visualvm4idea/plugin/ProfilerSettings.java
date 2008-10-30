@@ -31,38 +31,67 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import javax.swing.*;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.WriteExternalException;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class ProfilerRunnerSettingsView {
+public class ProfilerSettings implements JDOMExternalizable {
 
-    private JPanel rootPane;
+    // CPU Profiling settings
 
-    // CPU profiling settings
+    @NotNull public StartFrom startFromMode = StartFrom.MAIN_CLASS;
+    @NotNull public String startFromMainClass = "";
+    @NotNull public String startFromOtherClasses = "";
 
-    private ButtonGroup startFromGroup;
-    private JRadioButton startFromMainClassRadioButton;
-    private JRadioButton startFromOtherClassesRadioButton;
-    private JTextArea startFromOtherClassesField;
+    public boolean profileNewRunnables = true;
 
-    private JCheckBox profileNewRunnablesCheckBox;
-
-    private ButtonGroup filterGroup;
-    private JRadioButton filterIncludeButton;
-    private JTextArea filterIncludeField;
-    private JRadioButton filterExcludeRadioButton;
-    private JTextArea filterExcludeField;
+    @NotNull public FilterMode filteringMode = FilterMode.EXCLUDE;
+    @NotNull public String filterIncludeClasses = "";
+    @NotNull public String filterExcludeClasses = "java.*, javaw.*,\nsun.*, sunw.*, com.sun.*";
 
     // Memory profiling settings
 
-    private ButtonGroup profileAllocGroup;
-    private JRadioButton profileAllocRadioButton;
-    private JRadioButton profileAllocAndGcRadioButton;
+    @NotNull public AllocMode profileAllocMode = AllocMode.ALLOC_AND_GC;
+    public int profileAllocInterval = 10;
+    public boolean recordAllocTraces = false;
 
-    private JSpinner trackEveryNAllocsSpinner;
+    public void readExternal(Element element) throws InvalidDataException {
+    }
 
-    private JCheckBox recordAllocTracesCheckBox;
+    public void writeExternal(Element element) throws WriteExternalException {
+    }
+
+    public String getClassesToProfileFrom() {
+        if (startFromMode == StartFrom.MAIN_CLASS) {
+            return startFromMainClass;
+        } else {
+            return startFromOtherClasses;
+        }
+    }
+
+    public String getFilterValue() {
+        if (filteringMode == FilterMode.INCLUDE) {
+            return filterIncludeClasses;
+        } else {
+            return filterExcludeClasses;
+        }
+    }
+
+    public enum StartFrom {
+        MAIN_CLASS, OTHER_CLASSES
+    }
+
+    public enum FilterMode {
+        INCLUDE, EXCLUDE
+    }
+
+    public enum AllocMode {
+        ALLOC, ALLOC_AND_GC
+    }
 }
