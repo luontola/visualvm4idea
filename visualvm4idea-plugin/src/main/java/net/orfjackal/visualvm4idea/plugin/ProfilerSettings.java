@@ -31,9 +31,11 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,14 +48,14 @@ public class ProfilerSettings implements JDOMExternalizable {
     // CPU Profiling settings
 
     @NotNull public StartFrom startFromMode = StartFrom.MAIN_CLASS;
-    @NotNull public String startFromMainClass = "";
-    @NotNull public String startFromOtherClasses = "";
+    @NotNull public String mainClassToStartFrom = "";
+    @NotNull public String otherClassesToStartFrom = "";
 
     public boolean profileNewRunnables = true;
 
     @NotNull public FilterMode filteringMode = FilterMode.EXCLUDE;
     @NotNull public String filterIncludeClasses = "";
-    @NotNull public String filterExcludeClasses = "java.*, javaw.*,\nsun.*, sunw.*, com.sun.*";
+    @NotNull public String filterExcludeClasses = CpuSettings.DEFAULT_EXCLUDES;
 
     // Memory profiling settings
 
@@ -62,16 +64,30 @@ public class ProfilerSettings implements JDOMExternalizable {
     public boolean recordAllocTraces = false;
 
     public void readExternal(Element element) throws InvalidDataException {
+        // TODO
     }
 
     public void writeExternal(Element element) throws WriteExternalException {
+        // TODO
+    }
+
+    public void configureOnPatch(JavaParameters javaParameters) {
+        mainClassToStartFrom = javaParameters.getMainClass();
     }
 
     public String getClassesToProfileFrom() {
         if (startFromMode == StartFrom.MAIN_CLASS) {
-            return startFromMainClass;
+            return mainClassToStartFrom;
         } else {
-            return startFromOtherClasses;
+            return otherClassesToStartFrom;
+        }
+    }
+
+    public CpuSettings.FilterType getFilterType() {
+        if (filteringMode == FilterMode.INCLUDE) {
+            return CpuSettings.FilterType.INCLUDE;
+        } else {
+            return CpuSettings.FilterType.EXCLUDE;
         }
     }
 

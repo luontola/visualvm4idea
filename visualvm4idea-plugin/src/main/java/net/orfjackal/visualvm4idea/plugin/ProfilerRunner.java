@@ -39,68 +39,74 @@ import com.intellij.execution.runners.RunnerInfo;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
-import net.orfjackal.visualvm4idea.core.server.VisualVmCommandSender;
-import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
+import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
 
 /**
  * @author Esko Luontola
  * @since 14.10.2008
  */
 public class ProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
-
     private static final Logger log = Logger.getInstance(ProfilerRunner.class.getName());
 
-    private final VisualVmCommandSender visualVm = new VisualVmCommandSender();
+    private static final int PROFILER_PORT = 5140;
 
-    public ProfilerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
-        log.info("ProfilerRunner.createConfigurationData");
-        return new ProfilerSettings();
-    }
+    private final VisualVmCommandSender visualVm = new VisualVmCommandSender();
+    private final RunnerInfo runnerInfo = new ProfilerRunnerInfo();
 
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
+        ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
+        profilerSettings.configureOnPatch(javaParameters);
+
         log.info("ProfilerRunner.patch");
         log.info("javaParameters = " + javaParameters);
         log.info("settings = " + settings);
+        log.info("settings.getData() = " + settings.getData());
+        log.info("settings.getRunProfile() = " + settings.getRunProfile());
         log.info("beforeExecution = " + beforeExecution);
-
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
         String agent = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib\\deployed\\jdk16\\windows\\profilerinterface.dll";
         String lib = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib";
-        int port = 5140;
-        javaParameters.getVMParametersList().prepend("-agentpath:" + agent + "=" + lib + "," + port);
-    }
-
-    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
-        log.info("ProfilerRunner.checkConfiguration");
+        javaParameters.getVMParametersList().prepend("-agentpath:" + agent + "=" + lib + "," + PROFILER_PORT);
     }
 
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
+        ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
         log.info("ProfilerRunner.onProcessStarted");
         log.info("settings = " + settings);
         log.info("executionResult = " + executionResult);
 
-        visualVm.beginProfilingApplication(5140, true, "net.orfjackal.**",
-                CpuSettings.FilterType.EXCLUDE, CpuSettings.DEFAULT_EXCLUDES);
+        visualVm.beginProfilingApplication(PROFILER_PORT,
+                profilerSettings.profileNewRunnables,
+                profilerSettings.getClassesToProfileFrom(),
+                profilerSettings.getFilterType(),
+                profilerSettings.getFilterValue());
     }
 
     // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
         log.info("ProfilerRunner.createActions");
-        return new AnAction[0];
+        return new AnAction[0]; // TODO
     }
 
     public RunnerInfo getInfo() {
-//        log.info("ProfilerRunner.getInfo");
-        return new RunnerInfo("VisualVmId", "TODO: description", Resources.LOGO_16, "VisualVmToolWindowId", "VisualVmHelpId");
+        return runnerInfo;
+    }
+
+    public ProfilerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
+        return new ProfilerSettings();
+    }
+
+    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
+        ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
+        log.info("ProfilerRunner.checkConfiguration");
     }
 
     public SettingsEditor<ProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
-        log.info("ProfilerRunner.getSettingsEditor");
         return new ProfilerSettingsEditor();
     }
 }

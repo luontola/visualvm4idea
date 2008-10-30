@@ -4,11 +4,9 @@
     <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
     <colspec value="fill:d:grow"/>
     <constraints>
-      <xy x="20" y="20" width="505" height="542"/>
+      <xy x="20" y="20" width="533" height="510"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -44,7 +42,7 @@
             <rowspec value="center:max(d;4px):noGrow"/>
             <rowspec value="top:4dlu:noGrow"/>
             <rowspec value="center:max(d;32dlu):grow"/>
-            <colspec value="fill:10dlu:noGrow"/>
+            <colspec value="fill:12dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -72,7 +70,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ec981" class="javax.swing.JTextArea" binding="startFromOtherClassesField">
+                  <component id="ec981" class="javax.swing.JTextArea" binding="otherClassesToStartFromField">
                     <constraints/>
                     <properties/>
                   </component>
@@ -84,7 +82,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <text value="Main class (foo.Main)"/>
+                  <text value="Main class"/>
                 </properties>
               </component>
             </children>
@@ -172,7 +170,7 @@
         <rowspec value="center:max(d;4px):noGrow"/>
         <colspec value="fill:max(d;4px):noGrow"/>
         <colspec value="left:4dlu:noGrow"/>
-        <colspec value="fill:max(m;30dlu):noGrow"/>
+        <colspec value="fill:max(d;4px):noGrow"/>
         <colspec value="left:4dlu:noGrow"/>
         <colspec value="fill:max(d;4px):grow"/>
         <constraints>

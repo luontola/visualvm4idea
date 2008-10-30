@@ -37,6 +37,7 @@ import com.intellij.util.NewInstanceFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Esko Luontola
@@ -50,7 +51,7 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
 
     private JRadioButton startFromMainClassRadioButton;
     private JRadioButton startFromOtherClassesRadioButton;
-    private JTextArea startFromOtherClassesField;
+    private JTextArea otherClassesToStartFromField;
 
     private JCheckBox profileNewRunnablesCheckBox;
 
@@ -71,12 +72,15 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
     public ProfilerSettingsEditor() {
         super(NewInstanceFactory.fromClass(ProfilerSettings.class));
         profileAllocIntervalSpinner.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        Dimension size = profileAllocIntervalSpinner.getPreferredSize();
+        size.width = 70;
+        profileAllocIntervalSpinner.setPreferredSize(size);
     }
 
     protected void resetEditorFrom(ProfilerSettings settings) {
         startFromMainClassRadioButton.setSelected(settings.startFromMode == ProfilerSettings.StartFrom.MAIN_CLASS);
         startFromOtherClassesRadioButton.setSelected(settings.startFromMode == ProfilerSettings.StartFrom.OTHER_CLASSES);
-        startFromOtherClassesField.setText(settings.startFromOtherClasses);
+        otherClassesToStartFromField.setText(settings.otherClassesToStartFrom);
 
         profileNewRunnablesCheckBox.setSelected(settings.profileNewRunnables);
 
@@ -97,8 +101,7 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
         settings.startFromMode = startFromMainClassRadioButton.isSelected()
                 ? ProfilerSettings.StartFrom.MAIN_CLASS
                 : ProfilerSettings.StartFrom.OTHER_CLASSES;
-        settings.startFromMainClass = ""; // TODO: how to get the main class?
-        settings.startFromOtherClasses = startFromOtherClassesField.getText();
+        settings.otherClassesToStartFrom = otherClassesToStartFromField.getText();
 
         settings.profileNewRunnables = profileNewRunnablesCheckBox.isSelected();
 
