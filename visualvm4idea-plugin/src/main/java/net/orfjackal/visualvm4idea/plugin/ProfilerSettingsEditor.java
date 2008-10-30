@@ -37,6 +37,8 @@ import com.intellij.util.NewInstanceFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -75,6 +77,22 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
         Dimension size = profileAllocIntervalSpinner.getPreferredSize();
         size.width = 70;
         profileAllocIntervalSpinner.setPreferredSize(size);
+
+        ChangeListener listener = new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                updateControls();
+            }
+        };
+        startFromMainClassRadioButton.addChangeListener(listener);
+        startFromOtherClassesRadioButton.addChangeListener(listener);
+        filterIncludeRadioButton.addChangeListener(listener);
+        filterExcludeRadioButton.addChangeListener(listener);
+    }
+
+    private void updateControls() {
+        otherClassesToStartFromField.setEnabled(startFromOtherClassesRadioButton.isSelected());
+        filterIncludeField.setEnabled(filterIncludeRadioButton.isSelected());
+        filterExcludeField.setEnabled(filterExcludeRadioButton.isSelected());
     }
 
     protected void resetEditorFrom(ProfilerSettings settings) {
