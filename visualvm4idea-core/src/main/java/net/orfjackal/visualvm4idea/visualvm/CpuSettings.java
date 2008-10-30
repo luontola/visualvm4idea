@@ -62,7 +62,7 @@ public class CpuSettings {
         }
     }
 
-    public static final String DEFAULT_EXCLUDES = "java.*, javax.*, sun.*, sunw.*, com.sun.*";
+    public static final String DEFAULT_EXCLUDES = "java.*, javax.*,\nsun.*, sunw.*, com.sun.*";
 
     public boolean profileNewThreads = true;
     public String roots = "";
@@ -81,7 +81,7 @@ public class CpuSettings {
     }
 
     private SimpleFilter getInstrumentationFilter() {
-        String filterValue = filter.trim();
+        String filterValue = filter.trim().replaceAll("\\s+", " ");
         if (filterValue.length() == 0 || filterValue.equals("*")) {
             return SimpleFilter.NO_FILTER;
         }
