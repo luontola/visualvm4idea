@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.core.server;
+package net.orfjackal.visualvm4idea.plugin.server;
 
 import net.orfjackal.visualvm4idea.comm.MessageClientLauncher;
 import net.orfjackal.visualvm4idea.util.ProcessExecutorImpl;
