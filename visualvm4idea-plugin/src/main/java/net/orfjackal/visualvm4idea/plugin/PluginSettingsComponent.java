@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -55,11 +56,14 @@ import javax.swing.*;
                 file = "$APP_CONFIG$/other.xml"
         )}
 )
-public class PluginSettingsComponent
-        implements ApplicationComponent, Configurable, PersistentStateComponent<PluginSettings> {
+public class PluginSettingsComponent implements ApplicationComponent, Configurable, PersistentStateComponent<PluginSettings> {
 
     private PluginSettings settings = new PluginSettings();
     private PluginSettingsEditor editor;
+
+    public static PluginSettingsComponent getInstance() {
+        return ApplicationManager.getApplication().getComponent(PluginSettingsComponent.class);
+    }
 
     public String getVisualvmHome() {
         return settings.getVisualvmHome();

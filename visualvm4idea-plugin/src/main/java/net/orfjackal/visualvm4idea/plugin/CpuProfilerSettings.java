@@ -35,6 +35,7 @@ import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.xmlb.XmlSerializer;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ import org.jetbrains.annotations.NotNull;
 public class CpuProfilerSettings implements JDOMExternalizable {
 
     @NotNull public StartFrom startFromMode = StartFrom.MAIN_CLASS;
-    @NotNull public String mainClassToStartFrom = "";
+    @NotNull private String mainClassToStartFrom = "";
     @NotNull public String otherClassesToStartFrom = "";
 
     public boolean profileNewRunnables = true;
@@ -56,11 +57,11 @@ public class CpuProfilerSettings implements JDOMExternalizable {
     @NotNull public String filterExcludeClasses = CpuSettings.DEFAULT_EXCLUDES;
 
     public void readExternal(Element element) throws InvalidDataException {
-        // TODO
+        XmlSerializer.deserializeInto(this, element);
     }
 
     public void writeExternal(Element element) throws WriteExternalException {
-        // TODO
+        element.setContent(XmlSerializer.serialize(this).removeContent());
     }
 
     public void configureOnPatch(JavaParameters javaParameters) {

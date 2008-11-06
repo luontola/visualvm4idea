@@ -69,7 +69,7 @@ public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSet
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        // TODO: javaParameters.getVMParametersList().prepend(PluginUtil.getVisualVmAgentCommand());
+        // TODO: javaParameters.getVMParametersList().prepend(VisualVmUtil.getVisualVmAgentCommand());
     }
 
     // on run: 2

@@ -34,6 +34,7 @@ package net.orfjackal.visualvm4idea.plugin;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,11 +49,11 @@ public class MemoryProfilerSettings implements JDOMExternalizable {
     public boolean recordAllocTraces = false;
 
     public void readExternal(Element element) throws InvalidDataException {
-        // TODO
+        XmlSerializer.deserializeInto(this, element);
     }
 
     public void writeExternal(Element element) throws WriteExternalException {
-        // TODO
+        element.setContent(XmlSerializer.serialize(this).removeContent());
     }
 
     public enum AllocMode {

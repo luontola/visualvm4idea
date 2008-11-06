@@ -40,6 +40,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
+import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
 
 /**
  * @author Esko Luontola
@@ -70,7 +71,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        javaParameters.getVMParametersList().prepend(PluginUtil.getVisualVmAgentCommand());
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getVisualVmAgentCommand());
     }
 
     // on run: 2

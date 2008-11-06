@@ -32,7 +32,6 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import net.orfjackal.visualvm4idea.comm.MessageClientLauncher;
-import net.orfjackal.visualvm4idea.plugin.PluginUtil;
 import net.orfjackal.visualvm4idea.util.ProcessExecutorImpl;
 
 /**
@@ -49,7 +48,7 @@ public class VisualVmLauncher implements MessageClientLauncher {
         String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-visualvm-agent.jar";
         String libPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-core.jar";
         new ProcessExecutorImpl()
-                .exec(PluginUtil.getVisualVmExecutable(),
+                .exec(VisualVmUtil.getVisualVmExecutable(),
                         "-J-javaagent:" + agentPath,
                         "-J-Dvisualvm4idea.lib=" + libPath,
                         "-J-Dvisualvm4idea.port=" + serverPort);

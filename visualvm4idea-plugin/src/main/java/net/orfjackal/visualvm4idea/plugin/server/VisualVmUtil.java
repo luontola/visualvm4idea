@@ -29,32 +29,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin;
+package net.orfjackal.visualvm4idea.plugin.server;
 
-import com.intellij.openapi.application.ApplicationManager;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
+import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
 import net.orfjackal.visualvm4idea.util.FileUtil;
 
 /**
  * @author Esko Luontola
  * @since 6.11.2008
  */
-public class PluginUtil {
+public class VisualVmUtil {
 
-    private PluginUtil() {
-    }
-
-    public static PluginSettingsComponent getPluginSettings() {
-        return ApplicationManager.getApplication().getComponent(PluginSettingsComponent.class);
+    private VisualVmUtil() {
     }
 
     public static String getVisualVmExecutable() {
-        String visualvmHome = getPluginSettings().getVisualvmHome();
+        String visualvmHome = PluginSettingsComponent.getInstance().getVisualvmHome();
         return FileUtil.getFile(visualvmHome, "bin", "visualvm.exe").getAbsolutePath();
     }
 
     public static String getVisualVmAgentCommand() {
-        String visualvmHome = getPluginSettings().getVisualvmHome();
+        String visualvmHome = PluginSettingsComponent.getInstance().getVisualvmHome();
         String libDir = FileUtil.getFile(visualvmHome, "profiler2", "lib").getAbsolutePath();
         String agent = FileUtil.getFile(libDir, "deployed", "jdk16", "windows", "profilerinterface.dll").getAbsolutePath();
         return "-agentpath:" + agent + "=" + libDir + "," + VisualVmCommandSender.PROFILER_PORT;
