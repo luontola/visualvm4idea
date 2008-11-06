@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.ExecutionRegistry;
 import com.intellij.openapi.components.ApplicationComponent;
+import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,7 +42,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VisualVmPlugin implements ApplicationComponent {
 
-    private final CpuProfilerRunner runner = new CpuProfilerRunner();
+    private final VisualVmCommandSender visualvm = new VisualVmCommandSender();
+    private final CpuProfilerRunner cpuRunner = new CpuProfilerRunner(visualvm);
 
     @NotNull
     public String getComponentName() {
@@ -49,10 +51,10 @@ public class VisualVmPlugin implements ApplicationComponent {
     }
 
     public void initComponent() {
-        ExecutionRegistry.getInstance().registerRunner(runner);
+        ExecutionRegistry.getInstance().registerRunner(cpuRunner);
     }
 
     public void disposeComponent() {
-        ExecutionRegistry.getInstance().unregisterRunner(runner);
+        ExecutionRegistry.getInstance().unregisterRunner(cpuRunner);
     }
 }

@@ -61,6 +61,10 @@ public class PluginSettingsComponent
     private PluginSettings settings = new PluginSettings();
     private PluginSettingsEditor editor;
 
+    public String getVisualvmHome() {
+        return settings.getVisualvmHome();
+    }
+
     // ApplicationComponent
 
     @NotNull

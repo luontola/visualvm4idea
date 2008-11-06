@@ -50,7 +50,9 @@ import java.util.concurrent.TimeoutException;
 public class VisualVmCommandSender {
     private static final Logger log = Logger.getInstance(VisualVmCommandSender.class.getName());
 
-    private MessageSender visualvm;
+    public static final int PROFILER_PORT = 5140;
+
+    private final MessageSender visualvm;
 
     public VisualVmCommandSender() {
         visualvm = new MessageServer(new VisualVmLauncher());
@@ -82,11 +84,5 @@ public class VisualVmCommandSender {
         } catch (TimeoutException e) {
             throw new RuntimeException("No response from VisualVM, request was: " + Arrays.toString(message), e);
         }
-    }
-
-    public static void main(String[] args) {
-        VisualVmCommandSender sender = new VisualVmCommandSender();
-        sender.beginProfilingApplication(5140, true, "net.orfjackal.**",
-                CpuSettings.FilterType.EXCLUDE, CpuSettings.DEFAULT_EXCLUDES);
     }
 }

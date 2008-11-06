@@ -29,29 +29,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
+package net.orfjackal.visualvm4idea.util;
 
-import net.orfjackal.visualvm4idea.comm.MessageClientLauncher;
-import net.orfjackal.visualvm4idea.plugin.PluginUtil;
-import net.orfjackal.visualvm4idea.util.ProcessExecutorImpl;
+import java.io.File;
 
 /**
  * @author Esko Luontola
- * @since 25.10.2008
+ * @since 6.11.2008
  */
-public class VisualVmLauncher implements MessageClientLauncher {
+public class FileUtil {
 
-    public void launch(int serverPort) {
-        startVisualVm(serverPort);
+    private FileUtil() {
     }
 
-    private static void startVisualVm(int serverPort) {
-        String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-visualvm-agent.jar";
-        String libPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-core.jar";
-        new ProcessExecutorImpl()
-                .exec(PluginUtil.getVisualVmExecutable(),
-                        "-J-javaagent:" + agentPath,
-                        "-J-Dvisualvm4idea.lib=" + libPath,
-                        "-J-Dvisualvm4idea.port=" + serverPort);
+    public static File getFile(String parent, String... children) {
+        File file = new File(parent);
+        for (String child : children) {
+            file = new File(file, child);
+        }
+        return file;
     }
 }

@@ -48,10 +48,12 @@ import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
 public class CpuProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
     private static final Logger log = Logger.getInstance(CpuProfilerRunner.class.getName());
 
-    private static final int PROFILER_PORT = 5140;
-
-    private final VisualVmCommandSender visualVm = new VisualVmCommandSender();
+    private final VisualVmCommandSender visualvm;
     private final RunnerInfo runnerInfo = new CpuProfilerRunnerInfo();
+
+    public CpuProfilerRunner(VisualVmCommandSender visualvm) {
+        this.visualvm = visualvm;
+    }
 
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
@@ -68,9 +70,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        String agent = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib\\deployed\\jdk16\\windows\\profilerinterface.dll";
-        String lib = "D:\\DEVEL\\VISUAL~1\\visualvm_101\\profiler2\\lib";
-        javaParameters.getVMParametersList().prepend("-agentpath:" + agent + "=" + lib + "," + PROFILER_PORT);
+        javaParameters.getVMParametersList().prepend(PluginUtil.getVisualVmAgentCommand());
     }
 
     // on run: 2
@@ -80,7 +80,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
         log.info("settings = " + settings);
         log.info("executionResult = " + executionResult);
 
-        visualVm.beginProfilingApplication(PROFILER_PORT,
+        visualvm.beginProfilingApplication(VisualVmCommandSender.PROFILER_PORT,
                 profilerSettings.profileNewRunnables,
                 profilerSettings.getClassesToProfileFrom(),
                 profilerSettings.getFilterType(),
