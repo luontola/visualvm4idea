@@ -58,8 +58,8 @@ public class VisualVmCommandSender {
         visualvm = new MessageServer(new VisualVmLauncher());
     }
 
-    public void beginProfilingApplication(int port, boolean profileNewThreads, String roots,
-                                          CpuSettings.FilterType filterType, String filter) {
+    public void beginProfilingApplicationCPU(int port, boolean profileNewThreads, String roots,
+                                             CpuSettings.FilterType filterType, String filter) {
         ProfileAppCommand cmd = new ProfileAppCommand();
         cmd.profilerPort = port;
         cmd.profileNewThreads = profileNewThreads;

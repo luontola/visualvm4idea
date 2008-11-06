@@ -31,33 +31,16 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.ExecutionRegistry;
-import com.intellij.openapi.components.ApplicationComponent;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.execution.runners.RunnerInfo;
 
 /**
  * @author Esko Luontola
- * @since 14.10.2008
+ * @since 30.10.2008
  */
-public class VisualVmPlugin implements ApplicationComponent {
+public class MemoryProfilerRunnerInfo extends RunnerInfo {
 
-    private final VisualVmCommandSender visualvm = new VisualVmCommandSender();
-    private final CpuProfilerRunner cpuRunner = new CpuProfilerRunner(visualvm);
-    private final MemoryProfilerRunner memoryRunner = new MemoryProfilerRunner(visualvm);
-
-    @NotNull
-    public String getComponentName() {
-        return "VisualVmPlugin";
-    }
-
-    public void initComponent() {
-        ExecutionRegistry.getInstance().registerRunner(cpuRunner);
-        ExecutionRegistry.getInstance().registerRunner(memoryRunner);
-    }
-
-    public void disposeComponent() {
-        ExecutionRegistry.getInstance().unregisterRunner(cpuRunner);
-        ExecutionRegistry.getInstance().unregisterRunner(memoryRunner);
+    public MemoryProfilerRunnerInfo() {
+        super("Profile Memory", "Profile memory usage of selected configuration with VisualVM", Resources.PROFILE_MEMORY_16,
+                "Profile Memory", null);
     }
 }

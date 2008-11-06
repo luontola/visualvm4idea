@@ -31,33 +31,31 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.ExecutionRegistry;
-import com.intellij.openapi.components.ApplicationComponent;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.WriteExternalException;
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
- * @since 14.10.2008
+ * @since 30.10.2008
  */
-public class VisualVmPlugin implements ApplicationComponent {
+public class MemoryProfilerSettings implements JDOMExternalizable {
 
-    private final VisualVmCommandSender visualvm = new VisualVmCommandSender();
-    private final CpuProfilerRunner cpuRunner = new CpuProfilerRunner(visualvm);
-    private final MemoryProfilerRunner memoryRunner = new MemoryProfilerRunner(visualvm);
+    @NotNull public AllocMode profileAllocMode = AllocMode.ALLOC_AND_GC;
+    public int profileAllocInterval = 10;
+    public boolean recordAllocTraces = false;
 
-    @NotNull
-    public String getComponentName() {
-        return "VisualVmPlugin";
+    public void readExternal(Element element) throws InvalidDataException {
+        // TODO
     }
 
-    public void initComponent() {
-        ExecutionRegistry.getInstance().registerRunner(cpuRunner);
-        ExecutionRegistry.getInstance().registerRunner(memoryRunner);
+    public void writeExternal(Element element) throws WriteExternalException {
+        // TODO
     }
 
-    public void disposeComponent() {
-        ExecutionRegistry.getInstance().unregisterRunner(cpuRunner);
-        ExecutionRegistry.getInstance().unregisterRunner(memoryRunner);
+    public enum AllocMode {
+        ALLOC, ALLOC_AND_GC
     }
 }

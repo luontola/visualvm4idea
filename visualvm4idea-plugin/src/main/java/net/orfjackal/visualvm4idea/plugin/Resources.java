@@ -43,4 +43,7 @@ public class Resources {
 
     public static final Icon LOGO_16 = IconLoader.getIcon("icons/logo-16.png", Resources.class);
     public static final Icon LOGO_32 = IconLoader.getIcon("icons/logo-32.png", Resources.class);
+
+    public static final Icon PROFILE_CPU_16 = IconLoader.getIcon("icons/cpu-16.png", Resources.class);
+    public static final Icon PROFILE_MEMORY_16 = IconLoader.getIcon("icons/memory-16.png", Resources.class);
 }

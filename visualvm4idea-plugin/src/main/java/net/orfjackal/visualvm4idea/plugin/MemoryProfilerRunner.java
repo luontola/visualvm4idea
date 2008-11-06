@@ -45,22 +45,21 @@ import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
  * @author Esko Luontola
  * @since 14.10.2008
  */
-public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings> {
-    private static final Logger log = Logger.getInstance(CpuProfilerRunner.class.getName());
+public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSettings> {
+    private static final Logger log = Logger.getInstance(MemoryProfilerRunner.class.getName());
 
     private final VisualVmCommandSender visualvm;
-    private final RunnerInfo runnerInfo = new CpuProfilerRunnerInfo();
+    private final RunnerInfo runnerInfo = new MemoryProfilerRunnerInfo();
 
-    public CpuProfilerRunner(VisualVmCommandSender visualvm) {
+    public MemoryProfilerRunner(VisualVmCommandSender visualvm) {
         this.visualvm = visualvm;
     }
 
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
-        CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
-        profilerSettings.configureOnPatch(javaParameters);
+        MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
 
-        log.info("CpuProfilerRunner.patch");
+        log.info("MemoryProfilerRunner.patch");
         log.info("javaParameters = " + javaParameters);
         log.info("settings = " + settings);
         log.info("settings.getData() = " + settings.getData());
@@ -70,26 +69,22 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        javaParameters.getVMParametersList().prepend(PluginUtil.getVisualVmAgentCommand());
+        // TODO: javaParameters.getVMParametersList().prepend(PluginUtil.getVisualVmAgentCommand());
     }
 
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
-        CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
-        log.info("CpuProfilerRunner.onProcessStarted");
+        MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
+        log.info("MemoryProfilerRunner.onProcessStarted");
         log.info("settings = " + settings);
         log.info("executionResult = " + executionResult);
 
-        visualvm.beginProfilingApplicationCPU(VisualVmCommandSender.PROFILER_PORT,
-                profilerSettings.profileNewRunnables,
-                profilerSettings.getClassesToProfileFrom(),
-                profilerSettings.getFilterType(),
-                profilerSettings.getFilterValue());
+        // TODO: visualvm.beginProfilingApplicationMemory(...);
     }
 
     // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
-        log.info("CpuProfilerRunner.createActions");
+        log.info("MemoryProfilerRunner.createActions");
         return new AnAction[0]; // TODO
     }
 
@@ -97,16 +92,16 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         return runnerInfo;
     }
 
-    public CpuProfilerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
-        return new CpuProfilerSettings();
+    public MemoryProfilerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
+        return new MemoryProfilerSettings();
     }
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
-        CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
-        log.info("CpuProfilerRunner.checkConfiguration");
+        MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
+        log.info("MemoryProfilerRunner.checkConfiguration");
     }
 
-    public SettingsEditor<CpuProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
-        return new CpuProfilerSettingsEditor();
+    public SettingsEditor<MemoryProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
+        return new MemoryProfilerSettingsEditor();
     }
 }

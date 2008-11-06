@@ -43,9 +43,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class ProfilerSettings implements JDOMExternalizable {
-
-    // CPU Profiling settings
+public class CpuProfilerSettings implements JDOMExternalizable {
 
     @NotNull public StartFrom startFromMode = StartFrom.MAIN_CLASS;
     @NotNull public String mainClassToStartFrom = "";
@@ -56,12 +54,6 @@ public class ProfilerSettings implements JDOMExternalizable {
     @NotNull public FilterMode filteringMode = FilterMode.EXCLUDE;
     @NotNull public String filterIncludeClasses = "";
     @NotNull public String filterExcludeClasses = CpuSettings.DEFAULT_EXCLUDES;
-
-    // Memory profiling settings
-
-    @NotNull public AllocMode profileAllocMode = AllocMode.ALLOC_AND_GC;
-    public int profileAllocInterval = 10;
-    public boolean recordAllocTraces = false;
 
     public void readExternal(Element element) throws InvalidDataException {
         // TODO
@@ -105,9 +97,5 @@ public class ProfilerSettings implements JDOMExternalizable {
 
     public enum FilterMode {
         INCLUDE, EXCLUDE
-    }
-
-    public enum AllocMode {
-        ALLOC, ALLOC_AND_GC
     }
 }

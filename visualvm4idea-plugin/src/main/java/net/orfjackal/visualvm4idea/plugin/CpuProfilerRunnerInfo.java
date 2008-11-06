@@ -40,7 +40,7 @@ import com.intellij.execution.runners.RunnerInfo;
 public class CpuProfilerRunnerInfo extends RunnerInfo {
 
     public CpuProfilerRunnerInfo() {
-        super("Profile CPU", "Profile CPU usage of selected configuration with VisualVM", Resources.LOGO_16,
+        super("Profile CPU", "Profile CPU usage of selected configuration with VisualVM", Resources.PROFILE_CPU_16,
                 "Profile CPU", null);
     }
 }

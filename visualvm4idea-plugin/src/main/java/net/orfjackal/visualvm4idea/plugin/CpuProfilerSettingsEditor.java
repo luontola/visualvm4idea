@@ -39,13 +39,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
 
 /**
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
+public class CpuProfilerSettingsEditor extends SettingsEditor<CpuProfilerSettings> {
 
     private JPanel rootPane;
 
@@ -62,21 +61,8 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
     private JRadioButton filterExcludeRadioButton;
     private JTextArea filterExcludeField;
 
-    // Memory profiling settings
-
-    private JRadioButton profileAllocRadioButton;
-    private JRadioButton profileAllocAndGcRadioButton;
-
-    private JSpinner profileAllocIntervalSpinner;
-
-    private JCheckBox recordAllocTracesCheckBox;
-
-    public ProfilerSettingsEditor() {
-        super(NewInstanceFactory.fromClass(ProfilerSettings.class));
-        profileAllocIntervalSpinner.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-        Dimension size = profileAllocIntervalSpinner.getPreferredSize();
-        size.width = 70;
-        profileAllocIntervalSpinner.setPreferredSize(size);
+    public CpuProfilerSettingsEditor() {
+        super(NewInstanceFactory.fromClass(CpuProfilerSettings.class));
 
         ChangeListener listener = new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -95,47 +81,32 @@ public class ProfilerSettingsEditor extends SettingsEditor<ProfilerSettings> {
         filterExcludeField.setEnabled(filterExcludeRadioButton.isSelected());
     }
 
-    protected void resetEditorFrom(ProfilerSettings settings) {
-        startFromMainClassRadioButton.setSelected(settings.startFromMode == ProfilerSettings.StartFrom.MAIN_CLASS);
-        startFromOtherClassesRadioButton.setSelected(settings.startFromMode == ProfilerSettings.StartFrom.OTHER_CLASSES);
+    protected void resetEditorFrom(CpuProfilerSettings settings) {
+        startFromMainClassRadioButton.setSelected(settings.startFromMode == CpuProfilerSettings.StartFrom.MAIN_CLASS);
+        startFromOtherClassesRadioButton.setSelected(settings.startFromMode == CpuProfilerSettings.StartFrom.OTHER_CLASSES);
         otherClassesToStartFromField.setText(settings.otherClassesToStartFrom);
 
         profileNewRunnablesCheckBox.setSelected(settings.profileNewRunnables);
 
-        filterIncludeRadioButton.setSelected(settings.filteringMode == ProfilerSettings.FilterMode.INCLUDE);
+        filterIncludeRadioButton.setSelected(settings.filteringMode == CpuProfilerSettings.FilterMode.INCLUDE);
         filterIncludeField.setText(settings.filterIncludeClasses);
-        filterExcludeRadioButton.setSelected(settings.filteringMode == ProfilerSettings.FilterMode.EXCLUDE);
+        filterExcludeRadioButton.setSelected(settings.filteringMode == CpuProfilerSettings.FilterMode.EXCLUDE);
         filterExcludeField.setText(settings.filterExcludeClasses);
-
-        profileAllocRadioButton.setSelected(settings.profileAllocMode == ProfilerSettings.AllocMode.ALLOC);
-        profileAllocAndGcRadioButton.setSelected(settings.profileAllocMode == ProfilerSettings.AllocMode.ALLOC_AND_GC);
-
-        profileAllocIntervalSpinner.setValue(settings.profileAllocInterval);
-
-        recordAllocTracesCheckBox.setSelected(settings.recordAllocTraces);
     }
 
-    protected void applyEditorTo(ProfilerSettings settings) throws ConfigurationException {
+    protected void applyEditorTo(CpuProfilerSettings settings) throws ConfigurationException {
         settings.startFromMode = startFromMainClassRadioButton.isSelected()
-                ? ProfilerSettings.StartFrom.MAIN_CLASS
-                : ProfilerSettings.StartFrom.OTHER_CLASSES;
+                ? CpuProfilerSettings.StartFrom.MAIN_CLASS
+                : CpuProfilerSettings.StartFrom.OTHER_CLASSES;
         settings.otherClassesToStartFrom = otherClassesToStartFromField.getText();
 
         settings.profileNewRunnables = profileNewRunnablesCheckBox.isSelected();
 
         settings.filteringMode = filterIncludeRadioButton.isSelected()
-                ? ProfilerSettings.FilterMode.INCLUDE
-                : ProfilerSettings.FilterMode.EXCLUDE;
+                ? CpuProfilerSettings.FilterMode.INCLUDE
+                : CpuProfilerSettings.FilterMode.EXCLUDE;
         settings.filterIncludeClasses = filterIncludeField.getText();
         settings.filterExcludeClasses = filterExcludeField.getText();
-
-        settings.profileAllocMode = profileAllocRadioButton.isSelected()
-                ? ProfilerSettings.AllocMode.ALLOC
-                : ProfilerSettings.AllocMode.ALLOC_AND_GC;
-
-        settings.profileAllocInterval = (Integer) profileAllocIntervalSpinner.getValue();
-
-        settings.recordAllocTraces = recordAllocTracesCheckBox.isSelected();
     }
 
     @NotNull
