@@ -7,7 +7,7 @@
 
     <description>
         Launches VisualVM's Java profiler from within IDEA. VisualVM is based on NetBeans Profiler and it is bundled
-        with JDK 6 Update 7 and above. VisualVM may also be downloaded separately from https://visualvm.dev.java.net/
+        with JDK 6 Update 7 and above. VisualVM may be downloaded for free from https://visualvm.dev.java.net/
     </description>
     <category>Profiling</category>
 
