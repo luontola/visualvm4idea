@@ -597,6 +597,9 @@
       <option name="useAlternate" value="false" />
     </LanguageOptions>
   </component>
+  <component name="uidesigner-configuration">
+    <option name="DEFAULT_LAYOUT_MANAGER" value="FormLayout" />
+  </component>
   <UsedPathMacros>
     <macro name="M2_REPO" />
   </UsedPathMacros>

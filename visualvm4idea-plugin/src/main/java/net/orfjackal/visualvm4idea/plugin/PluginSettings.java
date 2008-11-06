@@ -31,16 +31,24 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.runners.RunnerInfo;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
- * @since 30.10.2008
+ * @since 6.11.2008
  */
-public class ProfilerRunnerInfo extends RunnerInfo {
+public class PluginSettings {
 
-    public ProfilerRunnerInfo() {
-        super("Profile CPU", "Profile CPU usage of selected configuration with VisualVM", Resources.LOGO_16,
-                "Profile CPU", null);
+    @NotNull private String visualvmHome = "";
+
+    // generated getters and setters
+
+    @NotNull
+    public String getVisualvmHome() {
+        return visualvmHome;
+    }
+
+    public void setVisualvmHome(@NotNull String visualvmHome) {
+        this.visualvmHome = visualvmHome;
     }
 }

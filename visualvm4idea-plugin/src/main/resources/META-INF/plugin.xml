@@ -6,7 +6,7 @@
     <version>${project.version}</version>
 
     <description>
-        xxx
+        Integration with VisualVM's profiler (the same as NetBeans Profiler).
     </description>
     <category>Profiling</category>
 
@@ -19,15 +19,21 @@
         <br>- Initial release</p>
 
         <p>Known issues
-        <br>- xxx
+        <br>- Memory profiling is not available
+        <br>- Settings are not copied to VisualVM's user interface
+        <br>- Bundled VisualVM is not detected from available JDKs
+        <br>- No button for opening the currently running (non-profiled) program in VisualVM
         </p>
     ]]></change-notes>
 
-    <helpset file="visualvm4idea-help.jar" path="/Help.hs"/>
+    <!--<helpset file="visualvm4idea-help.jar" path="/Help.hs"/>-->
 
     <application-components>
         <component>
             <implementation-class>net.orfjackal.visualvm4idea.plugin.VisualVmPlugin</implementation-class>
+        </component>
+        <component>
+            <implementation-class>net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent</implementation-class>
         </component>
     </application-components>
 

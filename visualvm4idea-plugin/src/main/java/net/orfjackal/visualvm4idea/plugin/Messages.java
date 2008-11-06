@@ -31,16 +31,40 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.runners.RunnerInfo;
+import com.intellij.CommonBundle;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.PropertyKey;
+
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.ResourceBundle;
 
 /**
  * @author Esko Luontola
- * @since 30.10.2008
+ * @since 6.11.2008
  */
-public class ProfilerRunnerInfo extends RunnerInfo {
+public class Messages {
 
-    public ProfilerRunnerInfo() {
-        super("Profile CPU", "Profile CPU usage of selected configuration with VisualVM", Resources.LOGO_16,
-                "Profile CPU", null);
+    @NonNls private static final String BUNDLE_NAME = "net.orfjackal.visualvm4idea.plugin.messages";
+
+    private static Reference<ResourceBundle> bundle;
+
+    private Messages() {
+    }
+
+    private static ResourceBundle getBundle() {
+        ResourceBundle bundle = null;
+        if (Messages.bundle != null) {
+            bundle = Messages.bundle.get();
+        }
+        if (bundle == null) {
+            bundle = ResourceBundle.getBundle(BUNDLE_NAME);
+            Messages.bundle = new SoftReference<ResourceBundle>(bundle);
+        }
+        return bundle;
+    }
+
+    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME)String key, Object... params) {
+        return CommonBundle.message(getBundle(), key, params);
     }
 }
