@@ -37,9 +37,9 @@ import com.intellij.execution.runners.RunnerInfo;
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class ProfilerRunnerInfo extends RunnerInfo {
+public class CpuProfilerRunnerInfo extends RunnerInfo {
 
-    public ProfilerRunnerInfo() {
+    public CpuProfilerRunnerInfo() {
         super("Profile CPU", "Profile CPU usage of selected configuration with VisualVM", Resources.LOGO_16,
                 "Profile CPU", null);
     }

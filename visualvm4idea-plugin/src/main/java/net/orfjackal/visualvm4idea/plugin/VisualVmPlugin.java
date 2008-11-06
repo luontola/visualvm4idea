@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VisualVmPlugin implements ApplicationComponent {
 
-    private final ProfilerRunner runner = new ProfilerRunner();
+    private final CpuProfilerRunner runner = new CpuProfilerRunner();
 
     @NotNull
     public String getComponentName() {

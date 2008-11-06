@@ -45,20 +45,20 @@ import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
  * @author Esko Luontola
  * @since 14.10.2008
  */
-public class ProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
-    private static final Logger log = Logger.getInstance(ProfilerRunner.class.getName());
+public class CpuProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
+    private static final Logger log = Logger.getInstance(CpuProfilerRunner.class.getName());
 
     private static final int PROFILER_PORT = 5140;
 
     private final VisualVmCommandSender visualVm = new VisualVmCommandSender();
-    private final RunnerInfo runnerInfo = new ProfilerRunnerInfo();
+    private final RunnerInfo runnerInfo = new CpuProfilerRunnerInfo();
 
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
         ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
         profilerSettings.configureOnPatch(javaParameters);
 
-        log.info("ProfilerRunner.patch");
+        log.info("CpuProfilerRunner.patch");
         log.info("javaParameters = " + javaParameters);
         log.info("settings = " + settings);
         log.info("settings.getData() = " + settings.getData());
@@ -76,7 +76,7 @@ public class ProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
-        log.info("ProfilerRunner.onProcessStarted");
+        log.info("CpuProfilerRunner.onProcessStarted");
         log.info("settings = " + settings);
         log.info("executionResult = " + executionResult);
 
@@ -89,7 +89,7 @@ public class ProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
 
     // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
-        log.info("ProfilerRunner.createActions");
+        log.info("CpuProfilerRunner.createActions");
         return new AnAction[0]; // TODO
     }
 
@@ -103,7 +103,7 @@ public class ProfilerRunner implements JavaProgramRunner<ProfilerSettings> {
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
         ProfilerSettings profilerSettings = (ProfilerSettings) settings.getData();
-        log.info("ProfilerRunner.checkConfiguration");
+        log.info("CpuProfilerRunner.checkConfiguration");
     }
 
     public SettingsEditor<ProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
