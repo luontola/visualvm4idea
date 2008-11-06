@@ -22,7 +22,7 @@
 
         <p>Known issues
         <br>- Hardcoded profiler interface: jdk16 windows
-        <br>- Works only with a separate VisualVM install; get it from <a href="">https://visualvm.dev.java.net/</a>
+        <br>- Works only with a separate VisualVM install; get it from <a href="https://visualvm.dev.java.net/">https://visualvm.dev.java.net/</a>
         <br>- Bundled VisualVM is not detected from available JDKs
         <br>- Memory profiling is not available
         <br>- Settings are not copied to VisualVM's user interface
