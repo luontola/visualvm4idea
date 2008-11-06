@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.ExecutionRegistry;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.extensions.PluginId;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
  * @since 14.10.2008
  */
 public class VisualVmPlugin implements ApplicationComponent {
+
+    public static final PluginId PLUGIN_ID = PluginId.getId("visualvm4idea");
 
     private final VisualVmCommandSender visualvm = new VisualVmCommandSender();
     private final CpuProfilerRunner cpuRunner = new CpuProfilerRunner(visualvm);

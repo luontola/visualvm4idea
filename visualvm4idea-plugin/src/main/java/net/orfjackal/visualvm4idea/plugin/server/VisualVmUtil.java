@@ -43,15 +43,25 @@ public class VisualVmUtil {
     private VisualVmUtil() {
     }
 
+    public static String getAppProfilerCommand() {
+        String visualvmHome = PluginSettingsComponent.getInstance().getVisualvmHome();
+        String libDir = FileUtil.getFile(visualvmHome, "profiler2", "lib").getAbsolutePath();
+        String agent = FileUtil.getFile(libDir, "deployed", "jdk16", "windows", "profilerinterface.dll").getAbsolutePath();
+        return "-agentpath:" + agent + "=" + libDir + "," + VisualVmCommandSender.PROFILER_PORT;
+    }
+
     public static String getVisualVmExecutable() {
         String visualvmHome = PluginSettingsComponent.getInstance().getVisualvmHome();
         return FileUtil.getFile(visualvmHome, "bin", "visualvm.exe").getAbsolutePath();
     }
 
-    public static String getVisualVmAgentCommand() {
-        String visualvmHome = PluginSettingsComponent.getInstance().getVisualvmHome();
-        String libDir = FileUtil.getFile(visualvmHome, "profiler2", "lib").getAbsolutePath();
-        String agent = FileUtil.getFile(libDir, "deployed", "jdk16", "windows", "profilerinterface.dll").getAbsolutePath();
-        return "-agentpath:" + agent + "=" + libDir + "," + VisualVmCommandSender.PROFILER_PORT;
+    public static String getVisualVmHookAgent() {
+        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
+        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-visualvm-agent.jar").getAbsolutePath();
+    }
+
+    public static String getVisualVmHookLib() {
+        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
+        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-core.jar").getAbsolutePath();
     }
 }

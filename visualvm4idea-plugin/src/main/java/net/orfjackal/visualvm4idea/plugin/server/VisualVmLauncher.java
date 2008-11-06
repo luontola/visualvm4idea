@@ -45,12 +45,10 @@ public class VisualVmLauncher implements MessageClientLauncher {
     }
 
     private static void startVisualVm(int serverPort) {
-        String agentPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-visualvm-agent.jar";
-        String libPath = "D:\\DEVEL\\VisualVM for IDEA\\visualvm4idea\\visualvm4idea-dist\\target\\visualvm4idea\\lib\\visualvm4idea-core.jar";
         new ProcessExecutorImpl()
                 .exec(VisualVmUtil.getVisualVmExecutable(),
-                        "-J-javaagent:" + agentPath,
-                        "-J-Dvisualvm4idea.lib=" + libPath,
+                        "-J-javaagent:" + VisualVmUtil.getVisualVmHookAgent(),
+                        "-J-Dvisualvm4idea.lib=" + VisualVmUtil.getVisualVmHookLib(),
                         "-J-Dvisualvm4idea.port=" + serverPort);
     }
 }

@@ -71,7 +71,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        javaParameters.getVMParametersList().prepend(VisualVmUtil.getVisualVmAgentCommand());
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand());
     }
 
     // on run: 2

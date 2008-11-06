@@ -16,13 +16,16 @@
 
     <change-notes><![CDATA[
         <p>0.1.0 (2008-xx-xx)
-        <br>- Initial release</p>
+        <br>- Initial release
+        <br>- CPU profiling (Windows Java 6 only)</p>
 
         <p>Known issues
+        <br>- Hardcoded profiler interface: jdk16 windows
         <br>- Memory profiling is not available
         <br>- Settings are not copied to VisualVM's user interface
         <br>- Bundled VisualVM is not detected from available JDKs
         <br>- No button for opening the currently running (non-profiled) program in VisualVM
+        <br>- Detecting the launched application from within VisualVM is not 100% sure
         </p>
     ]]></change-notes>
 

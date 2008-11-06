@@ -31,11 +31,13 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.Nls;
@@ -44,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.io.File;
 
 /**
  * @author Esko Luontola
@@ -57,8 +60,10 @@ import javax.swing.*;
         )}
 )
 public class PluginSettingsComponent implements ApplicationComponent, Configurable, PersistentStateComponent<PluginSettings> {
+    private static final Logger log = Logger.getInstance(PluginSettingsComponent.class.getName());
 
     private PluginSettings settings = new PluginSettings();
+    private File pluginHome;
     private PluginSettingsEditor editor;
 
     public static PluginSettingsComponent getInstance() {
@@ -69,6 +74,10 @@ public class PluginSettingsComponent implements ApplicationComponent, Configurab
         return settings.getVisualvmHome();
     }
 
+    public String getPluginHome() {
+        return pluginHome.getAbsolutePath();
+    }
+
     // ApplicationComponent
 
     @NotNull
@@ -77,6 +86,8 @@ public class PluginSettingsComponent implements ApplicationComponent, Configurab
     }
 
     public void initComponent() {
+        IdeaPluginDescriptor visualvmPlugin = ApplicationManager.getApplication().getPlugin(VisualVmPlugin.PLUGIN_ID);
+        pluginHome = visualvmPlugin.getPath();
     }
 
     public void disposeComponent() {
