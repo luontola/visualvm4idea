@@ -1,12 +1,13 @@
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
-<idea-plugin url="http://plugins.intellij.net/plugin/?id=xxx">
+<idea-plugin url="http://plugins.intellij.net/plugin/?id=3749">
 
     <name>${plugin.name}</name>
     <id>${plugin.id}</id>
     <version>${project.version}</version>
 
     <description>
-        Integration with VisualVM's profiler (the same as NetBeans Profiler).
+        Launches VisualVM's profiler from within IDEA. VisualVM is based on NetBeans Profiler and it is bundled
+        with JDK 6 Update 7 and above. VisualVM may also be downloaded separately from https://visualvm.dev.java.net/
     </description>
     <category>Profiling</category>
 
@@ -15,15 +16,16 @@
     <idea-version since-build="7941"/>
 
     <change-notes><![CDATA[
-        <p>0.1.0 (2008-xx-xx)
+        <p>0.1.0 (2008-11-06)
         <br>- Initial release
         <br>- CPU profiling (Windows Java 6 only)</p>
 
         <p>Known issues
         <br>- Hardcoded profiler interface: jdk16 windows
+        <br>- Works only with a separate VisualVM install; get it from <a href="">https://visualvm.dev.java.net/</a>
+        <br>- Bundled VisualVM is not detected from available JDKs
         <br>- Memory profiling is not available
         <br>- Settings are not copied to VisualVM's user interface
-        <br>- Bundled VisualVM is not detected from available JDKs
         <br>- No button for opening the currently running (non-profiled) program in VisualVM
         <br>- Detecting the launched application from within VisualVM is not 100% sure
         </p>

@@ -16,7 +16,7 @@
         <module>visualvm4idea-dist</module>
     </modules>
     <properties>
-        <plugin.name>VisualVM for IDEA</plugin.name>
+        <plugin.name>VisualVM Profiler</plugin.name>
         <plugin.id>visualvm4idea</plugin.id>
     </properties>
 
