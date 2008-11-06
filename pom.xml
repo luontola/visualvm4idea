@@ -20,7 +20,7 @@
         <plugin.id>visualvm4idea</plugin.id>
     </properties>
 
-    <name>VisualVM for IDEA</name>
+    <name>VisualVM Profiler</name>
     <description>Intellij IDEA plugin for VisualVM integration.</description>
     <url>http://www.orfjackal.net</url>
     <inceptionYear>2008</inceptionYear>
