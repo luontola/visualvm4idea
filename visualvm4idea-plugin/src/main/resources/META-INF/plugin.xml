@@ -30,6 +30,7 @@
         <br>- Memory profiling is not available
         <br>- Settings are not copied to VisualVM's user interface
         <br>- No warning if the plugin is not configured (and if you run the profiler once when it is not configured, you will need to restart IDEA)
+        <br>- VisualVM may freeze if the application finishes execution before it is opened in VisualVM
         <br>- No button for opening the currently running (non-profiled) program in VisualVM
         <br>- Detecting the launched application from within VisualVM is not 100% sure
         </p>
