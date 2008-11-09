@@ -32,6 +32,7 @@
 package net.orfjackal.visualvm4idea.plugin.config;
 
 import net.orfjackal.visualvm4idea.util.FileUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
@@ -43,15 +44,18 @@ public class ExternalVisualVmConfig extends AbstractVisualVmConfig {
         super(visualVmHome, systemVars);
     }
 
+    @NotNull
     public String getAppProfilerAgent(JdkVersion jdkVersion) {
         String jdk = jdkVersion.getAppProfilerJdk();
         return FileUtil.getFile(getAppProfilerLib(), "deployed", jdk, getSystemArch(), getProfilerInterfaceName()).getAbsolutePath();
     }
 
+    @NotNull
     public String getAppProfilerLib() {
         return FileUtil.getFile(getVisualVmHome(), "profiler2", "lib").getAbsolutePath();
     }
 
+    @NotNull
     public String getVisualVmExecutable() {
         return FileUtil.getFile(getVisualVmHome(), "bin", getVisualVmExecutableName()).getAbsolutePath();
     }

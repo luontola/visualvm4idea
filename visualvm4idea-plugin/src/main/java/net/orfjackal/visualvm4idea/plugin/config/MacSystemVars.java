@@ -31,20 +31,25 @@
 
 package net.orfjackal.visualvm4idea.plugin.config;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
 public class MacSystemVars implements SystemVars {
 
+    @NotNull
     public String getSystemArch() {
         return "mac";
     }
 
+    @NotNull
     public String getProfilerInterfaceName() {
         return "libprofilerinterface.jnilib";
     }
 
+    @NotNull
     public String getVisualVmExecutableName() {
         return "visualvm";
     }

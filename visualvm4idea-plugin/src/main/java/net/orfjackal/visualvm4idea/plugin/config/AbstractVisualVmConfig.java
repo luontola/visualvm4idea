@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.plugin.config;
 
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
 import net.orfjackal.visualvm4idea.util.FileUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -54,30 +55,35 @@ public abstract class AbstractVisualVmConfig implements VisualVmConfig, SystemVa
         return visualVmHome;
     }
 
+    @NotNull
     public String getSystemArch() {
         return systemVars.getSystemArch();
     }
 
+    @NotNull
     public String getProfilerInterfaceName() {
         return systemVars.getProfilerInterfaceName();
     }
 
+    @NotNull
     public String getVisualVmExecutableName() {
         return systemVars.getVisualVmExecutableName();
     }
 
     public boolean isValid() {
-        return getVisualVmHome() != null && getVisualVmHome().length() > 0
+        return visualVmHome != null && visualVmHome.length() > 0
                 && new File(getVisualVmHome()).isDirectory()
                 && new File(getVisualVmExecutable()).isFile()
                 && new File(getAppProfilerLib()).isDirectory();
     }
 
+    @NotNull
     public String getVisualVmHookAgent() {
         String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
         return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-visualvm-agent.jar").getAbsolutePath();
     }
 
+    @NotNull
     public String getVisualVmHookLib() {
         String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
         return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-core.jar").getAbsolutePath();

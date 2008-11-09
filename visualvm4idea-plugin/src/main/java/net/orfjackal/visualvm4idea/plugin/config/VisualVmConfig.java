@@ -31,6 +31,8 @@
 
 package net.orfjackal.visualvm4idea.plugin.config;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Esko Luontola
  * @since 9.11.2008
@@ -39,13 +41,18 @@ public interface VisualVmConfig {
 
     boolean isValid();
 
+    @NotNull
     String getAppProfilerAgent(JdkVersion jdkVersion);
 
+    @NotNull
     String getAppProfilerLib();
 
+    @NotNull
     String getVisualVmExecutable();
 
+    @NotNull
     String getVisualVmHookAgent();
 
+    @NotNull
     String getVisualVmHookLib();
 }
