@@ -47,9 +47,9 @@ public class VisualVmUtil {
         return new WindowsExternalVisualVmConfig(visualVmHome);
     }
 
-    public static String getAppProfilerCommand() {
+    public static String getAppProfilerCommand(JdkVersion jdkVersion) {
         VisualVmConfig config = getConfig();
-        String agent = config.getAppProfilerAgent();
+        String agent = config.getAppProfilerAgent(jdkVersion);
         String lib = config.getAppProfilerLib();
         return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
     }

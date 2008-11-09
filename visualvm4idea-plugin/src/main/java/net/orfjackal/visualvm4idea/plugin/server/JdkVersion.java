@@ -35,15 +35,16 @@ package net.orfjackal.visualvm4idea.plugin.server;
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public interface VisualVmConfig {
+public enum JdkVersion {
+    JDK15("jdk15"), JDK16("jdk16");
 
-    String getAppProfilerAgent(JdkVersion jdkVersion);
+    private final String appProfilerArch;
 
-    String getAppProfilerLib();
+    private JdkVersion(String appProfilerArch) {
+        this.appProfilerArch = appProfilerArch;
+    }
 
-    String getVisualVmExecutable();
-
-    String getVisualVmHookAgent();
-
-    String getVisualVmHookLib();
+    public String getAppProfilerArch() {
+        return appProfilerArch;
+    }
 }

@@ -46,8 +46,9 @@ public class WindowsExternalVisualVmConfig implements VisualVmConfig {
         this.visualVmHome = visualVmHome;
     }
 
-    public String getAppProfilerAgent() {
-        return FileUtil.getFile(getAppProfilerLib(), "deployed", "jdk16", "windows", "profilerinterface.dll").getAbsolutePath();
+    public String getAppProfilerAgent(JdkVersion jdkVersion) {
+        String arch = jdkVersion.getAppProfilerArch();
+        return FileUtil.getFile(getAppProfilerLib(), "deployed", arch, "windows", "profilerinterface.dll").getAbsolutePath();
     }
 
     public String getAppProfilerLib() {
