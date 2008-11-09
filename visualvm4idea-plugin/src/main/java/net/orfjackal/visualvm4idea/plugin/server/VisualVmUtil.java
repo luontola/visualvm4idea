@@ -32,10 +32,12 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
-import net.orfjackal.visualvm4idea.plugin.config.ExternalVisualVmConfig;
-import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
-import net.orfjackal.visualvm4idea.plugin.config.VisualVmConfig;
-import net.orfjackal.visualvm4idea.plugin.config.WindowsSystemVars;
+import net.orfjackal.visualvm4idea.plugin.config.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Esko Luontola
@@ -43,14 +45,58 @@ import net.orfjackal.visualvm4idea.plugin.config.WindowsSystemVars;
  */
 public class VisualVmUtil {
 
+    public static final List<SystemVars> SYSTEMS = Arrays.asList(
+            new WindowsSystemVars(),
+            new Windows64SystemVars(),
+            new LinuxSystemVars(),
+            new Linux64SystemVars(),
+            new MacSystemVars()
+    );
+
     private VisualVmUtil() {
     }
 
+    @NotNull
     private static VisualVmConfig getConfig() {
         String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
-        return new ExternalVisualVmConfig(visualVmHome, new WindowsSystemVars());
+        VisualVmConfig config = getValidConfig(visualVmHome, getCurrentSystem());
+        if (config == null) {
+            throw new IllegalArgumentException("Not a valid VisualVM home: " + visualVmHome);
+        }
+        return config;
     }
 
+    @NotNull
+    private static SystemVars getCurrentSystem() {
+        // TODO: support for 64 bit systems
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            return new WindowsSystemVars();
+        }
+        if (osName.contains("linux")) {
+            return new LinuxSystemVars();
+        }
+        if (osName.contains("mac")) {
+            return new MacSystemVars();
+        }
+        throw new IllegalArgumentException("Unknown OS: " + osName);
+    }
+
+    @Nullable
+    private static VisualVmConfig getValidConfig(String visualVmHome, SystemVars system) {
+        List<? extends VisualVmConfig> allConfigs = Arrays.asList(
+                new BundledVisualVmConfig(visualVmHome, system),
+                new ExternalVisualVmConfig(visualVmHome, system)
+        );
+        for (VisualVmConfig config : allConfigs) {
+            if (config.isValid()) {
+                return config;
+            }
+        }
+        return null;
+    }
+
+    @NotNull
     public static String getAppProfilerCommand(JdkVersion jdkVersion) {
         VisualVmConfig config = getConfig();
         String agent = config.getAppProfilerAgent(jdkVersion);
@@ -58,14 +104,17 @@ public class VisualVmUtil {
         return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
     }
 
+    @NotNull
     public static String getVisualVmExecutable() {
         return getConfig().getVisualVmExecutable();
     }
 
+    @NotNull
     public static String getVisualVmHookAgent() {
         return getConfig().getVisualVmHookAgent();
     }
 
+    @NotNull
     public static String getVisualVmHookLib() {
         return getConfig().getVisualVmHookLib();
     }
