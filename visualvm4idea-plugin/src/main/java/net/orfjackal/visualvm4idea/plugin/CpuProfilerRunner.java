@@ -39,7 +39,7 @@ import com.intellij.execution.runners.RunnerInfo;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
-import net.orfjackal.visualvm4idea.plugin.server.JdkVersion;
+import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
 

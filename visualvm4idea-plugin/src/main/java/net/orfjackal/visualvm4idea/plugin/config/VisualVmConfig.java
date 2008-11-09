@@ -29,22 +29,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
+package net.orfjackal.visualvm4idea.plugin.config;
 
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public enum JdkVersion {
-    JDK15("jdk15"), JDK16("jdk16");
+public interface VisualVmConfig {
 
-    private final String appProfilerJdk;
+    boolean isValid();
 
-    private JdkVersion(String appProfilerJdk) {
-        this.appProfilerJdk = appProfilerJdk;
-    }
+    String getAppProfilerAgent(JdkVersion jdkVersion);
 
-    public String getAppProfilerJdk() {
-        return appProfilerJdk;
-    }
+    String getAppProfilerLib();
+
+    String getVisualVmExecutable();
+
+    String getVisualVmHookAgent();
+
+    String getVisualVmHookLib();
 }

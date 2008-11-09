@@ -29,23 +29,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
+package net.orfjackal.visualvm4idea.plugin.config;
+
+import net.orfjackal.visualvm4idea.util.FileUtil;
 
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public class MacSystemVars implements SystemVars {
+public class BundledVisualVmConfig extends AbstractVisualVmConfig {
 
-    public String getSystemArch() {
-        return "mac";
+    public BundledVisualVmConfig(String visualVmHome, SystemVars systemVars) {
+        super(visualVmHome, systemVars);
     }
 
-    public String getProfilerInterfaceName() {
-        return "libprofilerinterface.jnilib";
+    public String getAppProfilerAgent(JdkVersion jdkVersion) {
+        String jdk = jdkVersion.getAppProfilerJdk();
+        return FileUtil.getFile(getAppProfilerLib(), "deployed", jdk, getSystemArch(), getProfilerInterfaceName()).getAbsolutePath();
     }
 
-    public String getVisualVmExecutableName() {
-        return "visualvm";
+    public String getAppProfilerLib() {
+        return FileUtil.getFile(getJdkHome(), "lib", "visualvm", "profiler2", "lib").getAbsolutePath();
+    }
+
+    public String getVisualVmExecutable() {
+        return FileUtil.getFile(getJdkHome(), "bin", "j" + getVisualVmExecutableName()).getAbsolutePath();
+    }
+
+    private String getJdkHome() {
+        return getVisualVmHome();
     }
 }

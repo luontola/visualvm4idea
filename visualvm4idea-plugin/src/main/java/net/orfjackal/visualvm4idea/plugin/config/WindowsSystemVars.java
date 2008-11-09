@@ -29,57 +29,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
-
-import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
-import net.orfjackal.visualvm4idea.util.FileUtil;
-
-import java.io.File;
+package net.orfjackal.visualvm4idea.plugin.config;
 
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public abstract class AbstractVisualVmConfig implements VisualVmConfig, SystemVars {
-
-    private final String visualVmHome;
-    private final SystemVars systemVars;
-
-    public AbstractVisualVmConfig(String visualVmHome, SystemVars systemVars) {
-        this.visualVmHome = visualVmHome;
-        this.systemVars = systemVars;
-    }
-
-    public String getVisualVmHome() {
-        return visualVmHome;
-    }
+public class WindowsSystemVars implements SystemVars {
 
     public String getSystemArch() {
-        return systemVars.getSystemArch();
+        return "windows";
     }
 
     public String getProfilerInterfaceName() {
-        return systemVars.getProfilerInterfaceName();
+        return "profilerinterface.dll";
     }
 
     public String getVisualVmExecutableName() {
-        return systemVars.getVisualVmExecutableName();
-    }
-
-    public boolean isValid() {
-        return getVisualVmHome() != null && getVisualVmHome().length() > 0
-                && new File(getVisualVmHome()).isDirectory()
-                && new File(getVisualVmExecutable()).isFile()
-                && new File(getAppProfilerLib()).isDirectory();
-    }
-
-    public String getVisualVmHookAgent() {
-        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
-        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-visualvm-agent.jar").getAbsolutePath();
-    }
-
-    public String getVisualVmHookLib() {
-        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
-        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-core.jar").getAbsolutePath();
+        return "visualvm.exe";
     }
 }

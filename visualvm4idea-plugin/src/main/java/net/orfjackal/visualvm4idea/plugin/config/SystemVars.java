@@ -29,23 +29,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
+package net.orfjackal.visualvm4idea.plugin.config;
 
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public class Windows64SystemVars implements SystemVars {
+public interface SystemVars {
 
-    public String getSystemArch() {
-        return "windows-amd64";
-    }
+    String getSystemArch();
 
-    public String getProfilerInterfaceName() {
-        return "profilerinterface.dll";
-    }
+    String getProfilerInterfaceName();
 
-    public String getVisualVmExecutableName() {
-        return "visualvm.exe";
-    }
+    String getVisualVmExecutableName();
 }

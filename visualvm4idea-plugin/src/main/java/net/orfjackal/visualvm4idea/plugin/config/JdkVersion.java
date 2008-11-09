@@ -29,30 +29,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin.server;
-
-import net.orfjackal.visualvm4idea.util.FileUtil;
+package net.orfjackal.visualvm4idea.plugin.config;
 
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public class ExternalVisualVmConfig extends AbstractVisualVmConfig {
+public enum JdkVersion {
+    JDK15("jdk15"), JDK16("jdk16");
 
-    public ExternalVisualVmConfig(String visualVmHome, SystemVars systemVars) {
-        super(visualVmHome, systemVars);
+    private final String appProfilerJdk;
+
+    private JdkVersion(String appProfilerJdk) {
+        this.appProfilerJdk = appProfilerJdk;
     }
 
-    public String getAppProfilerAgent(JdkVersion jdkVersion) {
-        String jdk = jdkVersion.getAppProfilerJdk();
-        return FileUtil.getFile(getAppProfilerLib(), "deployed", jdk, getSystemArch(), getProfilerInterfaceName()).getAbsolutePath();
-    }
-
-    public String getAppProfilerLib() {
-        return FileUtil.getFile(getVisualVmHome(), "profiler2", "lib").getAbsolutePath();
-    }
-
-    public String getVisualVmExecutable() {
-        return FileUtil.getFile(getVisualVmHome(), "bin", getVisualVmExecutableName()).getAbsolutePath();
+    public String getAppProfilerJdk() {
+        return appProfilerJdk;
     }
 }

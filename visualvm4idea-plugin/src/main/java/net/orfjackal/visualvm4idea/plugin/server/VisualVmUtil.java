@@ -32,6 +32,10 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
+import net.orfjackal.visualvm4idea.plugin.config.ExternalVisualVmConfig;
+import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
+import net.orfjackal.visualvm4idea.plugin.config.VisualVmConfig;
+import net.orfjackal.visualvm4idea.plugin.config.WindowsSystemVars;
 
 /**
  * @author Esko Luontola
