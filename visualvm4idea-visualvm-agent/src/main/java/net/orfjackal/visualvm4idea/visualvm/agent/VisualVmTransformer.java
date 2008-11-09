@@ -41,7 +41,6 @@ import org.objectweb.asm.ClassVisitor;
 public class VisualVmTransformer extends AbstractTransformationChain {
 
     protected ClassVisitor getAdapters(ClassVisitor cv) {
-        cv = new DebugClassAdapter(cv);
         cv = new HookLoadingClassAdapter(cv);
         return cv;
     }
