@@ -62,12 +62,6 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
         profilerSettings.configureOnPatch(javaParameters);
 
-        log.info("CpuProfilerRunner.patch");
-        log.info("javaParameters = " + javaParameters);
-        log.info("settings = " + settings);
-        log.info("settings.getData() = " + settings.getData());
-        log.info("settings.getRunProfile() = " + settings.getRunProfile());
-        log.info("beforeExecution = " + beforeExecution);
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
@@ -78,9 +72,6 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
-        log.info("CpuProfilerRunner.onProcessStarted");
-        log.info("settings = " + settings);
-        log.info("executionResult = " + executionResult);
 
         visualvm.beginProfilingApplicationCPU(VisualVmCommandSender.PROFILER_PORT,
                 profilerSettings.profileNewRunnables,
@@ -91,8 +82,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
 
     // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
-        log.info("CpuProfilerRunner.createActions");
-        return new AnAction[0]; // TODO
+        return new AnAction[0];
     }
 
     public RunnerInfo getInfo() {
@@ -105,9 +95,8 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings)
             throws RuntimeConfigurationException {
-        VisualVmUtil.checkCurrentConfig();
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
-        log.info("CpuProfilerRunner.checkConfiguration");
+        VisualVmUtil.checkCurrentConfig();
     }
 
     public SettingsEditor<CpuProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
