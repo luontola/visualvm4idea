@@ -32,6 +32,7 @@
 package net.orfjackal.visualvm4idea.util;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Esko Luontola
@@ -48,5 +49,13 @@ public class FileUtil {
             file = new File(file, child);
         }
         return file;
+    }
+
+    public static String getCanonicalPath(String path) {
+        try {
+            return new File(path).getCanonicalPath();
+        } catch (IOException e) {
+            return new File(path).getAbsolutePath();
+        }
     }
 }

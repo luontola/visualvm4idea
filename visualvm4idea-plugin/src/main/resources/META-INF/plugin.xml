@@ -16,8 +16,9 @@
     <idea-version since-build="7000" until-build="7999"/>
 
     <change-notes><![CDATA[
-        <p>0.2.0 (2008-11-xx)
-        <br>- Works with the VisualVM bundled with JDK 6 Update 7 and above (enter JDK home in the settings)
+        <p>0.2.0 (2008-11-09)
+        <br>- Works with the bundled VisualVM which comes with JDK 6 Update 7 and above
+        <br>- Detects bundled VisualVMs automatically, in which case no configuration is necessary
         <br>- Should work also with Linux and Mac (not tested, also not sure about 64 bit JVMs)
         <br>- Defaults to jdk15 profiler interface for better compatibility (hardcoded)
         <br>- Warns about invalid configuration
@@ -29,12 +30,12 @@
         </p>
 
         <p>Known issues
-        <br>- Bundled VisualVM is not detected from available JDKs
         <br>- Memory profiling is not available
         <br>- Settings are not copied to VisualVM's user interface
         <br>- VisualVM may freeze if the application finishes execution before it is opened in VisualVM
         <br>- No button for opening the currently running (non-profiled) program in VisualVM
         <br>- Detecting the launched application from within VisualVM is not 100% sure
+        <br>- IDEA 8 is not yet supported
         </p>
     ]]></change-notes>
 

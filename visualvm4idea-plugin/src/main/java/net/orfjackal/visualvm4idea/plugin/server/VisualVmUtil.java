@@ -32,12 +32,17 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.openapi.projectRoots.ProjectJdk;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
 import net.orfjackal.visualvm4idea.plugin.config.*;
+import net.orfjackal.visualvm4idea.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,12 +62,31 @@ public class VisualVmUtil {
     private VisualVmUtil() {
     }
 
-    public static boolean isValidConfig(@NotNull String visualVmHome) {
-        return getValidConfig(visualVmHome, getCurrentSystem()) != null;
+    @NotNull
+    public static String getAppProfilerCommand(JdkVersion jdkVersion) {
+        VisualVmConfig config = getConfig();
+        String agent = config.getAppProfilerAgent(jdkVersion);
+        String lib = config.getAppProfilerLib();
+        return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
+    }
+
+    @NotNull
+    public static String getVisualVmExecutable() {
+        return getConfig().getVisualVmExecutable();
+    }
+
+    @NotNull
+    public static String getVisualVmHookAgent() {
+        return getConfig().getVisualVmHookAgent();
+    }
+
+    @NotNull
+    public static String getVisualVmHookLib() {
+        return getConfig().getVisualVmHookLib();
     }
 
     public static void checkCurrentConfig() throws RuntimeConfigurationException {
-        String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
+        String visualVmHome = getVisualVmHome();
         VisualVmConfig config = getValidConfig(visualVmHome, getCurrentSystem());
         if (config == null) {
             throw new RuntimeConfigurationException(
@@ -73,13 +97,43 @@ public class VisualVmUtil {
 
     @NotNull
     private static VisualVmConfig getConfig() {
-        String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
+        String visualVmHome = getVisualVmHome();
         VisualVmConfig config = getValidConfig(visualVmHome, getCurrentSystem());
         if (config == null) {
             throw new IllegalStateException(
                     "VisualVM Plugin not configured: VisualVM could not be found from \"" + visualVmHome + "\"");
         }
         return config;
+    }
+
+    @NotNull
+    public static String getVisualVmHome() {
+        String configuredHome = PluginSettingsComponent.getInstance().getVisualVmHome();
+        List<String> homes = new ArrayList<String>();
+        homes.add(configuredHome);
+        homes.addAll(getAutodetectedVisualVmHomes());
+        for (String home : homes) {
+            if (isValidHome(home)) {
+                return home;
+            }
+        }
+        return configuredHome;
+    }
+
+    @NotNull
+    public static List<String> getAutodetectedVisualVmHomes() {
+        List<String> autodetected = new ArrayList<String>();
+        for (ProjectJdk jdk : ProjectJdkTable.getInstance().getAllJdks()) {
+            final String jdkHome = FileUtil.getCanonicalPath(jdk.getHomePath());
+            if (VisualVmUtil.isValidHome(jdkHome)) {
+                autodetected.add(jdkHome);
+            }
+        }
+        return Collections.unmodifiableList(autodetected);
+    }
+
+    public static boolean isValidHome(@NotNull String visualVmHome) {
+        return getValidConfig(visualVmHome, getCurrentSystem()) != null;
     }
 
     @NotNull
@@ -110,28 +164,5 @@ public class VisualVmUtil {
             }
         }
         return null;
-    }
-
-    @NotNull
-    public static String getAppProfilerCommand(JdkVersion jdkVersion) {
-        VisualVmConfig config = getConfig();
-        String agent = config.getAppProfilerAgent(jdkVersion);
-        String lib = config.getAppProfilerLib();
-        return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
-    }
-
-    @NotNull
-    public static String getVisualVmExecutable() {
-        return getConfig().getVisualVmExecutable();
-    }
-
-    @NotNull
-    public static String getVisualVmHookAgent() {
-        return getConfig().getVisualVmHookAgent();
-    }
-
-    @NotNull
-    public static String getVisualVmHookLib() {
-        return getConfig().getVisualVmHookLib();
     }
 }

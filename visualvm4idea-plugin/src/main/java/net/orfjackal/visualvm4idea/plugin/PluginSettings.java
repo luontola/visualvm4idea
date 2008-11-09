@@ -39,16 +39,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PluginSettings {
 
-    @NotNull private String visualVmHome = "";
+    @NotNull private String selectedVisualVmHome = "";
+    @NotNull private String customVisualVmHome = "";
 
     // generated getters and setters
 
     @NotNull
-    public String getVisualVmHome() {
-        return visualVmHome;
+    public String getSelectedVisualVmHome() {
+        return selectedVisualVmHome;
     }
 
-    public void setVisualVmHome(@NotNull String visualVmHome) {
-        this.visualVmHome = visualVmHome;
+    public void setSelectedVisualVmHome(@NotNull String selectedVisualVmHome) {
+        this.selectedVisualVmHome = selectedVisualVmHome;
+    }
+
+    @NotNull
+    public String getCustomVisualVmHome() {
+        return customVisualVmHome;
+    }
+
+    public void setCustomVisualVmHome(@NotNull String customVisualVmHome) {
+        this.customVisualVmHome = customVisualVmHome;
     }
 }

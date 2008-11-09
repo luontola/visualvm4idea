@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ConfigurationException;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
 import org.jetbrains.annotations.NotNull;
@@ -42,17 +43,21 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Esko Luontola
  * @since 6.11.2008
  */
 public class PluginSettingsEditor {
+    private static final Logger log = Logger.getInstance(PluginSettingsEditor.class.getName());
 
     private JPanel rootComponent;
 
     private ButtonGroup visualvmHomeGroup;
     private JPanel autodetectedHomesPanel;
+    private final Map<String, JRadioButton> autodetectedHomes = new HashMap<String, JRadioButton>();
 
     private JRadioButton customHomeRadioButton;
     private JTextField customHomeField;
@@ -61,6 +66,14 @@ public class PluginSettingsEditor {
     @Nullable private File lastDirectory;
 
     public PluginSettingsEditor() {
+        autodetectedHomesPanel.setLayout(new BoxLayout(autodetectedHomesPanel, BoxLayout.PAGE_AXIS));
+        for (String home : VisualVmUtil.getAutodetectedVisualVmHomes()) {
+            JRadioButton radio = new JRadioButton("Bundled VisualVM (" + home + ")");
+            visualvmHomeGroup.add(radio);
+            autodetectedHomes.put(home, radio);
+            autodetectedHomesPanel.add(radio);
+        }
+
         customHomeBrowse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 browseForDirectory(customHomeField);
@@ -105,35 +118,52 @@ public class PluginSettingsEditor {
     }
 
     public void importFrom(@NotNull PluginSettings in) {
-        setVisualVmHome(in.getVisualVmHome());
+        customHomeField.setText(in.getCustomVisualVmHome());
+        setSelectedVisualVmHome(in.getSelectedVisualVmHome());
     }
 
     public void exportTo(@NotNull PluginSettings out) {
-        out.setVisualVmHome(getVisualVmHome());
+        out.setSelectedVisualVmHome(getSelectedVisualVmHome());
+        out.setCustomVisualVmHome(customHomeField.getText());
     }
 
     public boolean isModified(@NotNull PluginSettings prev) {
-        return !getVisualVmHome().equals(prev.getVisualVmHome());
+        return !getSelectedVisualVmHome().equals(prev.getSelectedVisualVmHome());
     }
 
     public void checkConfig() throws ConfigurationException {
-        String visualVmHome = getVisualVmHome();
-        if (!VisualVmUtil.isValidConfig(visualVmHome)) {
+        String visualVmHome = getSelectedVisualVmHome();
+        if (!VisualVmUtil.isValidHome(visualVmHome)) {
             throw new ConfigurationException("VisualVM was not found from \"" + visualVmHome + "\"\n" +
                     "Please point it to the home directory of VisualVM or JDK 1.6.0 Update 7 (or higher)");
         }
     }
 
     @NotNull
-    public String getVisualVmHome() {
+    private String getSelectedVisualVmHome() {
         if (customHomeRadioButton.isSelected()) {
             return customHomeField.getText();
+        }
+        for (Map.Entry<String, JRadioButton> entry : autodetectedHomes.entrySet()) {
+            String home = entry.getKey();
+            JRadioButton radio = entry.getValue();
+            if (radio.isSelected()) {
+                return home;
+            }
         }
         return "";
     }
 
-    private void setVisualVmHome(@NotNull String visualVmHome) {
-        customHomeRadioButton.setEnabled(true);
-        customHomeField.setText(visualVmHome);
+    private void setSelectedVisualVmHome(@NotNull String selectedHome) {
+        if (selectedHome.equals("")) {
+            selectedHome = VisualVmUtil.getVisualVmHome();
+        }
+        JRadioButton radio = autodetectedHomes.get(selectedHome);
+        if (radio != null) {
+            radio.setSelected(true);
+        } else {
+            customHomeRadioButton.setSelected(true);
+            customHomeField.setText(selectedHome);
+        }
     }
 }
