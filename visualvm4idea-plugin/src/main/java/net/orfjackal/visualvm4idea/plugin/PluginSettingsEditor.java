@@ -104,17 +104,17 @@ public class PluginSettingsEditor {
 
     public void importFrom(@NotNull PluginSettings in) {
         customHomeRadioButton.setEnabled(true);
-        customHomeField.setText(in.getVisualvmHome());
+        customHomeField.setText(in.getVisualVmHome());
     }
 
     public void exportTo(@NotNull PluginSettings out) {
         if (customHomeRadioButton.isSelected()) {
-            out.setVisualvmHome(customHomeField.getText());
+            out.setVisualVmHome(customHomeField.getText());
         }
     }
 
     public boolean isModified(@NotNull PluginSettings prev) {
         return customHomeRadioButton.isSelected()
-                && !customHomeField.getText().equals(prev.getVisualvmHome());
+                && !customHomeField.getText().equals(prev.getVisualVmHome());
     }
 }

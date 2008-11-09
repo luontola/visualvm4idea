@@ -70,8 +70,8 @@ public class PluginSettingsComponent implements ApplicationComponent, Configurab
         return ApplicationManager.getApplication().getComponent(PluginSettingsComponent.class);
     }
 
-    public String getVisualvmHome() {
-        return settings.getVisualvmHome();
+    public String getVisualVmHome() {
+        return settings.getVisualVmHome();
     }
 
     public String getPluginHome() {
