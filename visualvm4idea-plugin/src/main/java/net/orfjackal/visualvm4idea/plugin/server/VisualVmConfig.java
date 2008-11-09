@@ -31,38 +31,19 @@
 
 package net.orfjackal.visualvm4idea.plugin.server;
 
-import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
-
 /**
  * @author Esko Luontola
- * @since 6.11.2008
+ * @since 9.11.2008
  */
-public class VisualVmUtil {
+public interface VisualVmConfig {
 
-    private VisualVmUtil() {
-    }
+    String getAppProfilerAgent();
 
-    private static VisualVmConfig getConfig() {
-        String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
-        return new WindowsExternalVisualVmConfig(visualVmHome);
-    }
+    String getAppProfilerLib();
 
-    public static String getAppProfilerCommand() {
-        VisualVmConfig config = getConfig();
-        String agent = config.getAppProfilerAgent();
-        String lib = config.getAppProfilerLib();
-        return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
-    }
+    String getVisualVmExecutable();
 
-    public static String getVisualVmExecutable() {
-        return getConfig().getVisualVmExecutable();
-    }
+    String getVisualVmHookAgent();
 
-    public static String getVisualVmHookAgent() {
-        return getConfig().getVisualVmHookAgent();
-    }
-
-    public static String getVisualVmHookLib() {
-        return getConfig().getVisualVmHookLib();
-    }
+    String getVisualVmHookLib();
 }
