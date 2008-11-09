@@ -13,7 +13,7 @@
 
     <vendor url="http://www.orfjackal.net" logo="/net/orfjackal/visualvm4idea/icons/logo-16.png">Esko Luontola</vendor>
 
-    <idea-version since-build="7941"/>
+    <idea-version since-build="7941" until-build="7999"/>
 
     <change-notes><![CDATA[
         <p>0.2.0 (2008-11-xx)
