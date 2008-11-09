@@ -44,7 +44,7 @@ public class VisualVmUtil {
 
     private static VisualVmConfig getConfig() {
         String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
-        return new WindowsExternalVisualVmConfig(visualVmHome);
+        return new ExternalVisualVmConfig(visualVmHome, new WindowsSystemVars());
     }
 
     public static String getAppProfilerCommand(JdkVersion jdkVersion) {

@@ -31,41 +31,15 @@
 
 package net.orfjackal.visualvm4idea.plugin.server;
 
-import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
-import net.orfjackal.visualvm4idea.util.FileUtil;
-
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public class WindowsExternalVisualVmConfig implements VisualVmConfig {
+public interface SystemVars {
 
-    private final String visualVmHome;
+    String getSystemArch();
 
-    public WindowsExternalVisualVmConfig(String visualVmHome) {
-        this.visualVmHome = visualVmHome;
-    }
+    String getProfilerInterfaceName();
 
-    public String getAppProfilerAgent(JdkVersion jdkVersion) {
-        String arch = jdkVersion.getAppProfilerArch();
-        return FileUtil.getFile(getAppProfilerLib(), "deployed", arch, "windows", "profilerinterface.dll").getAbsolutePath();
-    }
-
-    public String getAppProfilerLib() {
-        return FileUtil.getFile(visualVmHome, "profiler2", "lib").getAbsolutePath();
-    }
-
-    public String getVisualVmExecutable() {
-        return FileUtil.getFile(visualVmHome, "bin", "visualvm.exe").getAbsolutePath();
-    }
-
-    public String getVisualVmHookAgent() {
-        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
-        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-visualvm-agent.jar").getAbsolutePath();
-    }
-
-    public String getVisualVmHookLib() {
-        String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
-        return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-core.jar").getAbsolutePath();
-    }
+    String getVisualVmExecutableName();
 }

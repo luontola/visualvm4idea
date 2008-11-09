@@ -35,16 +35,17 @@ package net.orfjackal.visualvm4idea.plugin.server;
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public enum JdkVersion {
-    JDK15("jdk15"), JDK16("jdk16");
+public class WindowsSystemVars implements SystemVars {
 
-    private final String appProfilerJdk;
-
-    private JdkVersion(String appProfilerJdk) {
-        this.appProfilerJdk = appProfilerJdk;
+    public String getSystemArch() {
+        return "windows";
     }
 
-    public String getAppProfilerJdk() {
-        return appProfilerJdk;
+    public String getProfilerInterfaceName() {
+        return "profilerinterface.dll";
+    }
+
+    public String getVisualVmExecutableName() {
+        return "visualvm.exe";
     }
 }

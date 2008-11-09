@@ -37,6 +37,8 @@ package net.orfjackal.visualvm4idea.plugin.server;
  */
 public interface VisualVmConfig {
 
+    boolean isValid();
+
     String getAppProfilerAgent(JdkVersion jdkVersion);
 
     String getAppProfilerLib();
