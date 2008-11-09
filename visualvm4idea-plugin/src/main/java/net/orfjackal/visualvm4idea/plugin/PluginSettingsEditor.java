@@ -31,6 +31,8 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
+import com.intellij.openapi.options.ConfigurationException;
+import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,18 +105,35 @@ public class PluginSettingsEditor {
     }
 
     public void importFrom(@NotNull PluginSettings in) {
-        customHomeRadioButton.setEnabled(true);
-        customHomeField.setText(in.getVisualVmHome());
+        setVisualVmHome(in.getVisualVmHome());
     }
 
     public void exportTo(@NotNull PluginSettings out) {
-        if (customHomeRadioButton.isSelected()) {
-            out.setVisualVmHome(customHomeField.getText());
-        }
+        out.setVisualVmHome(getVisualVmHome());
     }
 
     public boolean isModified(@NotNull PluginSettings prev) {
-        return customHomeRadioButton.isSelected()
-                && !customHomeField.getText().equals(prev.getVisualVmHome());
+        return !getVisualVmHome().equals(prev.getVisualVmHome());
+    }
+
+    public void checkConfig() throws ConfigurationException {
+        String visualVmHome = getVisualVmHome();
+        if (!VisualVmUtil.isValidConfig(visualVmHome)) {
+            throw new ConfigurationException("VisualVM was not found from \"" + visualVmHome + "\"\n" +
+                    "Please point it to the home directory of VisualVM or JDK 1.6.0 Update 7 (or higher)");
+        }
+    }
+
+    @NotNull
+    public String getVisualVmHome() {
+        if (customHomeRadioButton.isSelected()) {
+            return customHomeField.getText();
+        }
+        return "";
+    }
+
+    private void setVisualVmHome(@NotNull String visualVmHome) {
+        customHomeRadioButton.setEnabled(true);
+        customHomeField.setText(visualVmHome);
     }
 }

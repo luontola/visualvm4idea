@@ -103,7 +103,9 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         return new CpuProfilerSettings();
     }
 
-    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
+    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings)
+            throws RuntimeConfigurationException {
+        VisualVmUtil.checkCurrentConfig();
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
         log.info("CpuProfilerRunner.checkConfiguration");
     }

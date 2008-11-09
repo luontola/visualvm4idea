@@ -120,6 +120,7 @@ public class PluginSettingsComponent implements ApplicationComponent, Configurab
     }
 
     public void apply() throws ConfigurationException {
+        getEditor().checkConfig();
         getEditor().exportTo(settings);
     }
 

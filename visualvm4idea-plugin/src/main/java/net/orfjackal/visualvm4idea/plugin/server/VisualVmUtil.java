@@ -31,6 +31,7 @@
 
 package net.orfjackal.visualvm4idea.plugin.server;
 
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
 import net.orfjackal.visualvm4idea.plugin.config.*;
 import org.jetbrains.annotations.NotNull;
@@ -56,12 +57,27 @@ public class VisualVmUtil {
     private VisualVmUtil() {
     }
 
+    public static boolean isValidConfig(@NotNull String visualVmHome) {
+        return getValidConfig(visualVmHome, getCurrentSystem()) != null;
+    }
+
+    public static void checkCurrentConfig() throws RuntimeConfigurationException {
+        String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
+        VisualVmConfig config = getValidConfig(visualVmHome, getCurrentSystem());
+        if (config == null) {
+            throw new RuntimeConfigurationException(
+                    "VisualVM could not be found from \"" + visualVmHome + "\"",
+                    "VisualVM Plugin not configured");
+        }
+    }
+
     @NotNull
     private static VisualVmConfig getConfig() {
         String visualVmHome = PluginSettingsComponent.getInstance().getVisualVmHome();
         VisualVmConfig config = getValidConfig(visualVmHome, getCurrentSystem());
         if (config == null) {
-            throw new IllegalArgumentException("Not a valid VisualVM home: " + visualVmHome);
+            throw new IllegalStateException(
+                    "VisualVM Plugin not configured: VisualVM could not be found from \"" + visualVmHome + "\"");
         }
         return config;
     }
