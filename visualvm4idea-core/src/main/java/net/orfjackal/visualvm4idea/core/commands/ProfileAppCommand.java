@@ -129,7 +129,7 @@ public class ProfileAppCommand implements Command {
         for (Application app : apps) {
             Jvm jvm = JvmFactory.getJVMFor(app);
             // TODO: use a unique id to identify the right JVM
-            if (jvm.getJvmArgs().contains("profilerinterface.dll")) {
+            if (jvm.getJvmArgs().contains("profilerinterface")) {
                 return app;
             }
         }
