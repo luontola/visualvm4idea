@@ -43,8 +43,6 @@
         </p>
     ]]></change-notes>
 
-    <!--<helpset file="visualvm4idea-help.jar" path="/Help.hs"/>-->
-
     <application-components>
         <component>
             <implementation-class>net.orfjackal.visualvm4idea.plugin.VisualVmPlugin</implementation-class>

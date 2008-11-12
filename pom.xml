@@ -12,7 +12,6 @@
         <module>visualvm4idea-visualvm-agent</module>
 
         <module>visualvm4idea-plugin</module>
-        <module>visualvm4idea-help</module>
         <module>visualvm4idea-dist</module>
     </modules>
     <properties>
@@ -108,15 +107,9 @@
                 <artifactId>visualvm4idea-visualvm-agent</artifactId>
                 <version>${version}</version>
             </dependency>
-
             <dependency>
                 <groupId>net.orfjackal.visualvm4idea</groupId>
                 <artifactId>visualvm4idea-plugin</artifactId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.orfjackal.visualvm4idea</groupId>
-                <artifactId>visualvm4idea-help</artifactId>
                 <version>${version}</version>
             </dependency>
 

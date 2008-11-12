@@ -17,10 +17,6 @@
 
         <dependency>
             <groupId>net.orfjackal.visualvm4idea</groupId>
-            <artifactId>visualvm4idea-help</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.orfjackal.visualvm4idea</groupId>
             <artifactId>visualvm4idea-plugin</artifactId>
         </dependency>
         <dependency>
