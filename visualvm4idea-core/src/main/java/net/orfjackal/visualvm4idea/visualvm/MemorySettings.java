@@ -29,31 +29,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.orfjackal.visualvm4idea.plugin;
+package net.orfjackal.visualvm4idea.visualvm;
 
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.util.xmlb.XmlSerializer;
-import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import org.netbeans.lib.profiler.common.ProfilingSettings;
+import org.netbeans.lib.profiler.common.ProfilingSettingsPresets;
 
 /**
  * @author Esko Luontola
- * @since 30.10.2008
+ * @since 12.11.2008
  */
-public class MemoryProfilerSettings implements JDOMExternalizable {
+public class MemorySettings {
 
-    @NotNull public MemorySettings.AllocMode profileAllocMode = MemorySettings.AllocMode.ALLOC_AND_GC;
-    public int profileAllocInterval = 10;
-    public boolean recordAllocTraces = false;
-
-    public void readExternal(Element element) throws InvalidDataException {
-        XmlSerializer.deserializeInto(this, element);
+    public enum AllocMode {
+        ALLOC, ALLOC_AND_GC
     }
 
-    public void writeExternal(Element element) throws WriteExternalException {
-        element.setContent(XmlSerializer.serialize(this).removeContent());
+    public MemorySettings.AllocMode allocMode = AllocMode.ALLOC_AND_GC;
+    public int allocInterval = 10;
+    public boolean recordAllocTraces = false;
+
+    public ProfilingSettings toProfilingSettings() {
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleMemoryProfiling()
+        // com.sun.tools.visualvm.profiler.MemorySettingsSupport.getSettings()
+        ProfilingSettings settings;
+        settings = allocMode.equals(AllocMode.ALLOC)
+                ? ProfilingSettingsPresets.createMemoryPreset(ProfilingSettings.PROFILE_MEMORY_ALLOCATIONS)
+                : ProfilingSettingsPresets.createMemoryPreset(ProfilingSettings.PROFILE_MEMORY_LIVENESS);
+        settings.setAllocTrackEvery(allocInterval);
+        settings.setAllocStackTraceLimit(recordAllocTraces ? -1 : 0);
+        return settings;
     }
 }

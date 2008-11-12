@@ -34,6 +34,7 @@ package net.orfjackal.visualvm4idea.plugin;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.util.NewInstanceFactory;
+import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -65,8 +66,8 @@ public class MemoryProfilerSettingsEditor extends SettingsEditor<MemoryProfilerS
     }
 
     protected void resetEditorFrom(MemoryProfilerSettings settings) {
-        profileAllocRadioButton.setSelected(settings.profileAllocMode == MemoryProfilerSettings.AllocMode.ALLOC);
-        profileAllocAndGcRadioButton.setSelected(settings.profileAllocMode == MemoryProfilerSettings.AllocMode.ALLOC_AND_GC);
+        profileAllocRadioButton.setSelected(settings.profileAllocMode == MemorySettings.AllocMode.ALLOC);
+        profileAllocAndGcRadioButton.setSelected(settings.profileAllocMode == MemorySettings.AllocMode.ALLOC_AND_GC);
 
         profileAllocIntervalSpinner.setValue(settings.profileAllocInterval);
 
@@ -75,8 +76,8 @@ public class MemoryProfilerSettingsEditor extends SettingsEditor<MemoryProfilerS
 
     protected void applyEditorTo(MemoryProfilerSettings settings) throws ConfigurationException {
         settings.profileAllocMode = profileAllocRadioButton.isSelected()
-                ? MemoryProfilerSettings.AllocMode.ALLOC
-                : MemoryProfilerSettings.AllocMode.ALLOC_AND_GC;
+                ? MemorySettings.AllocMode.ALLOC
+                : MemorySettings.AllocMode.ALLOC_AND_GC;
 
         settings.profileAllocInterval = (Integer) profileAllocIntervalSpinner.getValue();
 

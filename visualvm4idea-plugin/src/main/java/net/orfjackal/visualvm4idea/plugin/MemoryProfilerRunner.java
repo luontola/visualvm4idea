@@ -39,7 +39,9 @@ import com.intellij.execution.runners.RunnerInfo;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
+import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
 import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
+import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
 
 /**
  * @author Esko Luontola
@@ -59,33 +61,26 @@ public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSet
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
         MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
 
-        log.info("MemoryProfilerRunner.patch");
-        log.info("javaParameters = " + javaParameters);
-        log.info("settings = " + settings);
-        log.info("settings.getData() = " + settings.getData());
-        log.info("settings.getRunProfile() = " + settings.getRunProfile());
-        log.info("beforeExecution = " + beforeExecution);
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
-        // TODO: javaParameters.getVMParametersList().prepend(VisualVmUtil.getVisualVmAgentCommand());
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(JdkVersion.JDK15));
     }
 
     // on run: 2
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
-        log.info("MemoryProfilerRunner.onProcessStarted");
-        log.info("settings = " + settings);
-        log.info("executionResult = " + executionResult);
 
-        // TODO: visualvm.beginProfilingApplicationMemory(...);
+        visualvm.beginProfilingApplicationMemory(VisualVmCommandSender.PROFILER_PORT,
+                profilerSettings.profileAllocMode,
+                profilerSettings.profileAllocInterval,
+                profilerSettings.recordAllocTraces);
     }
 
     // on run: 3
     public AnAction[] createActions(ExecutionResult executionResult) {
-        log.info("MemoryProfilerRunner.createActions");
-        return new AnAction[0]; // TODO
+        return new AnAction[0];
     }
 
     public RunnerInfo getInfo() {
@@ -96,9 +91,10 @@ public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSet
         return new MemoryProfilerSettings();
     }
 
-    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) throws RuntimeConfigurationException {
+    public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings)
+            throws RuntimeConfigurationException {
         MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
-        log.info("MemoryProfilerRunner.checkConfiguration");
+        VisualVmUtil.checkCurrentConfig();
     }
 
     public SettingsEditor<MemoryProfilerSettings> getSettingsEditor(RunConfiguration configuration) {

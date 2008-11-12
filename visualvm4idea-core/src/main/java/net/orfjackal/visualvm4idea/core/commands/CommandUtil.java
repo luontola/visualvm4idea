@@ -35,6 +35,7 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import org.netbeans.lib.profiler.common.AttachSettings;
 
 import java.util.Set;
 
@@ -74,5 +75,15 @@ public class CommandUtil {
         } catch (InterruptedException e) {
             // ignore
         }
+    }
+
+    static AttachSettings getAttachSettings(int profilerPort) {
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
+        final AttachSettings attachSettings = new AttachSettings();
+        attachSettings.setDirect(true);
+        attachSettings.setHost("localhost");
+        attachSettings.setPort(profilerPort);
+        return attachSettings;
     }
 }

@@ -46,10 +46,11 @@ public class CommandResolver {
     public CommandResolver() {
         Map<String, Command> commands = new HashMap<String, Command>();
         register(commands, new ProfileCpuCommand());
+        register(commands, new ProfileMemoryCommand());
         this.commands = Collections.unmodifiableMap(commands);
     }
 
-    private static void register(Map<String, Command> target, ProfileCpuCommand command) {
+    private static void register(Map<String, Command> target, Command command) {
         target.put(command.getCommandId(), command);
     }
 

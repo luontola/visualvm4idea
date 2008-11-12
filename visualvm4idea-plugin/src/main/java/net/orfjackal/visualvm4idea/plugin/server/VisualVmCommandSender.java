@@ -36,8 +36,9 @@ import net.orfjackal.visualvm4idea.comm.MessageSender;
 import net.orfjackal.visualvm4idea.comm.MessageServer;
 import net.orfjackal.visualvm4idea.core.commands.Command;
 import net.orfjackal.visualvm4idea.core.commands.ProfileCpuCommand;
-import net.orfjackal.visualvm4idea.plugin.MemoryProfilerSettings;
+import net.orfjackal.visualvm4idea.core.commands.ProfileMemoryCommand;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
+import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -70,9 +71,14 @@ public class VisualVmCommandSender {
         runCommand(cmd);
     }
 
-    public void beginProfilingApplicationMemory(int port, MemoryProfilerSettings.AllocMode allocMode,
+    public void beginProfilingApplicationMemory(int port, MemorySettings.AllocMode allocMode,
                                                 int allocInterval, boolean recordAllocTraces) {
-
+        ProfileMemoryCommand cmd = new ProfileMemoryCommand();
+        cmd.profilerPort = port;
+        cmd.allocMode = allocMode;
+        cmd.allocInterval = allocInterval;
+        cmd.recordAllocTraces = recordAllocTraces;
+        runCommand(cmd);
     }
 
     private String[] runCommand(Command command) {

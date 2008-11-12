@@ -32,58 +32,55 @@
 package net.orfjackal.visualvm4idea.core.commands;
 
 import com.sun.tools.visualvm.application.Application;
-import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
+import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 import org.netbeans.modules.profiler.utils.IDEUtils;
 
 /**
  * @author Esko Luontola
- * @since 25.10.2008
+ * @since 12.11.2008
  */
-public class ProfileCpuCommand implements Command {
+public class ProfileMemoryCommand implements Command {
 
     public int profilerPort;
-    public boolean profileNewThreads = true;
-    public String roots = "";
-    public CpuSettings.FilterType filterType = CpuSettings.FilterType.EXCLUDE;
-    public String filter = "";
+    public MemorySettings.AllocMode allocMode;
+    public int allocInterval;
+    public boolean recordAllocTraces;
 
     public String getCommandId() {
-        return "PROFILE_CPU";
+        return "PROFILE_MEMORY";
     }
 
     public String[] toMessage() {
         return new String[]{
                 getCommandId(),
                 String.valueOf(profilerPort),
-                String.valueOf(profileNewThreads),
-                roots,
-                filterType.name(),
-                filter,
+                allocMode.name(),
+                String.valueOf(allocInterval),
+                String.valueOf(recordAllocTraces),
         };
     }
 
     public Command fromMessage(String[] message) {
         int i = 0;
-        ProfileCpuCommand cmd = new ProfileCpuCommand();
+        ProfileMemoryCommand cmd = new ProfileMemoryCommand();
         cmd.profilerPort = Integer.parseInt(message[++i]);
-        cmd.profileNewThreads = Boolean.parseBoolean(message[++i]);
-        cmd.roots = message[++i];
-        cmd.filterType = CpuSettings.FilterType.valueOf(message[++i]);
-        cmd.filter = message[++i];
+        cmd.allocMode = MemorySettings.AllocMode.valueOf(message[++i]);
+        cmd.allocInterval = Integer.parseInt(message[++i]);
+        cmd.recordAllocTraces = Boolean.parseBoolean(message[++i]);
         return cmd;
     }
 
     public String[] call() {
-        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
+        // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleMemoryProfiling()
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
                 int profilingState = NetBeansProfiler.getDefaultNB().getProfilingState();
                 System.err.println("profilingState = " + profilingState);
 
                 NetBeansProfiler.getDefaultNB().attachToApp(
-                        getCpuSettings().toProfilingSettings(),
+                        getMemorySettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
                 Application app = CommandUtil.getProfiledApplication();
                 ProfilerSupportWrapper.setProfiledApplication(app);
@@ -93,12 +90,11 @@ public class ProfileCpuCommand implements Command {
         return OK_RESPONSE;
     }
 
-    private CpuSettings getCpuSettings() {
-        CpuSettings cpuSettings = new CpuSettings();
-        cpuSettings.profileNewThreads = profileNewThreads;
-        cpuSettings.roots = roots;
-        cpuSettings.filterType = filterType;
-        cpuSettings.filter = filter;
-        return cpuSettings;
+    private MemorySettings getMemorySettings() {
+        MemorySettings memorySettings = new MemorySettings();
+        memorySettings.allocMode = allocMode;
+        memorySettings.allocInterval = allocInterval;
+        memorySettings.recordAllocTraces = recordAllocTraces;
+        return memorySettings;
     }
 }

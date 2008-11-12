@@ -72,12 +72,12 @@ public class CpuSettings {
     public ProfilingSettings toProfilingSettings() {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.getSettings()
-        final ProfilingSettings profilingSettings = ProfilingSettingsPresets.createCPUPreset();
-        profilingSettings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
-        profilingSettings.setInstrumentSpawnedThreads(profileNewThreads);
-        profilingSettings.setInstrumentationRootMethods(asSourceCodeSelection(splitCommaSeparated(roots)));
-        profilingSettings.setSelectedInstrumentationFilter(getInstrumentationFilter());
-        return profilingSettings;
+        ProfilingSettings settings = ProfilingSettingsPresets.createCPUPreset();
+        settings.setInstrScheme(CommonConstants.INSTRSCHEME_LAZY);
+        settings.setInstrumentSpawnedThreads(profileNewThreads);
+        settings.setInstrumentationRootMethods(asSourceCodeSelection(splitCommaSeparated(roots)));
+        settings.setSelectedInstrumentationFilter(getInstrumentationFilter());
+        return settings;
     }
 
     private SimpleFilter getInstrumentationFilter() {
