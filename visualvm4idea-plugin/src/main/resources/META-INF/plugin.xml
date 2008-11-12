@@ -16,7 +16,11 @@
     <idea-version since-build="7000" until-build="7999"/>
 
     <change-notes><![CDATA[
-        <p>0.3.0 (2008-11-11)
+        <p>0.4.0 (2008-11-xx)
+        <br>- xxx
+        </p>
+
+        <p>0.3.0 (2008-11-12)
         <br>- Memory profiling
         <br>- Settings are copied to VisualVM's user interface
         <br>- Saved space in the run configuration dialog by moving help texts to tooltips
