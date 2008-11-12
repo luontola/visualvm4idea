@@ -17,7 +17,8 @@
 
     <change-notes><![CDATA[
         <p>0.3.0 (2008-11-xx)
-        <br>- xxx
+        <br>- Memory profiling
+        <br>- Settings are copied to VisualVM's user interface
         </p>
 
         <p>0.2.0 (2008-11-09)
@@ -34,8 +35,6 @@
         </p>
 
         <p>Known issues
-        <br>- Memory profiling is not available
-        <br>- Settings are not copied to VisualVM's user interface
         <br>- VisualVM may freeze if the application finishes execution before it is opened in VisualVM
         <br>- No button for opening the currently running (non-profiled) program in VisualVM
         <br>- Detecting the launched application from within VisualVM is not 100% sure

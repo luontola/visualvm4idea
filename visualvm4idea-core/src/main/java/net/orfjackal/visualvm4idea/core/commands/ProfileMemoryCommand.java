@@ -32,6 +32,9 @@
 package net.orfjackal.visualvm4idea.core.commands;
 
 import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.core.datasource.Storage;
+import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
+import net.orfjackal.visualvm4idea.util.Reflect;
 import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.modules.profiler.NetBeansProfiler;
@@ -76,18 +79,30 @@ public class ProfileMemoryCommand implements Command {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleMemoryProfiling()
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
-                int profilingState = NetBeansProfiler.getDefaultNB().getProfilingState();
-                System.err.println("profilingState = " + profilingState);
-
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getMemorySettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
                 Application app = CommandUtil.getProfiledApplication();
+                copySettingsToUserInterface(app);
                 ProfilerSupportWrapper.setProfiledApplication(app);
                 ProfilerSupportWrapper.selectProfilerView(app);
             }
         });
         return OK_RESPONSE;
+    }
+
+    private void copySettingsToUserInterface(Application app) {
+        // com.sun.tools.visualvm.profiler.MemorySettingsSupport.saveSettings()
+        final String SNAPSHOT_VERSION = (String) Reflect.on(MemorySettingsSupport.class)
+                .field("SNAPSHOT_VERSION").get().value();
+        final String CURRENT_SNAPSHOT_VERSION = (String) Reflect.on(MemorySettingsSupport.class)
+                .field("CURRENT_SNAPSHOT_VERSION").get().value();
+
+        Storage storage = app.getStorage();
+        storage.setCustomProperty(SNAPSHOT_VERSION, CURRENT_SNAPSHOT_VERSION);
+        storage.setCustomProperty(MemorySettingsSupport.PROP_MODE, Integer.toString(allocMode.getType()));
+        storage.setCustomProperty(MemorySettingsSupport.PROP_STACKTRACES, Integer.toString(recordAllocTraces ? -1 : 0));
+        storage.setCustomProperty(MemorySettingsSupport.PROP_TRACK_EVERY, Integer.toString(allocInterval));
     }
 
     private MemorySettings getMemorySettings() {

@@ -41,7 +41,18 @@ import org.netbeans.lib.profiler.common.ProfilingSettingsPresets;
 public class MemorySettings {
 
     public enum AllocMode {
-        ALLOC, ALLOC_AND_GC
+        ALLOC(ProfilingSettings.PROFILE_MEMORY_ALLOCATIONS),
+        ALLOC_AND_GC(ProfilingSettings.PROFILE_MEMORY_LIVENESS);
+
+        private final int type;
+
+        private AllocMode(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
     }
 
     public MemorySettings.AllocMode allocMode = AllocMode.ALLOC_AND_GC;
@@ -52,9 +63,7 @@ public class MemorySettings {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleMemoryProfiling()
         // com.sun.tools.visualvm.profiler.MemorySettingsSupport.getSettings()
         ProfilingSettings settings;
-        settings = allocMode.equals(AllocMode.ALLOC)
-                ? ProfilingSettingsPresets.createMemoryPreset(ProfilingSettings.PROFILE_MEMORY_ALLOCATIONS)
-                : ProfilingSettingsPresets.createMemoryPreset(ProfilingSettings.PROFILE_MEMORY_LIVENESS);
+        settings = ProfilingSettingsPresets.createMemoryPreset(allocMode.getType());
         settings.setAllocTrackEvery(allocInterval);
         settings.setAllocStackTraceLimit(recordAllocTraces ? -1 : 0);
         return settings;

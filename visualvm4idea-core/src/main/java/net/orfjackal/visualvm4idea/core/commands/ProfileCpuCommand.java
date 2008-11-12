@@ -32,6 +32,9 @@
 package net.orfjackal.visualvm4idea.core.commands;
 
 import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.core.datasource.Storage;
+import com.sun.tools.visualvm.profiler.CPUSettingsSupport;
+import net.orfjackal.visualvm4idea.util.Reflect;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.modules.profiler.NetBeansProfiler;
@@ -79,18 +82,38 @@ public class ProfileCpuCommand implements Command {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
-                int profilingState = NetBeansProfiler.getDefaultNB().getProfilingState();
-                System.err.println("profilingState = " + profilingState);
+                System.err.println("profilingState 1 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
 
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getCpuSettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
+
+                System.err.println("profilingState 2 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 Application app = CommandUtil.getProfiledApplication();
+                copySettingsToUserInterface(app);
+                System.err.println("profilingState 3 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 ProfilerSupportWrapper.setProfiledApplication(app);
-                ProfilerSupportWrapper.selectProfilerView(app);
+                System.err.println("profilingState 4 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
+                ProfilerSupportWrapper.selectProfilerView(app); // TODO: freezes visualvm if the app exits before the view opens
+                System.err.println("profilingState 5 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
             }
         });
         return OK_RESPONSE;
+    }
+
+    private void copySettingsToUserInterface(Application app) {
+        // com.sun.tools.visualvm.profiler.CPUSettingsSupport.saveSettings()
+        final String SNAPSHOT_VERSION = (String) Reflect.on(CPUSettingsSupport.class)
+                .field("SNAPSHOT_VERSION").get().value();
+        final String CURRENT_SNAPSHOT_VERSION = (String) Reflect.on(CPUSettingsSupport.class)
+                .field("CURRENT_SNAPSHOT_VERSION").get().value();
+
+        Storage storage = app.getStorage();
+        storage.setCustomProperty(SNAPSHOT_VERSION, CURRENT_SNAPSHOT_VERSION);
+        storage.setCustomProperty(CPUSettingsSupport.PROP_ROOT_CLASSES, roots);
+        storage.setCustomProperty(CPUSettingsSupport.PROP_PROFILE_RUNNABLES, Boolean.toString(profileNewThreads));
+        storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_TYPE, Integer.toString(filterType.getType()));
+        storage.setCustomProperty(CPUSettingsSupport.PROP_FILTER_VALUE, filter);
     }
 
     private CpuSettings getCpuSettings() {
