@@ -21,7 +21,7 @@
     </properties>
 
     <name>visualvm4idea</name>
-    <description>Intellij IDEA plugin for VisualVM integration.</description>
+    <description>VisualVM integration plugin for Intellij IDEA.</description>
     <url>http://www.orfjackal.net</url>
     <inceptionYear>2008</inceptionYear>
 

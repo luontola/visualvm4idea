@@ -19,6 +19,7 @@
         <p>0.3.0 (2008-11-xx)
         <br>- Memory profiling
         <br>- Settings are copied to VisualVM's user interface
+        <br>- Saved space in the run configuration dialog by moving help texts to tooltips
         </p>
 
         <p>0.2.0 (2008-11-09)
