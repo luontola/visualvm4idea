@@ -32,22 +32,17 @@
 package net.orfjackal.visualvm4idea.core.commands;
 
 import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.application.jvm.Jvm;
-import com.sun.tools.visualvm.application.jvm.JvmFactory;
-import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.lib.profiler.common.AttachSettings;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 import org.netbeans.modules.profiler.utils.IDEUtils;
 
-import java.util.Set;
-
 /**
  * @author Esko Luontola
  * @since 25.10.2008
  */
-public class ProfileAppCommand implements Command {
+public class ProfileCpuCommand implements Command {
 
     public int profilerPort;
     public boolean profileNewThreads = true;
@@ -56,7 +51,7 @@ public class ProfileAppCommand implements Command {
     public String filter = "";
 
     public String getCommandId() {
-        return "PROFILE_APP";
+        return "PROFILE_CPU";
     }
 
     public String[] toMessage() {
@@ -72,7 +67,7 @@ public class ProfileAppCommand implements Command {
 
     public Command fromMessage(String[] message) {
         int i = 0;
-        ProfileAppCommand cmd = new ProfileAppCommand();
+        ProfileCpuCommand cmd = new ProfileCpuCommand();
         cmd.profilerPort = Integer.parseInt(message[++i]);
         cmd.profileNewThreads = Boolean.parseBoolean(message[++i]);
         cmd.roots = message[++i];
@@ -86,7 +81,7 @@ public class ProfileAppCommand implements Command {
             public void run() {
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getCpuSettings().toProfilingSettings(), getAttachSettings());
-                Application app = getProfiledApplication();
+                Application app = CommandUtil.getProfiledApplication();
                 ProfilerSupportWrapper.setProfiledApplication(app);
                 ProfilerSupportWrapper.selectProfilerView(app);
             }
@@ -113,34 +108,5 @@ public class ProfileAppCommand implements Command {
         attachSettings.setHost("localhost");
         attachSettings.setPort(profilerPort);
         return attachSettings;
-    }
-
-    private Application getProfiledApplication() {
-        Application app;
-        do {
-            sleep(500);
-            app = findProfiledApp();
-        } while (app == null);
-        return app;
-    }
-
-    private static Application findProfiledApp() {
-        Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
-        for (Application app : apps) {
-            Jvm jvm = JvmFactory.getJVMFor(app);
-            // TODO: use a unique id to identify the right JVM
-            if (jvm.getJvmArgs().contains("profilerinterface")) {
-                return app;
-            }
-        }
-        return null;
-    }
-
-    private static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // ignore
-        }
     }
 }

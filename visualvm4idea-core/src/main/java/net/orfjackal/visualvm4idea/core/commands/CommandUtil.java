@@ -31,30 +31,48 @@
 
 package net.orfjackal.visualvm4idea.core.commands;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import com.sun.tools.visualvm.application.Application;
+import com.sun.tools.visualvm.application.jvm.Jvm;
+import com.sun.tools.visualvm.application.jvm.JvmFactory;
+import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+
+import java.util.Set;
 
 /**
  * @author Esko Luontola
- * @since 25.10.2008
+ * @since 12.11.2008
  */
-public class CommandResolver {
+public class CommandUtil {
 
-    private final Map<String, Command> commands;
-
-    public CommandResolver() {
-        Map<String, Command> commands = new HashMap<String, Command>();
-        register(commands, new ProfileCpuCommand());
-        this.commands = Collections.unmodifiableMap(commands);
+    private CommandUtil() {
     }
 
-    private static void register(Map<String, Command> target, ProfileCpuCommand command) {
-        target.put(command.getCommandId(), command);
+    public static Application getProfiledApplication() {
+        Application app;
+        do {
+            sleep(500);
+            app = findProfiledApp();
+        } while (app == null);
+        return app;
     }
 
-    public Command getCommandFromMessage(String[] message) {
-        Command command = commands.get(message[0]);
-        return command.fromMessage(message);
+    private static Application findProfiledApp() {
+        Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
+        for (Application app : apps) {
+            Jvm jvm = JvmFactory.getJVMFor(app);
+            // TODO: use a unique id to identify the right JVM
+            if (jvm.getJvmArgs().contains("profilerinterface")) {
+                return app;
+            }
+        }
+        return null;
+    }
+
+    private static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // ignore
+        }
     }
 }

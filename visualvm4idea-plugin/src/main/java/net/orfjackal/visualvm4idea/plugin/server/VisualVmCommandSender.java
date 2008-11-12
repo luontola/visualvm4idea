@@ -35,7 +35,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import net.orfjackal.visualvm4idea.comm.MessageSender;
 import net.orfjackal.visualvm4idea.comm.MessageServer;
 import net.orfjackal.visualvm4idea.core.commands.Command;
-import net.orfjackal.visualvm4idea.core.commands.ProfileAppCommand;
+import net.orfjackal.visualvm4idea.core.commands.ProfileCpuCommand;
+import net.orfjackal.visualvm4idea.plugin.MemoryProfilerSettings;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 
 import java.util.Arrays;
@@ -60,13 +61,18 @@ public class VisualVmCommandSender {
 
     public void beginProfilingApplicationCPU(int port, boolean profileNewThreads, String roots,
                                              CpuSettings.FilterType filterType, String filter) {
-        ProfileAppCommand cmd = new ProfileAppCommand();
+        ProfileCpuCommand cmd = new ProfileCpuCommand();
         cmd.profilerPort = port;
         cmd.profileNewThreads = profileNewThreads;
         cmd.roots = roots;
         cmd.filterType = filterType;
         cmd.filter = filter;
         runCommand(cmd);
+    }
+
+    public void beginProfilingApplicationMemory(int port, MemoryProfilerSettings.AllocMode allocMode,
+                                                int allocInterval, boolean recordAllocTraces) {
+
     }
 
     private String[] runCommand(Command command) {
