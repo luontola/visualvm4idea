@@ -36,6 +36,7 @@ import com.sun.tools.visualvm.application.jvm.Jvm;
 import com.sun.tools.visualvm.application.jvm.JvmFactory;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
 import org.netbeans.lib.profiler.common.AttachSettings;
+import org.netbeans.modules.profiler.NetBeansProfiler;
 
 import java.util.Set;
 
@@ -72,15 +73,7 @@ public class CommandUtil {
         return "-Dvisualvm4idea.appUniqueId=" + appUniqueId;
     }
 
-    private static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // ignore
-        }
-    }
-
-    static AttachSettings getAttachSettings(int profilerPort) {
+    public static AttachSettings getAttachSettings(int profilerPort) {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.MasterViewSupport()
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.initSettings()
         final AttachSettings attachSettings = new AttachSettings();
@@ -88,5 +81,22 @@ public class CommandUtil {
         attachSettings.setHost("localhost");
         attachSettings.setPort(profilerPort);
         return attachSettings;
+    }
+
+    public static void checkForDeadTargetJvm() {
+        if (!NetBeansProfiler.getDefaultNB().getTargetAppRunner().targetJVMIsAlive()) {
+            // If selectProfilerView is called when the target JVM is dead, VisualVM will freeze.
+            // Sleeping for a second or two would also help, but then the UI would be in insonsistent state. 
+            throw new IllegalStateException("BUG ALERT: Target JVM died before the profiler view could be opened.\n"
+                    + "This exception was thrown to prevent VisualVM from freezing.");
+        }
+    }
+
+    private static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // ignore
+        }
     }
 }

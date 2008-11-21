@@ -37,6 +37,7 @@ import com.sun.tools.visualvm.profiler.CPUSettingsSupport;
 import net.orfjackal.visualvm4idea.util.Reflect;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
+import org.netbeans.lib.profiler.TargetAppRunner;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 import org.netbeans.modules.profiler.utils.IDEUtils;
 
@@ -85,33 +86,64 @@ public class ProfileCpuCommand implements Command {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
+                System.err.println("<visualvm4idea>");
                 System.err.println("profilingState 1 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
 
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getCpuSettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
 
+                printProfilerInfo();
+
                 System.err.println("profilingState 2 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 Application app = CommandUtil.getProfiledApplication(appUniqueId);
+                System.err.println("app = " + app);
                 copySettingsToUserInterface(app);
                 System.err.println("profilingState 3 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 ProfilerSupportWrapper.setProfiledApplication(app);
                 System.err.println("profilingState 4 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
 
-                // TODO: freezes visualvm if the app exits before the view opens
-                // The problems might be somewhere here:
+                printProfilerInfo();
+
+                // TODO: freezes visualvm if the app ends execution before the view opens
+                //
+                // A solution would be to start attach the profiler without starting the application, but
+                // because org.netbeans.modules.profiler.NetBeansProfiler.attachToApp()
+                // always calls org.netbeans.lib.profiler.TargetAppRunner.attachToTargetVMOnStartup()
+                // this is not possible.
+                //
+                // The application gets frozen here:
+                //
                 // com.sun.tools.visualvm.profiler.ProfilerSupport.selectProfilerView()
                 // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.selectView()
                 // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.openWindowAndSelectView()
                 //      * Is run in thread "DataSourceWindowManager Processor"
                 //      * Apparently gets stuch in the first call to DataSourceViewsManager.sharedInstance().getViews(viewMaster)
-//                Object tmp = Reflect.on(DataSourceViewsManager.sharedInstance()).method("getViews", DataSource.class).call(app).value();
-//                System.out.println("tmp = " + tmp);
+                // ...
+                // -> com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:65)
+                // ...
+                // -> sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:40)
+                // -> sun.tools.attach.WindowsVirtualMachine.execute(WindowsVirtualMachine.java:82)
+                // -> sun.tools.attach.WindowsVirtualMachine.connectPipe(Native Method)  *FREEZE*
+                CommandUtil.checkForDeadTargetJvm();
                 ProfilerSupportWrapper.selectProfilerView(app);
                 System.err.println("profilingState 5 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
+
+                printProfilerInfo();
+
+                System.err.println("</visualvm4idea>");
             }
         });
         return OK_RESPONSE;
+    }
+
+    private static void printProfilerInfo() {
+        System.err.println("ProfileCpuCommand.printProfilerInfo");
+        NetBeansProfiler profiler = NetBeansProfiler.getDefaultNB();
+        TargetAppRunner r = profiler.getTargetAppRunner();
+        System.err.println("r.targetAppIsRunning() = " + r.targetAppIsRunning());
+        System.err.println("r.targetAppSuspended() = " + r.targetAppSuspended());
+        System.err.println("r.targetJVMIsAlive() = " + r.targetJVMIsAlive());
     }
 
     /*

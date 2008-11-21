@@ -88,6 +88,7 @@ public class ProfileMemoryCommand implements Command {
                 Application app = CommandUtil.getProfiledApplication(appUniqueId);
                 copySettingsToUserInterface(app);
                 ProfilerSupportWrapper.setProfiledApplication(app);
+                CommandUtil.checkForDeadTargetJvm();
                 ProfilerSupportWrapper.selectProfilerView(app);
             }
         });
