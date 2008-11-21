@@ -52,21 +52,24 @@ public class CommandUtil {
         Application app;
         do {
             sleep(500);
-            app = findProfiledApp();
+            app = findProfiledApp(appUniqueId);
         } while (app == null);
         return app;
     }
 
-    private static Application findProfiledApp() {
+    private static Application findProfiledApp(int appUniqueId) {
         Set<Application> apps = DataSourceRepository.sharedInstance().getDataSources(Application.class);
         for (Application app : apps) {
             Jvm jvm = JvmFactory.getJVMFor(app);
-            // TODO: use a unique id to identify the right JVM
-            if (jvm.getJvmArgs().contains("profilerinterface")) {
+            if (jvm.getJvmArgs().contains(getAppUniqueIdCommand(appUniqueId))) {
                 return app;
             }
         }
         return null;
+    }
+
+    public static String getAppUniqueIdCommand(int appUniqueId) {
+        return "-Dvisualvm4idea.appUniqueId=" + appUniqueId;
     }
 
     private static void sleep(int millis) {

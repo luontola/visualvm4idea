@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class IdGenerator {
 
-    private static final AtomicInteger id = new AtomicInteger((int) System.currentTimeMillis());
+    private static final AtomicInteger id = new AtomicInteger(Math.abs((int) System.currentTimeMillis()));
 
     public static int nextId() {
         return id.incrementAndGet();
