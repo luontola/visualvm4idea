@@ -97,12 +97,59 @@ public class ProfileCpuCommand implements Command {
                 System.err.println("profilingState 3 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 ProfilerSupportWrapper.setProfiledApplication(app);
                 System.err.println("profilingState 4 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
-                ProfilerSupportWrapper.selectProfilerView(app); // TODO: freezes visualvm if the app exits before the view opens
+
+                // TODO: freezes visualvm if the app exits before the view opens
+                // The problems might be somewhere here:
+                // com.sun.tools.visualvm.profiler.ProfilerSupport.selectProfilerView()
+                // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.selectView()
+                // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.openWindowAndSelectView()
+                //      * Is run in thread "DataSourceWindowManager Processor"
+                //      * Apparently gets stuch in the first call to DataSourceViewsManager.sharedInstance().getViews(viewMaster)
+//                Object tmp = Reflect.on(DataSourceViewsManager.sharedInstance()).method("getViews", DataSource.class).call(app).value();
+//                System.out.println("tmp = " + tmp);
+                ProfilerSupportWrapper.selectProfilerView(app);
                 System.err.println("profilingState 5 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
             }
         });
         return OK_RESPONSE;
     }
+
+    /*
+    The point where the above code gets stuck:
+
+"DataSourceWindowManager Processor" daemon prio=2 tid=0x041bd800 nid=0x728 runnable [0x037df000..0x037dfa14]
+   java.lang.Thread.State: RUNNABLE
+	at sun.tools.attach.WindowsVirtualMachine.connectPipe(Native Method)
+	at sun.tools.attach.WindowsVirtualMachine.execute(WindowsVirtualMachine.java:82)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:40)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:61)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgent(HotSpotVirtualMachine.java:85)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine.loadManagementAgent(JmxModelImpl.java:908)
+	- locked <0x1c270370> (a com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine.startManagementAgent(JmxModelImpl.java:865)
+	- locked <0x1c270370> (a com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$ProxyClient.tryConnect(JmxModelImpl.java:585)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$ProxyClient.connect(JmxModelImpl.java:555)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl.connect(JmxModelImpl.java:233)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl.<init>(JmxModelImpl.java:199)
+	at com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:65)
+	at com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:42)
+	at com.sun.tools.visualvm.core.model.ModelFactory.getModel(ModelFactory.java:96)
+	- locked <0x1be05308> (a com.sun.tools.visualvm.jvmstat.application.JvmstatApplication)
+	at com.sun.tools.visualvm.tools.jmx.JmxModelFactory.getJmxModelFor(JmxModelFactory.java:69)
+	at com.sun.tools.visualvm.application.views.threads.ApplicationThreadsViewProvider.supportsViewFor(ApplicationThreadsViewProvider.java:44)
+	at com.sun.tools.visualvm.application.views.threads.ApplicationThreadsViewProvider.supportsViewFor(ApplicationThreadsViewProvider.java:41)
+	at com.sun.tools.visualvm.core.ui.DataSourceViewsManager.getViews(DataSourceViewsManager.java:121)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager.openWindowAndSelectView(DataSourceWindowManager.java:155)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager.access$000(DataSourceWindowManager.java:50)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager$3.run(DataSourceWindowManager.java:126)
+	at org.openide.util.RequestProcessor$Task.run(RequestProcessor.java:561)
+	at org.openide.util.RequestProcessor$Processor.run(RequestProcessor.java:986)
+
+   Locked ownable synchronizers:
+	- None
+
+     */
 
     private void copySettingsToUserInterface(Application app) {
         // com.sun.tools.visualvm.profiler.CPUSettingsSupport.saveSettings()
