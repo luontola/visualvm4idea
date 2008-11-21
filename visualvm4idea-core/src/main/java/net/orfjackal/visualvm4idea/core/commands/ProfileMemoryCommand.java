@@ -46,6 +46,7 @@ import org.netbeans.modules.profiler.utils.IDEUtils;
  */
 public class ProfileMemoryCommand implements Command {
 
+    public int appUniqueId;
     public int profilerPort;
     public MemorySettings.AllocMode allocMode;
     public int allocInterval;
@@ -58,6 +59,7 @@ public class ProfileMemoryCommand implements Command {
     public String[] toMessage() {
         return new String[]{
                 getCommandId(),
+                String.valueOf(appUniqueId),
                 String.valueOf(profilerPort),
                 allocMode.name(),
                 String.valueOf(allocInterval),
@@ -68,6 +70,7 @@ public class ProfileMemoryCommand implements Command {
     public Command fromMessage(String[] message) {
         int i = 0;
         ProfileMemoryCommand cmd = new ProfileMemoryCommand();
+        cmd.appUniqueId = Integer.parseInt(message[++i]);
         cmd.profilerPort = Integer.parseInt(message[++i]);
         cmd.allocMode = MemorySettings.AllocMode.valueOf(message[++i]);
         cmd.allocInterval = Integer.parseInt(message[++i]);
@@ -82,7 +85,7 @@ public class ProfileMemoryCommand implements Command {
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getMemorySettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
-                Application app = CommandUtil.getProfiledApplication();
+                Application app = CommandUtil.getProfiledApplication(appUniqueId);
                 copySettingsToUserInterface(app);
                 ProfilerSupportWrapper.setProfiledApplication(app);
                 ProfilerSupportWrapper.selectProfilerView(app);

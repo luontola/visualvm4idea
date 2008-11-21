@@ -35,6 +35,7 @@ import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.projectRoots.ProjectJdk;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
+import net.orfjackal.visualvm4idea.plugin.ProfilerSettings;
 import net.orfjackal.visualvm4idea.plugin.config.*;
 import net.orfjackal.visualvm4idea.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +61,11 @@ public class VisualVmUtil {
     );
 
     private VisualVmUtil() {
+    }
+
+    @NotNull
+    public static String getAppUniqueIdCommand(ProfilerSettings settings) {
+        return "-Dvisualvm4idea.appUniqueId=" + settings.getAppUniqueId();
     }
 
     @NotNull

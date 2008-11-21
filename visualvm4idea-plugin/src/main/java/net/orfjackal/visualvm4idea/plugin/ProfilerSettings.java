@@ -32,38 +32,15 @@
 package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.util.xmlb.XmlSerializer;
-import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.util.JDOMExternalizable;
 
 /**
  * @author Esko Luontola
- * @since 30.10.2008
+ * @since 21.11.2008
  */
-public class MemoryProfilerSettings implements ProfilerSettings {
+public interface ProfilerSettings extends JDOMExternalizable {
 
-    @NotNull public MemorySettings.AllocMode profileAllocMode = MemorySettings.AllocMode.ALLOC_AND_GC;
-    public int profileAllocInterval = 10;
-    public boolean recordAllocTraces = false;
+    void configureOnPatch(JavaParameters javaParameters);
 
-    private int appUniqueId;
-
-    public void readExternal(Element element) throws InvalidDataException {
-        XmlSerializer.deserializeInto(this, element);
-    }
-
-    public void writeExternal(Element element) throws WriteExternalException {
-        element.setContent(XmlSerializer.serialize(this).removeContent());
-    }
-
-    public void configureOnPatch(JavaParameters javaParameters) {
-        appUniqueId = IdGenerator.nextId();
-    }
-
-    public int getAppUniqueId() {
-        return appUniqueId;
-    }
+    int getAppUniqueId();
 }

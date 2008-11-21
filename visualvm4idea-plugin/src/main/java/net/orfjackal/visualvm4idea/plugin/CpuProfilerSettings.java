@@ -33,7 +33,6 @@ package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.xmlb.XmlSerializer;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
@@ -44,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class CpuProfilerSettings implements JDOMExternalizable {
+public class CpuProfilerSettings implements ProfilerSettings {
 
     @NotNull public StartFrom startFromMode = StartFrom.MAIN_CLASS;
     @NotNull private String mainClassToStartFrom = "";
@@ -56,6 +55,8 @@ public class CpuProfilerSettings implements JDOMExternalizable {
     @NotNull public String filterIncludeClasses = "";
     @NotNull public String filterExcludeClasses = CpuSettings.DEFAULT_EXCLUDES;
 
+    private int appUniqueId;
+
     public void readExternal(Element element) throws InvalidDataException {
         XmlSerializer.deserializeInto(this, element);
     }
@@ -66,6 +67,11 @@ public class CpuProfilerSettings implements JDOMExternalizable {
 
     public void configureOnPatch(JavaParameters javaParameters) {
         mainClassToStartFrom = javaParameters.getMainClass();
+        appUniqueId = IdGenerator.nextId();
+    }
+
+    public int getAppUniqueId() {
+        return appUniqueId;
     }
 
     public String getClassesToProfileFrom() {

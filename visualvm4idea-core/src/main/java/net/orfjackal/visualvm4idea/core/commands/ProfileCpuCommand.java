@@ -46,6 +46,7 @@ import org.netbeans.modules.profiler.utils.IDEUtils;
  */
 public class ProfileCpuCommand implements Command {
 
+    public int appUniqueId;
     public int profilerPort;
     public boolean profileNewThreads = true;
     public String roots = "";
@@ -59,6 +60,7 @@ public class ProfileCpuCommand implements Command {
     public String[] toMessage() {
         return new String[]{
                 getCommandId(),
+                String.valueOf(appUniqueId),
                 String.valueOf(profilerPort),
                 String.valueOf(profileNewThreads),
                 roots,
@@ -70,6 +72,7 @@ public class ProfileCpuCommand implements Command {
     public Command fromMessage(String[] message) {
         int i = 0;
         ProfileCpuCommand cmd = new ProfileCpuCommand();
+        cmd.appUniqueId = Integer.parseInt(message[++i]);
         cmd.profilerPort = Integer.parseInt(message[++i]);
         cmd.profileNewThreads = Boolean.parseBoolean(message[++i]);
         cmd.roots = message[++i];
@@ -89,7 +92,7 @@ public class ProfileCpuCommand implements Command {
                         CommandUtil.getAttachSettings(profilerPort));
 
                 System.err.println("profilingState 2 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
-                Application app = CommandUtil.getProfiledApplication();
+                Application app = CommandUtil.getProfiledApplication(appUniqueId);
                 copySettingsToUserInterface(app);
                 System.err.println("profilingState 3 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 ProfilerSupportWrapper.setProfiledApplication(app);

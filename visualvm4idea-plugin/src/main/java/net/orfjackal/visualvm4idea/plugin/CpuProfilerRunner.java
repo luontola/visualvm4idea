@@ -66,6 +66,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppUniqueIdCommand(profilerSettings));
         javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(JdkVersion.JDK15));
     }
 
@@ -73,11 +74,14 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
 
-        visualvm.beginProfilingApplicationCPU(VisualVmCommandSender.PROFILER_PORT,
+        visualvm.beginProfilingApplicationCPU(
+                profilerSettings.getAppUniqueId(),
+                VisualVmCommandSender.PROFILER_PORT,
                 profilerSettings.profileNewRunnables,
                 profilerSettings.getClassesToProfileFrom(),
                 profilerSettings.getFilterType(),
-                profilerSettings.getFilterValue());
+                profilerSettings.getFilterValue()
+        );
     }
 
     // on run: 3

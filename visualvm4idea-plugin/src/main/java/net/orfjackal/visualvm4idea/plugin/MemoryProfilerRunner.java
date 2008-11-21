@@ -60,11 +60,13 @@ public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSet
     // on run: 1
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
         MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
+        profilerSettings.configureOnPatch(javaParameters);
 
         // see: com.intellij.debugger.impl.DebuggerManagerImpl.createDebugParameters()
         // javaParameters.getVMParametersList().replaceOrAppend(...);
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppUniqueIdCommand(profilerSettings));
         javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(JdkVersion.JDK15));
     }
 
@@ -72,10 +74,13 @@ public class MemoryProfilerRunner implements JavaProgramRunner<MemoryProfilerSet
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         MemoryProfilerSettings profilerSettings = (MemoryProfilerSettings) settings.getData();
 
-        visualvm.beginProfilingApplicationMemory(VisualVmCommandSender.PROFILER_PORT,
+        visualvm.beginProfilingApplicationMemory(
+                profilerSettings.getAppUniqueId(),
+                VisualVmCommandSender.PROFILER_PORT,
                 profilerSettings.profileAllocMode,
                 profilerSettings.profileAllocInterval,
-                profilerSettings.recordAllocTraces);
+                profilerSettings.recordAllocTraces
+        );
     }
 
     // on run: 3

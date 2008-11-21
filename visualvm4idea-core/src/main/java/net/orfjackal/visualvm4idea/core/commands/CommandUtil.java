@@ -48,7 +48,7 @@ public class CommandUtil {
     private CommandUtil() {
     }
 
-    public static Application getProfiledApplication() {
+    public static Application getProfiledApplication(int appUniqueId) {
         Application app;
         do {
             sleep(500);

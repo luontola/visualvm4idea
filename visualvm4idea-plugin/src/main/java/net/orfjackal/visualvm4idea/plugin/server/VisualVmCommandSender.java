@@ -60,10 +60,12 @@ public class VisualVmCommandSender {
         visualvm = new MessageServer(new VisualVmLauncher());
     }
 
-    public void beginProfilingApplicationCPU(int port, boolean profileNewThreads, String roots,
-                                             CpuSettings.FilterType filterType, String filter) {
+    public void beginProfilingApplicationCPU(int appUniqueId, int profilerPort, boolean profileNewThreads, String roots,
+                                             CpuSettings.FilterType filterType, String filter
+    ) {
         ProfileCpuCommand cmd = new ProfileCpuCommand();
-        cmd.profilerPort = port;
+        cmd.appUniqueId = appUniqueId;
+        cmd.profilerPort = profilerPort;
         cmd.profileNewThreads = profileNewThreads;
         cmd.roots = roots;
         cmd.filterType = filterType;
@@ -71,10 +73,11 @@ public class VisualVmCommandSender {
         runCommand(cmd);
     }
 
-    public void beginProfilingApplicationMemory(int port, MemorySettings.AllocMode allocMode,
+    public void beginProfilingApplicationMemory(int appUniqueId, int profilerPort, MemorySettings.AllocMode allocMode,
                                                 int allocInterval, boolean recordAllocTraces) {
         ProfileMemoryCommand cmd = new ProfileMemoryCommand();
-        cmd.profilerPort = port;
+        cmd.appUniqueId = appUniqueId;
+        cmd.profilerPort = profilerPort;
         cmd.allocMode = allocMode;
         cmd.allocInterval = allocInterval;
         cmd.recordAllocTraces = recordAllocTraces;
