@@ -40,9 +40,13 @@
         </p>
 
         <p>Known issues
-        <br>- VisualVM may freeze if the application finishes execution before it is opened in VisualVM
-        <br>- No button for opening the currently running (non-profiled) program in VisualVM
+        <br>- VisualVM may freeze if the application finishes execution before its window opens up in VisualVM
         <br>- IDEA 8 is not yet supported
+        </p>
+
+        <p>Future plans
+        <br>- A button for opening the currently running (non-profiled) program in VisualVM
+        <br>- Integration with NetBeans IDE's profiler if it has benefits over VisualVM (they both use internally the same NetBeans Profiler)
         </p>
     ]]></change-notes>
 
