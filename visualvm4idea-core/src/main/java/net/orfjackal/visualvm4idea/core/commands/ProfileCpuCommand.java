@@ -86,22 +86,15 @@ public class ProfileCpuCommand implements Command {
         // com.sun.tools.visualvm.profiler.ApplicationProfilerView.MasterViewSupport.handleCPUProfiling()
         IDEUtils.runInProfilerRequestProcessor(new Runnable() {
             public void run() {
-                System.err.println("<visualvm4idea>");
-                System.err.println("profilingState 1 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
-
                 NetBeansProfiler.getDefaultNB().attachToApp(
                         getCpuSettings().toProfilingSettings(),
                         CommandUtil.getAttachSettings(profilerPort));
 
                 printProfilerInfo();
 
-                System.err.println("profilingState 2 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 Application app = CommandUtil.getProfiledApplication(appUniqueId);
-                System.err.println("app = " + app);
                 copySettingsToUserInterface(app);
-                System.err.println("profilingState 3 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
                 ProfilerSupportWrapper.setProfiledApplication(app);
-                System.err.println("profilingState 4 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
 
                 printProfilerInfo();
 
@@ -125,13 +118,11 @@ public class ProfileCpuCommand implements Command {
                 // -> sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:40)
                 // -> sun.tools.attach.WindowsVirtualMachine.execute(WindowsVirtualMachine.java:82)
                 // -> sun.tools.attach.WindowsVirtualMachine.connectPipe(Native Method)  *FREEZE*
+
                 CommandUtil.checkForDeadTargetJvm();
                 ProfilerSupportWrapper.selectProfilerView(app);
-                System.err.println("profilingState 5 = " + NetBeansProfiler.getDefaultNB().getProfilingState());
 
                 printProfilerInfo();
-
-                System.err.println("</visualvm4idea>");
             }
         });
         return OK_RESPONSE;
