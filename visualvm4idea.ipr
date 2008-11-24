@@ -439,42 +439,6 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchMap">
-                <map>
-                  <entry key="svn://tux/orfjackal/visualvm4idea/branches">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1227282238502" />
-                          <option name="revision" value="154" />
-                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/branches/idea7" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="svn://tux/orfjackal/visualvm4idea/tags">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1226510146582" />
-                          <option name="revision" value="144" />
-                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.3.0" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1226250351606" />
-                          <option name="revision" value="134" />
-                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.2.0" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1225995932329" />
-                          <option name="revision" value="108" />
-                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.1.0" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
               <option name="branchUrls">
                 <list>
                   <option value="svn://tux/orfjackal/visualvm4idea/branches" />
