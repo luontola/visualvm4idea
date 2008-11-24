@@ -17,6 +17,7 @@
 
     <change-notes><![CDATA[
         <p>0.5.0 (2008-11-xx)
+        <br>- Fixed small inconsistency in memory profiler's Runner ID (IDEA 8 only)
         <br>- xxx
         </p>
 
