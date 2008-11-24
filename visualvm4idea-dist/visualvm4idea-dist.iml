@@ -2,8 +2,8 @@
 <module relativePaths="true" MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
-    <exclude-output />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
@@ -33,12 +33,12 @@
     <orderEntry type="library" name="Maven: org.netbeans.lib.profiler:netbeans-lib-profiler-ui:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.netbeans.modules.profiler:netbeans-modules-profiler:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:openapi:9013" level="project" />
-    <orderEntry type="library" name="Maven: com.intellij:util:9013" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:extensions:9013" level="project" />
+    <orderEntry type="library" name="Maven: com.intellij:util:9013" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:jdom:9013" level="project" />
+    <orderEntry type="library" name="Maven: com.intellij:idea:9013" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.intellij:forms_rt:6.0.5" level="project" />
     <orderEntry type="module" module-name="visualvm4idea-visualvm-agent" exported="" />
-    <orderEntryProperties />
   </component>
   <component name="copyright">
     <Base>

@@ -954,6 +954,17 @@
         <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/util-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: com.intellij:idea:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/idea.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/idea-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/idea-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="uidesigner-configuration">
     <option name="DEFAULT_LAYOUT_MANAGER" value="FormLayout" />

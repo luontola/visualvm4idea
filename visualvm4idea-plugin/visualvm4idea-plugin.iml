@@ -34,11 +34,11 @@
     <orderEntry type="library" name="Maven: org.netbeans.lib.profiler:netbeans-lib-profiler-ui:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.netbeans.modules.profiler:netbeans-modules-profiler:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:openapi:9013" level="project" />
-    <orderEntry type="library" name="Maven: com.intellij:util:9013" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:extensions:9013" level="project" />
+    <orderEntry type="library" name="Maven: com.intellij:util:9013" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:jdom:9013" level="project" />
+    <orderEntry type="library" name="Maven: com.intellij:idea:9013" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.intellij:forms_rt:6.0.5" level="project" />
-    <orderEntryProperties />
   </component>
   <component name="copyright">
     <Base>
