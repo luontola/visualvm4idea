@@ -68,6 +68,7 @@ public class MemoryProfilerExecutor extends Executor {
 
     @NotNull
     public String getActionName() {
+        // TODO: where is this used?
         return "MemoryProfilerActionName";
     }
 
@@ -78,12 +79,12 @@ public class MemoryProfilerExecutor extends Executor {
 
     @NotNull
     public String getStartActionText() {
-        return "Profile memory usage of selected configuration with VisualVM";
+        return "Profile Memory with VisualVM";
     }
 
-    @NotNull
     public String getContextActionId() {
-        return getId();
+        // HACK: ExecutorRegistryImpl expects this to be non-null, but we don't want any context actions for every file
+        return getId() + " context-action-does-not-exist";
     }
 
     public String getHelpId() {
