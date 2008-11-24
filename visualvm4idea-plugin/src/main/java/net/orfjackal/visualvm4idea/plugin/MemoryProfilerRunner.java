@@ -33,6 +33,7 @@ package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
+import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.runners.*;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -57,11 +58,13 @@ public class MemoryProfilerRunner extends JavaPatchableProgramRunner<MemoryProfi
 
     @NotNull
     public String getRunnerId() {
-        return getClass().getSimpleName();
+        return MemoryProfilerExecutor.EXECUTOR_ID;
     }
 
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return executorId.equals(MemoryProfilerExecutor.EXECUTOR_ID);
+        return executorId.equals(MemoryProfilerExecutor.EXECUTOR_ID)
+                && profile instanceof ModuleRunProfile
+                && !(profile instanceof RemoteConfiguration);
     }
 
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
