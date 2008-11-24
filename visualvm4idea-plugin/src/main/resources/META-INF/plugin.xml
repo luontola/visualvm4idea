@@ -16,6 +16,10 @@
     <idea-version since-build="7000" until-build="7999"/>
 
     <change-notes><![CDATA[
+        <p>0.5.0 (2008-11-xx)
+        <br>- xxx
+        </p>
+
         <p>0.4.0 (2008-11-24)
         <br>- Compatible with IDEA 8
         <br>- Uniquely identify the application launched by IDEA
