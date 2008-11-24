@@ -16,8 +16,9 @@
     <idea-version since-build="7000" until-build="7999"/>
 
     <change-notes><![CDATA[
-        <p>0.5.0 (2008-11-xx)
-        <br>- xxx
+        <p>0.4.1 (2008-11-24)
+        <br>- Fixed inconsistent naming of profiler actions (IDEA 8 only)
+        <br>- Fixed the profiler actions appearing in every file's context menu (IDEA 8 only)
         </p>
 
         <p>0.4.0 (2008-11-24)
