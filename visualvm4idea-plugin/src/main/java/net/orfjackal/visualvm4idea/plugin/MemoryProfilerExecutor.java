@@ -63,7 +63,7 @@ public class MemoryProfilerExecutor extends Executor {
     }
 
     public String getDescription() {
-        return null;
+        return "Profile memory usage of selected configuration with VisualVM";
     }
 
     @NotNull
@@ -79,7 +79,7 @@ public class MemoryProfilerExecutor extends Executor {
 
     @NotNull
     public String getStartActionText() {
-        return "Profile Memory with VisualVM";
+        return "Profile Memory";
     }
 
     public String getContextActionId() {

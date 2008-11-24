@@ -63,7 +63,7 @@ public class CpuProfilerExecutor extends Executor {
     }
 
     public String getDescription() {
-        return null;
+        return "Profile CPU usage of selected configuration with VisualVM";
     }
 
     @NotNull
@@ -79,7 +79,7 @@ public class CpuProfilerExecutor extends Executor {
 
     @NotNull
     public String getStartActionText() {
-        return "Profile CPU with VisualVM";
+        return "Profile CPU";
     }
 
     public String getContextActionId() {
