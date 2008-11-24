@@ -33,17 +33,11 @@ package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.options.*;
+import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -86,7 +80,8 @@ public class PluginSettingsComponent implements ApplicationComponent, Configurab
     }
 
     public void initComponent() {
-        IdeaPluginDescriptor visualvmPlugin = ApplicationManager.getApplication().getPlugin(VisualVmPlugin.PLUGIN_ID);
+        PluginId id = PluginId.getId("visualvm4idea");
+        IdeaPluginDescriptor visualvmPlugin = ApplicationManager.getApplication().getPlugin(id);
         pluginHome = visualvmPlugin.getPath();
     }
 

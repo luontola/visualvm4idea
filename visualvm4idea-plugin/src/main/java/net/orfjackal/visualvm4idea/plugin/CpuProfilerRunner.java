@@ -31,33 +31,39 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.runners.JavaProgramRunner;
-import com.intellij.execution.runners.RunnerInfo;
-import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.execution.runners.*;
+import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.project.Project;
 import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmUtil;
+import net.orfjackal.visualvm4idea.plugin.server.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Esko Luontola
  * @since 14.10.2008
  */
-public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings> {
-    private static final Logger log = Logger.getInstance(CpuProfilerRunner.class.getName());
+public class CpuProfilerRunner extends JavaPatchableProgramRunner<CpuProfilerSettings> {
+    private static final Logger logger = Logger.getInstance(CpuProfilerRunner.class.getName());
 
     private final VisualVmCommandSender visualvm;
-    private final RunnerInfo runnerInfo = new CpuProfilerRunnerInfo();
 
-    public CpuProfilerRunner(VisualVmCommandSender visualvm) {
-        this.visualvm = visualvm;
+    public CpuProfilerRunner() {
+        this.visualvm = VisualVmCommandSender.getInstance();
     }
 
-    // on run: 1
+    @NotNull
+    public String getRunnerId() {
+        return CpuProfilerExecutor.EXECUTOR_ID;
+    }
+
+    public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
+        return executorId.equals(CpuProfilerExecutor.EXECUTOR_ID);
+    }
+
     public void patch(JavaParameters javaParameters, RunnerSettings settings, boolean beforeExecution) throws ExecutionException {
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
         profilerSettings.configureOnPatch(javaParameters);
@@ -70,7 +76,11 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(JdkVersion.JDK15));
     }
 
-    // on run: 2
+    protected RunContentDescriptor doExecute(Project project, Executor executor, RunProfileState state,
+                                             RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
+        return DefaultJavaProgramRunnerWrapper.doExecute(this, project, executor, state, contentToReuse, env);
+    }
+
     public void onProcessStarted(RunnerSettings settings, ExecutionResult executionResult) {
         CpuProfilerSettings profilerSettings = (CpuProfilerSettings) settings.getData();
 
@@ -84,15 +94,6 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         );
     }
 
-    // on run: 3
-    public AnAction[] createActions(ExecutionResult executionResult) {
-        return new AnAction[0];
-    }
-
-    public RunnerInfo getInfo() {
-        return runnerInfo;
-    }
-
     public CpuProfilerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
         return new CpuProfilerSettings();
     }
@@ -103,7 +104,7 @@ public class CpuProfilerRunner implements JavaProgramRunner<CpuProfilerSettings>
         VisualVmUtil.checkCurrentConfig();
     }
 
-    public SettingsEditor<CpuProfilerSettings> getSettingsEditor(RunConfiguration configuration) {
+    public SettingsEditor<CpuProfilerSettings> getSettingsEditor(Executor executor, RunConfiguration configuration) {
         return new CpuProfilerSettingsEditor();
     }
 }

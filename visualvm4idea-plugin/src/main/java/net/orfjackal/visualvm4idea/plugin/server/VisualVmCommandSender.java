@@ -32,18 +32,12 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import com.intellij.openapi.diagnostic.Logger;
-import net.orfjackal.visualvm4idea.comm.MessageSender;
-import net.orfjackal.visualvm4idea.comm.MessageServer;
-import net.orfjackal.visualvm4idea.core.commands.Command;
-import net.orfjackal.visualvm4idea.core.commands.ProfileCpuCommand;
-import net.orfjackal.visualvm4idea.core.commands.ProfileMemoryCommand;
-import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
-import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
+import net.orfjackal.visualvm4idea.comm.*;
+import net.orfjackal.visualvm4idea.core.commands.*;
+import net.orfjackal.visualvm4idea.visualvm.*;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
  * @author Esko Luontola
@@ -54,15 +48,22 @@ public class VisualVmCommandSender {
 
     public static final int PROFILER_PORT = 5140;
 
+    private static VisualVmCommandSender instance;
     private final MessageSender visualvm;
+
+    public synchronized static VisualVmCommandSender getInstance() {
+        if (instance == null) {
+            instance = new VisualVmCommandSender();
+        }
+        return instance;
+    }
 
     public VisualVmCommandSender() {
         visualvm = new MessageServer(new VisualVmLauncher());
     }
 
     public void beginProfilingApplicationCPU(int appUniqueId, int profilerPort, boolean profileNewThreads, String roots,
-                                             CpuSettings.FilterType filterType, String filter
-    ) {
+                                             CpuSettings.FilterType filterType, String filter) {
         ProfileCpuCommand cmd = new ProfileCpuCommand();
         cmd.appUniqueId = appUniqueId;
         cmd.profilerPort = profilerPort;

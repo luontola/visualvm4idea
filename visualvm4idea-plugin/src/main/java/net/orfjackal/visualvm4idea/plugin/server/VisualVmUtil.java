@@ -32,20 +32,14 @@
 package net.orfjackal.visualvm4idea.plugin.server;
 
 import com.intellij.execution.configurations.RuntimeConfigurationException;
-import com.intellij.openapi.projectRoots.ProjectJdk;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.projectRoots.*;
 import net.orfjackal.visualvm4idea.core.commands.CommandUtil;
-import net.orfjackal.visualvm4idea.plugin.PluginSettingsComponent;
-import net.orfjackal.visualvm4idea.plugin.ProfilerSettings;
+import net.orfjackal.visualvm4idea.plugin.*;
 import net.orfjackal.visualvm4idea.plugin.config.*;
 import net.orfjackal.visualvm4idea.util.FileUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Esko Luontola
@@ -130,7 +124,7 @@ public class VisualVmUtil {
     @NotNull
     public static List<String> getAutodetectedVisualVmHomes() {
         List<String> autodetected = new ArrayList<String>();
-        for (ProjectJdk jdk : ProjectJdkTable.getInstance().getAllJdks()) {
+        for (Sdk jdk : ProjectJdkTable.getInstance().getAllJdks()) {
             final String jdkHome = FileUtil.getCanonicalPath(jdk.getHomePath());
             if (VisualVmUtil.isValidHome(jdkHome)) {
                 autodetected.add(jdkHome);

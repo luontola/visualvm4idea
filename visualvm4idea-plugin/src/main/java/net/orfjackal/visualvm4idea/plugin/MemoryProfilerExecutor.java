@@ -31,36 +31,62 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.ExecutionRegistry;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.extensions.PluginId;
-import net.orfjackal.visualvm4idea.plugin.server.VisualVmCommandSender;
+import com.intellij.execution.Executor;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * @author Esko Luontola
- * @since 14.10.2008
+ * @since 30.10.2008
  */
-public class VisualVmPlugin implements ApplicationComponent {
+public class MemoryProfilerExecutor extends Executor {
 
-    public static final PluginId PLUGIN_ID = PluginId.getId("visualvm4idea");
-
-    private final VisualVmCommandSender visualvm = new VisualVmCommandSender();
-    private final CpuProfilerRunner cpuRunner = new CpuProfilerRunner(visualvm);
-    private final MemoryProfilerRunner memoryRunner = new MemoryProfilerRunner(visualvm);
+    public static final String EXECUTOR_ID = "Profile Memory";
 
     @NotNull
-    public String getComponentName() {
-        return "VisualVmPlugin";
+    public String getToolWindowId() {
+        return getId();
     }
 
-    public void initComponent() {
-        ExecutionRegistry.getInstance().registerRunner(cpuRunner);
-        ExecutionRegistry.getInstance().registerRunner(memoryRunner);
+    public Icon getToolWindowIcon() {
+        return getIcon();
     }
 
-    public void disposeComponent() {
-        ExecutionRegistry.getInstance().unregisterRunner(cpuRunner);
-        ExecutionRegistry.getInstance().unregisterRunner(memoryRunner);
+    @NotNull
+    public Icon getIcon() {
+        return Resources.PROFILE_MEMORY_16;
+    }
+
+    public Icon getDisabledIcon() {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    @NotNull
+    public String getActionName() {
+        return "MemoryProfilerActionName";
+    }
+
+    @NotNull
+    public String getId() {
+        return EXECUTOR_ID;
+    }
+
+    @NotNull
+    public String getStartActionText() {
+        return "Profile memory usage of selected configuration with VisualVM";
+    }
+
+    @NotNull
+    public String getContextActionId() {
+        return getId();
+    }
+
+    public String getHelpId() {
+        return null;
     }
 }

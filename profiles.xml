@@ -6,9 +6,10 @@
             <!-- build 7361 = 7.0
                  build 7364 = 7.0.1
                  build 7590 = 7.0.2
-                 build 7941 = 7.0.4 -->
-            <idea.version>7941</idea.version>
-            <idea.home>C:/Program Files/JetBrains/idea-7.0.4-jdk15</idea.home>
+                 build 7941 = 7.0.4
+                 build 9013 = 8.0 -->
+            <idea.version>9013</idea.version>
+            <idea.home>C:/Program Files/JetBrains/idea-8.0-jdk15</idea.home>
             <visualvm.version>1.0.1</visualvm.version>
             <visualvm.home>D:/DEVEL/VisualVM for IDEA/visualvm_101</visualvm.home>
         </properties>

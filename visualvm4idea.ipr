@@ -52,6 +52,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -269,6 +270,9 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDetails">
+    <option name="projectName" value="visualvm4idea" />
+  </component>
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
@@ -285,7 +289,7 @@
       <SplitterProportionsDataImpl />
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7941" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 9013" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="ProjectRunConfigurationManager">
@@ -609,6 +613,294 @@
       <option name="fileLocation" value="1" />
       <option name="useAlternate" value="false" />
     </LanguageOptions>
+  </component>
+  <component name="libraryTable">
+    <library name="Maven: com.intellij:annotations:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/annotations.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/annotations-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/annotations-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: junit:junit:4.4">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/junit/junit/4.4/junit-4.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/junit/junit/4.4/junit-4.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/junit/junit/4.4/junit-4.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jdave:jdave-junit4:1.1-rc1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-junit4/1.1-rc1/jdave-junit4-1.1-rc1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-junit4/1.1-rc1/jdave-junit4-1.1-rc1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-junit4/1.1-rc1/jdave-junit4-1.1-rc1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jmock:jmock:2.4.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/jmock/jmock/2.4.0/jmock-2.4.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/jmock/jmock/2.4.0/jmock-2.4.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/jmock/jmock/2.4.0/jmock-2.4.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.hamcrest:hamcrest-core:1.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.hamcrest:hamcrest-library:1.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jmock:jmock-legacy:2.4.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/jmock/jmock-legacy/2.4.0/jmock-legacy-2.4.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/jmock/jmock-legacy/2.4.0/jmock-legacy-2.4.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/jmock/jmock-legacy/2.4.0/jmock-legacy-2.4.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.objenesis:objenesis:1.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/objenesis/objenesis/1.0/objenesis-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/objenesis/objenesis/1.0/objenesis-1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/objenesis/objenesis/1.0/objenesis-1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: cglib:cglib-nodep:2.1_3">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jdave:jdave-core:1.1-rc1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-core/1.1-rc1/jdave-core-1.1-rc1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-core/1.1-rc1/jdave-core-1.1-rc1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/jdave/jdave-core/1.1-rc1/jdave-core-1.1-rc1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: junit:junit-dep:4.4">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/junit/junit-dep/4.4/junit-dep-4.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/junit/junit-dep/4.4/junit-dep-4.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/junit/junit-dep/4.4/junit-dep-4.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: asm:asm:3.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/asm/asm/3.1/asm-3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: asm:asm-all:3.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/asm/asm-all/3.1/asm-all-3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.tools.visualvm:visualvm-application:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-application-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.tools.visualvm:visualvm-core:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-core-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.tools.visualvm:visualvm-host:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-host-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.tools.visualvm:visualvm-profiler:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/visualvm/modules/com-sun-tools-visualvm-profiler-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.netbeans.lib.profiler:netbeans-lib-profiler:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.netbeans.lib.profiler:netbeans-lib-profiler-common:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-common-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.netbeans.lib.profiler:netbeans-lib-profiler-ui:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-lib-profiler-ui-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.netbeans.modules.profiler:netbeans-modules-profiler:1.0.1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-modules-profiler.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-modules-profiler-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../visualvm_101/profiler2/modules/org-netbeans-modules-profiler-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.intellij:openapi:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/openapi.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/openapi-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/openapi-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.intellij:extensions:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/extensions.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/extensions-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/extensions-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.intellij:jdom:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/jdom.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/jdom-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/jdom-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.intellij:forms_rt:6.0.5">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/com/intellij/forms_rt/6.0.5/forms_rt-6.0.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.intellij:util:9013">
+      <CLASSES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/util.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/util-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://C:/Program Files/JetBrains/idea-8.0-jdk15/lib/util-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="uidesigner-configuration">
     <option name="DEFAULT_LAYOUT_MANAGER" value="FormLayout" />

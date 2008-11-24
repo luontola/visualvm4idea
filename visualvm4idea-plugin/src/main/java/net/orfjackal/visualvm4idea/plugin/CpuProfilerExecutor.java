@@ -31,16 +31,62 @@
 
 package net.orfjackal.visualvm4idea.plugin;
 
-import com.intellij.execution.runners.RunnerInfo;
+import com.intellij.execution.Executor;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * @author Esko Luontola
  * @since 30.10.2008
  */
-public class MemoryProfilerRunnerInfo extends RunnerInfo {
+public class CpuProfilerExecutor extends Executor {
 
-    public MemoryProfilerRunnerInfo() {
-        super("Profile Memory", "Profile memory usage of selected configuration with VisualVM", Resources.PROFILE_MEMORY_16,
-                "Profile Memory", null);
+    public static final String EXECUTOR_ID = "Profile CPU";
+
+    @NotNull
+    public String getToolWindowId() {
+        return getId();
+    }
+
+    public Icon getToolWindowIcon() {
+        return getIcon();
+    }
+
+    @NotNull
+    public Icon getIcon() {
+        return Resources.PROFILE_CPU_16;
+    }
+
+    public Icon getDisabledIcon() {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    @NotNull
+    public String getActionName() {
+        return "CpuProfilerActionName";
+    }
+
+    @NotNull
+    public String getId() {
+        return EXECUTOR_ID;
+    }
+
+    @NotNull
+    public String getStartActionText() {
+        return "Profile CPU usage of selected configuration with VisualVM";
+    }
+
+    @NotNull
+    public String getContextActionId() {
+        return getId();
+    }
+
+    public String getHelpId() {
+        return null;
     }
 }
