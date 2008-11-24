@@ -439,6 +439,21 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="svn://tux/orfjackal/visualvm4idea/branches">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227541319985" />
+                          <option name="revision" value="174" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/branches/idea7" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
               <option name="branchUrls">
                 <list>
                   <option value="svn://tux/orfjackal/visualvm4idea/branches" />
