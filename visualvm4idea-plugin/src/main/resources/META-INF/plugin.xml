@@ -16,7 +16,8 @@
     <idea-version since-build="9000" until-build="9999"/>
 
     <change-notes><![CDATA[
-        <p>0.4.0 (2008-11-xx)
+        <p>0.4.0 (2008-11-24)
+        <br>- Compatible with IDEA 8
         <br>- Uniquely identify the application launched by IDEA
         </p>
 
@@ -41,7 +42,6 @@
 
         <p>Known issues
         <br>- VisualVM may freeze if the application finishes execution before its window opens up in VisualVM
-        <br>- IDEA 8 is not yet supported
         </p>
 
         <p>Future plans
