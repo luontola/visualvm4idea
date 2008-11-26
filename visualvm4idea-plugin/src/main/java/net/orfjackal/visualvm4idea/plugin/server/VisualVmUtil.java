@@ -156,8 +156,10 @@ public class VisualVmUtil {
     @Nullable
     private static VisualVmConfig getValidConfig(String visualVmHome, SystemVars system) {
         List<? extends VisualVmConfig> allConfigs = Arrays.asList(
-                new BundledVisualVmConfig(visualVmHome, system),
-                new ExternalVisualVmConfig(visualVmHome, system)
+                new BundledVisualVm10Config(visualVmHome, system),
+                new BundledVisualVm11Config(visualVmHome, system),
+                new ExternalVisualVm10Config(visualVmHome, system),
+                new ExternalVisualVm11Config(visualVmHome, system)
         );
         for (VisualVmConfig config : allConfigs) {
             if (config.isValid()) {

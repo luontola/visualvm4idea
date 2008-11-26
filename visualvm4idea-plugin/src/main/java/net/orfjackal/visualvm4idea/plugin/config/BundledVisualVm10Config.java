@@ -34,29 +34,35 @@ package net.orfjackal.visualvm4idea.plugin.config;
 import net.orfjackal.visualvm4idea.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 /**
  * @author Esko Luontola
  * @since 9.11.2008
  */
-public class ExternalVisualVmConfig extends AbstractVisualVmConfig {
+public class BundledVisualVm10Config extends AbstractVisualVmConfig {
 
-    public ExternalVisualVmConfig(String visualVmHome, SystemVars systemVars) {
+    public BundledVisualVm10Config(String visualVmHome, SystemVars systemVars) {
         super(visualVmHome, systemVars);
     }
 
     @NotNull
-    public String getAppProfilerAgent(JdkVersion jdkVersion) {
+    protected File getAppProfilerAgentFileForJdk(JdkVersion jdkVersion) {
         String jdk = jdkVersion.getAppProfilerJdk();
-        return FileUtil.getFile(getAppProfilerLib(), "deployed", jdk, getSystemArch(), getProfilerInterfaceName()).getAbsolutePath();
+        return FileUtil.getFile(getAppProfilerLib(), "deployed", jdk, getSystemArch(), getProfilerInterfaceName());
     }
 
     @NotNull
     public String getAppProfilerLib() {
-        return FileUtil.getFile(getVisualVmHome(), "profiler2", "lib").getAbsolutePath();
+        return FileUtil.getFile(getJdkHome(), "lib", "visualvm", "profiler2", "lib").getAbsolutePath();
     }
 
     @NotNull
     public String getVisualVmExecutable() {
-        return FileUtil.getFile(getVisualVmHome(), "bin", getVisualVmExecutableName()).getAbsolutePath();
+        return FileUtil.getFile(getJdkHome(), "bin", "j" + getVisualVmExecutableName()).getAbsolutePath();
+    }
+
+    private String getJdkHome() {
+        return getVisualVmHome();
     }
 }
