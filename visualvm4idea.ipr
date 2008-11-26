@@ -445,8 +445,8 @@
                     <value>
                       <list>
                         <SvnBranchItem>
-                          <option name="creationDateMillis" value="1227541319985" />
-                          <option name="revision" value="174" />
+                          <option name="creationDateMillis" value="1227545188224" />
+                          <option name="revision" value="188" />
                           <option name="url" value="svn://tux/orfjackal/visualvm4idea/branches/idea7" />
                         </SvnBranchItem>
                       </list>
@@ -949,7 +949,7 @@
     <option name="DEFAULT_LAYOUT_MANAGER" value="FormLayout" />
   </component>
   <UsedPathMacros>
-    <macro name="M2_REPO" />
+    <macro name="M2_REPO" description="Path to the local Maven repository" />
   </UsedPathMacros>
 </project>
 
