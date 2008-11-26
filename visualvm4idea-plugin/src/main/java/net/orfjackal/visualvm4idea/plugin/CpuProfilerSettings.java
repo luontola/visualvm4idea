@@ -32,12 +32,11 @@
 package net.orfjackal.visualvm4idea.plugin;
 
 import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import com.intellij.util.xmlb.XmlSerializer;
 import net.orfjackal.visualvm4idea.visualvm.CpuSettings;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 /**
  * @author Esko Luontola
@@ -66,8 +65,13 @@ public class CpuProfilerSettings implements ProfilerSettings {
     }
 
     public void configureOnPatch(JavaParameters javaParameters) {
-        mainClassToStartFrom = javaParameters.getMainClass();
+        mainClassToStartFrom = nonnull(javaParameters.getMainClass());
         appUniqueId = IdGenerator.nextId();
+    }
+
+    @NotNull
+    private static String nonnull(@Nullable String s) {
+        return s != null ? s : "";
     }
 
     public int getAppUniqueId() {
