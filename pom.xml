@@ -4,7 +4,7 @@
 
     <groupId>net.orfjackal.visualvm4idea</groupId>
     <artifactId>visualvm4idea</artifactId>
-    <version>0.4.2_7</version>
+    <version>0.5.0_7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>visualvm4idea-core</module>
@@ -40,8 +40,8 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.2_7</connection>
-        <developerConnection>scm:svn:svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.2_7</developerConnection>
+        <connection>scm:svn:svn://tux/orfjackal/visualvm4idea/trunk</connection>
+        <developerConnection>scm:svn:svn://tux/orfjackal/visualvm4idea/trunk</developerConnection>
     </scm>
 
     <repositories>
