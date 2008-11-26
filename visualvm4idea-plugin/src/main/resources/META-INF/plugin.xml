@@ -17,7 +17,7 @@
 
     <change-notes><![CDATA[
         <p>0.5.0 (2008-11-xx)
-        <br>- xx
+        <br>- Fixed possible NPE if the MainClass returned by IDEA was null
         </p>
 
         <p>0.4.1 (2008-11-24)
