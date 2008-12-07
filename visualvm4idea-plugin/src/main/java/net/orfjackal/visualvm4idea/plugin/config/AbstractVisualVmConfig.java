@@ -59,8 +59,8 @@ public abstract class AbstractVisualVmConfig implements VisualVmConfig, SystemVa
     public String getAppProfilerAgent(JdkVersion preferredJdkVersion) {
         JdkVersion[] orderOfPreference = {
                 preferredJdkVersion,
-//                JdkVersion.JDK15,
-                //              JdkVersion.JDK16
+                JdkVersion.JDK15,
+                JdkVersion.JDK16
         };
         for (JdkVersion jdk : orderOfPreference) {
             File agent = getAppProfilerAgentFileForJdk(jdk);

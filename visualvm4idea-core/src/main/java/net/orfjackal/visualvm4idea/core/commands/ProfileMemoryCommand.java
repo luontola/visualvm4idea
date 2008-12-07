@@ -35,8 +35,7 @@ import com.sun.tools.visualvm.application.Application;
 import com.sun.tools.visualvm.core.datasource.Storage;
 import com.sun.tools.visualvm.profiler.MemorySettingsSupport;
 import net.orfjackal.visualvm4idea.util.Reflect;
-import net.orfjackal.visualvm4idea.visualvm.MemorySettings;
-import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
+import net.orfjackal.visualvm4idea.visualvm.*;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 import org.netbeans.modules.profiler.utils.IDEUtils;
 
@@ -88,8 +87,7 @@ public class ProfileMemoryCommand implements Command {
                 Application app = CommandUtil.getProfiledApplication(appUniqueId);
                 copySettingsToUserInterface(app);
                 ProfilerSupportWrapper.setProfiledApplication(app);
-                CommandUtil.checkForDeadTargetJvm();
-                ProfilerSupportWrapper.selectProfilerView(app);
+                CommandUtil.openProfilerView(app);
             }
         });
         return OK_RESPONSE;
