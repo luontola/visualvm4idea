@@ -38,6 +38,7 @@ import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.lib.profiler.common.AttachSettings;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 
+import javax.swing.*;
 import java.util.Set;
 
 /**
@@ -116,7 +117,11 @@ public class CommandUtil {
         if (NetBeansProfiler.getDefaultNB().getTargetAppRunner().targetJVMIsAlive()) {
             ProfilerSupportWrapper.selectProfilerView(app);
         } else {
-            System.err.println("Target JVM died before the profiler view could be opened.");
+            JOptionPane.showMessageDialog(null, "" +
+                    "Target JVM died before the profiler view could be opened, so opening the view was cancelled\n" +
+                    "(otherwise VisualVM might have frozen). Add a Thread.sleep(1000) or a longer delay to the\n" +
+                    "beginning of the main method to avoid this situation.",
+                    "VisualVM Profiler for IntelliJ IDEA", JOptionPane.ERROR_MESSAGE);
         }
     }
 
