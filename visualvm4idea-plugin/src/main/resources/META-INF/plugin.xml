@@ -11,7 +11,10 @@
     </description>
     <category>Profiling</category>
 
-    <vendor url="http://www.orfjackal.net" logo="/net/orfjackal/visualvm4idea/icons/logo-16.png">Esko Luontola</vendor>
+    <vendor url="http://www.orfjackal.net"
+            email="firstname.lastname@gmail.com"
+            logo="/net/orfjackal/visualvm4idea/icons/logo-16.png">Esko Luontola
+    </vendor>
 
     <idea-version since-build="9000" until-build="9999"/>
 
@@ -55,12 +58,16 @@
         </p>
 
         <p>Known issues
-        <br>- VisualVM may freeze if the application finishes execution before its window opens up in VisualVM
+        <br>- VisualVM may freeze if the application finishes execution before its window opens up in VisualVM.
+              A workaround is to add Thread.sleep(1000) or a longer delay to the beginning of the main() method
+              of the profiled application.
         </p>
 
         <p>Future plans
-        <br>- A button for opening the currently running (non-profiled) program in VisualVM
-        <br>- Integration with NetBeans IDE's profiler if it has benefits over VisualVM (they both use internally the same NetBeans Profiler)
+        <br>- A button for opening the currently running (non-profiled) program in VisualVM, so that the user will
+              not need to manually select the program from VisualVM's list of all running Java programs
+        <br>- Integration with NetBeans IDE's profiler if it has benefits over VisualVM (they both use internally
+              the same NetBeans Profiler)
         </p>
     ]]></change-notes>
 
