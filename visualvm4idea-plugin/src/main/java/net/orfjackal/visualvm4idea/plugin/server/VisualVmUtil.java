@@ -31,7 +31,8 @@
 
 package net.orfjackal.visualvm4idea.plugin.server;
 
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.JavaParameters;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.projectRoots.ProjectJdk;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import net.orfjackal.visualvm4idea.core.commands.CommandUtil;
@@ -78,7 +79,7 @@ public class VisualVmUtil {
     }
 
     private static JdkVersion getJdkVersion(JavaParameters javaParameters) {
-        Sdk jdk = javaParameters.getJdk();
+        ProjectJdk jdk = javaParameters.getJdk();
         String version = "";
         if (jdk != null) {
             version = jdk.getVersionString();
