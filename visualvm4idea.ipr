@@ -293,7 +293,7 @@
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="TraceClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false" runner="emma">
+    <configuration default="false" name="TraceClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
       <option name="MAIN_CLASS_NAME" value="org.objectweb.asm.util.TraceClassVisitor" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.visualvm.agent.Test" />
@@ -310,19 +310,32 @@
         <option name="JVMPI" value="false" />
         <option name="INTERPRETED" value="false" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="Profile CPU">
+        <option name="startFromMode" value="MAIN_CLASS" />
+        <option name="otherClassesToStartFrom" value="" />
+        <option name="profileNewRunnables" value="true" />
+        <option name="filteringMode" value="EXCLUDE" />
+        <option name="filterIncludeClasses" value="" />
+        <option name="filterExcludeClasses" value="java.*, javax.*,&#10;sun.*, sunw.*, com.sun.*" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Profile Memory">
+        <option name="profileAllocMode" value="ALLOC_AND_GC" />
+        <option name="profileAllocInterval" value="10" />
+        <option name="recordAllocTraces" value="false" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="false" name="ASMifierClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false" runner="emma">
+    <configuration default="false" name="ASMifierClassVisitor" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
       <option name="MAIN_CLASS_NAME" value="org.objectweb.asm.util.ASMifierClassVisitor" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="net.orfjackal.visualvm4idea.visualvm.agent.Test" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_10" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_11" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
@@ -445,9 +458,83 @@
                     <value>
                       <list>
                         <SvnBranchItem>
-                          <option name="creationDateMillis" value="1227545188224" />
-                          <option name="revision" value="188" />
+                          <option name="creationDateMillis" value="1227716003281" />
+                          <option name="revision" value="194" />
                           <option name="url" value="svn://tux/orfjackal/visualvm4idea/branches/idea7" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="svn://tux/orfjackal/visualvm4idea/branches" />
+                  <option value="svn://tux/orfjackal/visualvm4idea/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="svn://tux/orfjackal/visualvm4idea/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/visualvm4idea-dist">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="svn://tux/orfjackal/visualvm4idea/branches">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227716003281" />
+                          <option name="revision" value="194" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/branches/idea7" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="svn://tux/orfjackal/visualvm4idea/tags">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227716588162" />
+                          <option name="revision" value="197" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.2" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227716002151" />
+                          <option name="revision" value="193" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.2_7" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227544977594" />
+                          <option name="revision" value="184" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.1" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227541165504" />
+                          <option name="revision" value="170" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.0" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1227541088490" />
+                          <option name="revision" value="167" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.4.0_7" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1226510146582" />
+                          <option name="revision" value="144" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.3.0" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1226250351606" />
+                          <option name="revision" value="134" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.2.0" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1225995932329" />
+                          <option name="revision" value="108" />
+                          <option name="url" value="svn://tux/orfjackal/visualvm4idea/tags/visualvm4idea-0.1.0" />
                         </SvnBranchItem>
                       </list>
                     </value>
