@@ -56,6 +56,26 @@ public abstract class AbstractVisualVmConfig implements VisualVmConfig, SystemVa
     }
 
     @NotNull
+    public String getAppProfilerAgent(JdkVersion preferredJdkVersion) {
+        JdkVersion[] orderOfPreference = {
+                preferredJdkVersion,
+//                JdkVersion.JDK15,
+                //              JdkVersion.JDK16
+        };
+        for (JdkVersion jdk : orderOfPreference) {
+            File agent = getAppProfilerAgentFileForJdk(jdk);
+            if (agent.isFile()) {
+                return agent.getAbsolutePath();
+            }
+        }
+        throw new IllegalArgumentException(
+                "Unable to find profiler agent for " + preferredJdkVersion + " using " + this);
+    }
+
+    @NotNull
+    protected abstract File getAppProfilerAgentFileForJdk(JdkVersion jdkVersion);
+
+    @NotNull
     public String getSystemArch() {
         return systemVars.getSystemArch();
     }
@@ -87,5 +107,9 @@ public abstract class AbstractVisualVmConfig implements VisualVmConfig, SystemVa
     public String getVisualVmHookLib() {
         String pluginHome = PluginSettingsComponent.getInstance().getPluginHome();
         return FileUtil.getFile(pluginHome, "lib", "visualvm4idea-core.jar").getAbsolutePath();
+    }
+
+    public String toString() {
+        return getClass().getSimpleName() + "[visualVmHome=" + visualVmHome + ",systemVars=" + systemVars + "]";
     }
 }
