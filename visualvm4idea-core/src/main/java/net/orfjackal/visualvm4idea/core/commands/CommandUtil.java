@@ -32,9 +32,9 @@
 package net.orfjackal.visualvm4idea.core.commands;
 
 import com.sun.tools.visualvm.application.Application;
-import com.sun.tools.visualvm.application.jvm.Jvm;
-import com.sun.tools.visualvm.application.jvm.JvmFactory;
+import com.sun.tools.visualvm.application.jvm.*;
 import com.sun.tools.visualvm.core.datasource.DataSourceRepository;
+import net.orfjackal.visualvm4idea.visualvm.ProfilerSupportWrapper;
 import org.netbeans.lib.profiler.common.AttachSettings;
 import org.netbeans.modules.profiler.NetBeansProfiler;
 
@@ -56,6 +56,14 @@ public class CommandUtil {
             app = findProfiledApp(appUniqueId);
         } while (app == null);
         return app;
+    }
+
+    private static void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // ignore
+        }
     }
 
     private static Application findProfiledApp(int appUniqueId) {
@@ -83,20 +91,69 @@ public class CommandUtil {
         return attachSettings;
     }
 
-    public static void checkForDeadTargetJvm() {
-        if (!NetBeansProfiler.getDefaultNB().getTargetAppRunner().targetJVMIsAlive()) {
-            // If selectProfilerView is called when the target JVM is dead, VisualVM will freeze.
-            // Sleeping for a second or two would also help, but then the UI would be in insonsistent state. 
-            throw new IllegalStateException("BUG ALERT: Target JVM died before the profiler view could be opened.\n"
-                    + "This exception was thrown to prevent VisualVM from freezing.");
+    public static void openProfilerView(Application app) {
+        // TODO: freezes visualvm if the app ends execution before the view opens
+        //
+        // A solution would be to start attach the profiler without starting the application, but
+        // because org.netbeans.modules.profiler.NetBeansProfiler.attachToApp()
+        // always calls org.netbeans.lib.profiler.TargetAppRunner.attachToTargetVMOnStartup()
+        // this is not possible.
+        //
+        // The application gets frozen here:
+        //
+        // com.sun.tools.visualvm.profiler.ProfilerSupport.selectProfilerView()
+        // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.selectView()
+        // -> com.sun.tools.visualvm.core.ui.DataSourceWindowManager.openWindowAndSelectView()
+        //      * Is run in thread "DataSourceWindowManager Processor"
+        //      * Apparently gets stuch in the first call to DataSourceViewsManager.sharedInstance().getViews(viewMaster)
+        // ...
+        // -> com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:65)
+        // ...
+        // -> sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:40)
+        // -> sun.tools.attach.WindowsVirtualMachine.execute(WindowsVirtualMachine.java:82)
+        // -> sun.tools.attach.WindowsVirtualMachine.connectPipe(Native Method)  *FREEZE*
+
+        if (NetBeansProfiler.getDefaultNB().getTargetAppRunner().targetJVMIsAlive()) {
+            ProfilerSupportWrapper.selectProfilerView(app);
+        } else {
+            System.err.println("Target JVM died before the profiler view could be opened.");
         }
     }
 
-    private static void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            // ignore
-        }
-    }
+    /*
+    The point where the above code gets stuck:
+
+"DataSourceWindowManager Processor" daemon prio=2 tid=0x041bd800 nid=0x728 runnable [0x037df000..0x037dfa14]
+   java.lang.Thread.State: RUNNABLE
+	at sun.tools.attach.WindowsVirtualMachine.connectPipe(Native Method)
+	at sun.tools.attach.WindowsVirtualMachine.execute(WindowsVirtualMachine.java:82)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:40)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:61)
+	at sun.tools.attach.HotSpotVirtualMachine.loadAgent(HotSpotVirtualMachine.java:85)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine.loadManagementAgent(JmxModelImpl.java:908)
+	- locked <0x1c270370> (a com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine.startManagementAgent(JmxModelImpl.java:865)
+	- locked <0x1c270370> (a com.sun.tools.visualvm.jmx.JmxModelImpl$LocalVirtualMachine)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$ProxyClient.tryConnect(JmxModelImpl.java:585)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl$ProxyClient.connect(JmxModelImpl.java:555)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl.connect(JmxModelImpl.java:233)
+	at com.sun.tools.visualvm.jmx.JmxModelImpl.<init>(JmxModelImpl.java:199)
+	at com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:65)
+	at com.sun.tools.visualvm.jmx.JmxModelProvider.createModelFor(JmxModelProvider.java:42)
+	at com.sun.tools.visualvm.core.model.ModelFactory.getModel(ModelFactory.java:96)
+	- locked <0x1be05308> (a com.sun.tools.visualvm.jvmstat.application.JvmstatApplication)
+	at com.sun.tools.visualvm.tools.jmx.JmxModelFactory.getJmxModelFor(JmxModelFactory.java:69)
+	at com.sun.tools.visualvm.application.views.threads.ApplicationThreadsViewProvider.supportsViewFor(ApplicationThreadsViewProvider.java:44)
+	at com.sun.tools.visualvm.application.views.threads.ApplicationThreadsViewProvider.supportsViewFor(ApplicationThreadsViewProvider.java:41)
+	at com.sun.tools.visualvm.core.ui.DataSourceViewsManager.getViews(DataSourceViewsManager.java:121)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager.openWindowAndSelectView(DataSourceWindowManager.java:155)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager.access$000(DataSourceWindowManager.java:50)
+	at com.sun.tools.visualvm.core.ui.DataSourceWindowManager$3.run(DataSourceWindowManager.java:126)
+	at org.openide.util.RequestProcessor$Task.run(RequestProcessor.java:561)
+	at org.openide.util.RequestProcessor$Processor.run(RequestProcessor.java:986)
+
+   Locked ownable synchronizers:
+	- None
+
+     */
 }
