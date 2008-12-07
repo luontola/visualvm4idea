@@ -31,7 +31,7 @@
 
 package net.orfjackal.visualvm4idea.plugin.server;
 
-import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.*;
 import com.intellij.openapi.projectRoots.*;
 import net.orfjackal.visualvm4idea.core.commands.CommandUtil;
 import net.orfjackal.visualvm4idea.plugin.*;
@@ -64,11 +64,27 @@ public class VisualVmUtil {
     }
 
     @NotNull
-    public static String getAppProfilerCommand(JdkVersion jdkVersion) {
+    public static String getAppProfilerCommand(JavaParameters javaParameters) {
         VisualVmConfig config = getConfig();
-        String agent = config.getAppProfilerAgent(jdkVersion);
+        String agent = config.getAppProfilerAgent(getJdkVersion(javaParameters));
         String lib = config.getAppProfilerLib();
         return "-agentpath:" + agent + "=" + lib + "," + VisualVmCommandSender.PROFILER_PORT;
+    }
+
+    private static JdkVersion getJdkVersion(JavaParameters javaParameters) {
+        Sdk jdk = javaParameters.getJdk();
+        String version = "";
+        if (jdk != null) {
+            version = jdk.getVersionString();
+        }
+        if (version == null) {
+            version = "";
+        }
+        if (version.startsWith("java version \"1.5.0")) {
+            return JdkVersion.JDK15;
+        } else {
+            return JdkVersion.JDK16;
+        }
     }
 
     @NotNull

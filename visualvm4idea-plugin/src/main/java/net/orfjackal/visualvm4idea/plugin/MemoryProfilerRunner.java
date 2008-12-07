@@ -39,7 +39,6 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import net.orfjackal.visualvm4idea.plugin.config.JdkVersion;
 import net.orfjackal.visualvm4idea.plugin.server.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +75,7 @@ public class MemoryProfilerRunner extends JavaPatchableProgramRunner<MemoryProfi
 
         // http://profiler.netbeans.org/docs/help/5.5/attach.html#direct_attach
         javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppUniqueIdCommand(profilerSettings));
-        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(JdkVersion.JDK15));
+        javaParameters.getVMParametersList().prepend(VisualVmUtil.getAppProfilerCommand(javaParameters));
     }
 
     protected RunContentDescriptor doExecute(Project project, Executor executor, RunProfileState state,
