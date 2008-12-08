@@ -19,7 +19,7 @@
     <idea-version since-build="7000" until-build="7999"/>
 
     <change-notes><![CDATA[
-        <p>0.5.0 (2008-11-xx)
+        <p>1.0.0 (2008-12-08)
         <br>- Support for VisualVM 1.1
         <br>- Autodetect Java version when choosing the profiler interface to use
               (although officially VisualVM supports only Java 6 and 7)
