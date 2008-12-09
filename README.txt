@@ -36,13 +36,13 @@ command line options the path of this plugin's core libraries (visualvm4idea-
 core.jar) and the number of the port which this plugin listens to.
 
 The Java agent modifies the bytecode of the Installer class in VisualVM's 
-profiler module (see HookLoadingClassAdapter) by inserting there a method which 
-calls our own HookLoader class. The HookLoader in turn takes from system 
-properties the path of our plugin's core libraries, and creates a custom class 
-loader which is a child class loader of VisualVM's profiler module and which 
-adds our plugin's core libraries to the class path. Then it loads VisualVmHook 
-(from visualvm4idea-core.jar) inside that class loader. VisualVmHook in turn 
-connects to the IDEA plugin through a socket and begins to wait for commands.
+profiler module (see HookLoadingClassAdapter) by inserting there a method call 
+to our own HookLoader class. The HookLoader in turn takes from system properties 
+the path of our plugin's core libraries, and creates a custom class loader which 
+is a child class loader of VisualVM's profiler module and which adds our 
+plugin's core libraries to the class path. Then it loads VisualVmHook (from 
+visualvm4idea-core.jar) inside that class loader. VisualVmHook in turn connects 
+to the IDEA plugin through a socket and begins to wait for commands.
 
 This way the plugin can execute any commands inside VisualVM's JVM and it has 
 access to all the same classes as VisualVM's profiler module has.
