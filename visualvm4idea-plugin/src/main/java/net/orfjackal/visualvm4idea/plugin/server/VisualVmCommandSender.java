@@ -99,6 +99,8 @@ public class VisualVmCommandSender {
             throw new RuntimeException("Remote exception on VisualVM, request was: " + Arrays.toString(message), e);
         } catch (TimeoutException e) {
             throw new RuntimeException("No response from VisualVM, request was: " + Arrays.toString(message), e);
+            // TODO: Instead of throwing an exception, show a message dialog asking if the user wants to stop waiting.
+            // If the response does arrive before the user stops waiting, hide the dialog and resume normally.
         }
     }
 }
