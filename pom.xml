@@ -10,7 +10,6 @@
         <module>visualvm4idea-core</module>
         <module>visualvm4idea-util</module>
         <module>visualvm4idea-visualvm-agent</module>
-
         <module>visualvm4idea-plugin</module>
         <module>visualvm4idea-dist</module>
     </modules>
@@ -21,7 +20,7 @@
 
     <name>visualvm4idea</name>
     <description>VisualVM integration plugin for Intellij IDEA.</description>
-    <url>http://www.orfjackal.net</url>
+    <url>http://github.com/orfjackal/visualvm4idea</url>
     <inceptionYear>2008</inceptionYear>
 
     <licenses>
@@ -40,8 +39,8 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:svn://tux/orfjackal/visualvm4idea/trunk</connection>
-        <developerConnection>scm:svn:svn://tux/orfjackal/visualvm4idea/trunk</developerConnection>
+        <connection>scm:git:git://github.com/orfjackal/visualvm4idea.git</connection>
+        <url>http://github.com/orfjackal/visualvm4idea</url>
     </scm>
 
     <repositories>
